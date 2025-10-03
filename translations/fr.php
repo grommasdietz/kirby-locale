@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'grommasdietz.gd-locale.locale.label' => 'Langue',
-    'grommasdietz.gd-locale.locale.dialog.headline' => 'Choisir la langue pour la sélection',
-    'grommasdietz.gd-locale.locale.dialog.selectLabel' => 'Langue',
-    'grommasdietz.gd-locale.locale.dialog.empty' => 'Aucune langue',
+    'grommasdietz.kirby-locale.label' => 'Langue',
+    'grommasdietz.kirby-locale.dialog.headline' => 'Choisir la langue pour la sélection',
+    'grommasdietz.kirby-locale.dialog.selectLabel' => 'Langue',
+    'grommasdietz.kirby-locale.dialog.empty' => 'Aucune langue',
 ];

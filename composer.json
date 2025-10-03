@@ -1,5 +1,5 @@
 {
-    "name": "grommasdietz/gd-locale",
+    "name": "grommasdietz/kirby-locale",
     "description": "Locale picker Writer mark for Kirby",
     "type": "kirby-plugin",
     "license": "MIT",

@@ -1,1 +1,495 @@
-(function(){"use strict";const S=e=>Array.isArray(e)?e:[],b=e=>S(e).map(t=>{if(!t)return null;if(typeof t=="string")return{code:t,name:t,group:null};const a=t.code||t.id||t.value||t.slug||t.name,n=t.name||t.label||t.code,o=t.group||t.continent||t.region||t.category,r=typeof o=="string"&&o.trim()?o.trim():null;return a?{code:a,name:n||a,group:r}:null}).filter(t=>t&&t.code),v=e=>typeof e=="string"?e.trim():"",m=e=>{const t=v(e);return t?t.toLowerCase():""},M=()=>{const e=[],t=new Set;return{add(a){b(a).forEach(n=>{if(!n||!n.code)return;const o=v(n.code),r=m(o);!o||!r||t.has(r)||(t.add(r),e.push({code:o,name:n.name&&n.name!==o?n.name:o,group:typeof n.group=="string"&&n.group.trim()?n.group.trim():null}))})},list(){return e.slice()}}},F=()=>{var e,t,a,n;return b((n=(a=(t=(e=window.panel)==null?void 0:e.$store)==null?void 0:t.state)==null?void 0:a.languages)==null?void 0:n.all)},O=()=>F().map(e=>e.code).filter(Boolean),_=new Map,z=(e={},t={})=>{const a=["catalog","catalogLocales","localeCatalog","fallbackLocales","defaultLocales","builtinLocales"],n=i=>{for(const c of a)if(Object.prototype.hasOwnProperty.call(i,c))return i[c]},o=n(e);if(o!==void 0)return o;const r=n(t);if(r!==void 0)return r},P=async e=>{var u,f,p;if(_.has(e))return _.get(e);const t=M();t.add(F());const a=((u=window.panel)==null?void 0:u.config)||{},n=e.replace("/","."),o=(a==null?void 0:a[e])||(a==null?void 0:a[n])||{};t.add(o.locales),t.add(o.languages),[`${e}.locales`,`${e}.languages`,`${n}.locales`,`${n}.languages`].forEach(s=>{const g=a==null?void 0:a[s];g&&t.add(g)}),t.add(a.locales),t.add(a.languages);let i=[];if((p=(f=window.panel)==null?void 0:f.api)!=null&&p.get){try{const s=await window.panel.api.get(`${e}/locales`);i=b((s==null?void 0:s.data)||s),t.add(i)}catch(s){(s==null?void 0:s.status)!==404&&console.warn(`[${e}] Unable to fetch locales via plugin endpoint.`,s)}try{const s=await window.panel.api.get("languages");t.add(b((s==null?void 0:s.data)||s))}catch(s){console.warn(`[${e}] Unable to fetch locales via Panel API.`,s)}}const c=z(o,{...a,[e]:a==null?void 0:a[e],[n]:a==null?void 0:a[n]});c&&c!==!0&&t.add(c);const d=t.list();return d.length===0&&console.warn(`[${e}] No locales available. Configure \`grommasdietz.gd-locale.locales\` or enable the plugin API route.`),_.set(e,d),d},k=(e=[],t=null,a=[])=>{const n=[],o=new Set,r=new Set(a.map(l=>m(l)).filter(Boolean)),i=l=>typeof l=="string"&&l.trim()?m(l):"",c=l=>{const w=l==null?void 0:l.group;return typeof w=="string"&&w.trim()?w.trim():""},d=l=>{if(!l||!l.code)return;const w=v(l.code),y=m(w);!w||!y||o.has(y)||(o.add(y),n.push({value:l.code,text:l.name&&l.name!==l.code?`${l.name} (${l.code})`:l.code}))};let u=null;const f=(l,w=!1)=>{w&&(u=null),l.forEach(y=>{const L=c(y),A=L?i(L):"";L&&A!==u&&(n.push({value:`__group__${A||n.length}`,text:L,disabled:!0}),u=A),L||(u=null),d(y)})},p=e.filter(l=>r.has(m(l.code))),s=e.filter(l=>r.has(m(l.code))===!1);f(p,!0),p.length&&s.length&&(n.push({value:"__separator__",text:"──────────",disabled:!0}),u=null),f(s,!0);const g=v(t);if(g&&g!=="__separator__"){const l=m(g);l&&o.has(l)===!1&&(n.unshift({value:t,text:t}),o.add(l))}return n},$=(e,t,a)=>{var o;const n=`${e.replace("/",".")}.${t}`;if(typeof((o=window.panel)==null?void 0:o.$t)=="function"){const r=window.panel.$t(n);if(r!==n)return r}return a??n},B=(e,t,a)=>{const n=O(),o=k(a,t,n),r=o.filter(u=>u.disabled!==!0),i=r.length>0,c={label:$(e,"locale.dialog.selectLabel","Locale"),autofocus:!0},d=i?{...c,type:"select",empty:{text:$(e,"locale.dialog.empty","No locale")},options:o,searchable:r.length>7}:{...c,type:"text",placeholder:$(e,"locale.prompt","Enter the locale code (e.g. de, en-GB)")};return{component:"k-form-dialog",props:{icon:"translate",size:"medium",headline:$(e,"locale.dialog.headline","Choose locale for selection"),cancelButton:!0,submitButton:!0,fields:{locale:d},value:{locale:t}}}},D=({pluginId:e,value:t="",locales:a=[]})=>{var o,r;if(!((r=(o=window.panel)==null?void 0:o.dialog)!=null&&r.open))return console.warn(`[${e}] Kirby Panel dialog API is not available. Cannot open locale dialog.`),Promise.resolve(null);const n=B(e,t,a);return new Promise(i=>{let c=!1;const d=p=>{var s,g;c||(c=!0,typeof((g=(s=window.panel)==null?void 0:s.dialog)==null?void 0:g.close)=="function"&&window.panel.dialog.close(),i(p))},u=p=>{const s=p==null?void 0:p.locale;if(typeof s!="string"){d(null);return}const g=s.trim();if(!g||g==="__separator__"){d(null);return}d(g)},f=()=>{d(!1)};try{const p=window.panel.dialog.open(n,{on:{submit:u,cancel:f,close:f}});typeof(p==null?void 0:p.catch)=="function"&&p.catch(s=>{console.error(`[${e}] Failed to open locale dialog.`,s),f()})}catch(p){console.error(`[${e}] Failed to open locale dialog.`,p),f()}})},E=e=>({get button(){return{icon:"translate",label:window.panel.$t(`${e.replace("/",".")}.locale.label`)}},commands(){return async()=>{const t=this.editor.getMarkAttrs("locale")||{},a=typeof t.lang=="string"?t.lang:"",n=await P(e),o=await D({pluginId:e,value:a,locales:n});if(o!==!1){if(!o){this.remove();return}this.update({lang:o})}}},get name(){return"locale"},get schema(){return{attrs:{lang:{default:null}},parseDOM:[{tag:"span.notranslate[lang]",getAttrs:t=>({lang:t.getAttribute("lang")})}],toDOM:t=>["span",{class:"notranslate",lang:t.attrs.lang||null},0]}}}),h="grommasdietz/gd-locale",C=(e,t=null,a=null)=>{const n=O(),o=k(e,t,n),r=o.filter(d=>d.disabled!==!0),i=a?{...a}:{};let c=typeof t=="string"&&t.trim()!==""?t:null;if(!c&&r.length>0){const d=r.find(u=>typeof u.value=="string"&&n.includes(u.value));if(d)c=d.value;else{const u=r[0].value;c=typeof u=="string"&&u!==""?u:null}}return{field:{...i,name:"titleLocale",label:window.panel.$t("grommasdietz.gd-locale.locale.label"),type:"select",options:o,empty:{text:window.panel.$t("grommasdietz.gd-locale.locale.dialog.empty")},search:r.length>7,icon:"translate",width:"1/3",value:c},value:c}},K=(e,t,a)=>{var i,c;if(!((c=(i=e==null?void 0:e.props)==null?void 0:i.fields)!=null&&c.titleLocale))return e;const n=e.props.fields??{},o={...n.titleLocale||{},...t},r=n.title?{...n.title,width:"2/3"}:n.title;return{...e,props:{...e.props,fields:{...n,...r?{title:r}:{},titleLocale:o},value:{...e.props.value,titleLocale:a??null}}}},U=async(e,t)=>{var a,n;if(!e||!((n=(a=window.panel)==null?void 0:a.api)!=null&&n.get))return null;try{const o=await window.panel.api.get(`${h}/title-locale`,{id:e,language:t}),r=(o==null?void 0:o.data)||o,i=r==null?void 0:r.titleLocale;if(typeof i=="string"&&i.trim())return i}catch(o){console.warn(`[${h}] Unable to load stored title locale.`,o)}return null},j=(e={})=>{var a,n,o,r;if(typeof e.language=="string"&&e.language)return e.language;const t=(r=(o=(n=(a=window.panel)==null?void 0:a.$store)==null?void 0:n.state)==null?void 0:o.languages)==null?void 0:r.current;return typeof t=="string"&&t?t:null},G=(e={})=>{var t,a;return(t=e==null?void 0:e.page)!=null&&t.id?e.page.id:(a=e==null?void 0:e.model)!=null&&a.id?e.model.id:e!=null&&e.id?e.id:null};window.panel.plugin(h,{writerMarks:{locale:E(h)},dialogs:{async"page.create"(e){var i,c,d,u;const t=await P(h),a=((c=(i=e==null?void 0:e.props)==null?void 0:i.value)==null?void 0:c.titleLocale)??null,n=((u=(d=e==null?void 0:e.props)==null?void 0:d.fields)==null?void 0:u.titleLocale)??null;if(!n)return e;const{field:o,value:r}=C(t,a,n);return K(e,o,r)},async"page.changeTitle"(e,t={}){var u,f,p,s;const a=G(t),n=j(t),o=await P(h),r=((f=(u=e==null?void 0:e.props)==null?void 0:u.fields)==null?void 0:f.titleLocale)??null;if(!r)return e;let i=((s=(p=e==null?void 0:e.props)==null?void 0:p.value)==null?void 0:s.titleLocale)??null;i||(i=await U(a,n));const{field:c,value:d}=C(o,i,r);return K(e,c,d)}}})})();
+(function () {
+  "use strict";
+  const S = (e) => (Array.isArray(e) ? e : []),
+    b = (e) =>
+      S(e)
+        .map((t) => {
+          if (!t) return null;
+          if (typeof t == "string") return { code: t, name: t, group: null };
+          const a = t.code || t.id || t.value || t.slug || t.name,
+            n = t.name || t.label || t.code,
+            o = t.group || t.continent || t.region || t.category,
+            r = typeof o == "string" && o.trim() ? o.trim() : null;
+          return a ? { code: a, name: n || a, group: r } : null;
+        })
+        .filter((t) => t && t.code),
+    v = (e) => (typeof e == "string" ? e.trim() : ""),
+    m = (e) => {
+      const t = v(e);
+      return t ? t.toLowerCase() : "";
+    },
+    M = () => {
+      const e = [],
+        t = new Set();
+      return {
+        add(a) {
+          b(a).forEach((n) => {
+            if (!n || !n.code) return;
+            const o = v(n.code),
+              r = m(o);
+            !o ||
+              !r ||
+              t.has(r) ||
+              (t.add(r),
+              e.push({
+                code: o,
+                name: n.name && n.name !== o ? n.name : o,
+                group:
+                  typeof n.group == "string" && n.group.trim()
+                    ? n.group.trim()
+                    : null,
+              }));
+          });
+        },
+        list() {
+          return e.slice();
+        },
+      };
+    },
+    F = () => {
+      var e, t, a, n;
+      return b(
+        (n =
+          (a =
+            (t = (e = window.panel) == null ? void 0 : e.$store) == null
+              ? void 0
+              : t.state) == null
+            ? void 0
+            : a.languages) == null
+          ? void 0
+          : n.all
+      );
+    },
+    O = () =>
+      F()
+        .map((e) => e.code)
+        .filter(Boolean),
+    _ = new Map(),
+    z = (e = {}, t = {}) => {
+      const a = [
+          "catalog",
+          "catalogLocales",
+          "localeCatalog",
+          "fallbackLocales",
+          "defaultLocales",
+          "builtinLocales",
+        ],
+        n = (i) => {
+          for (const c of a)
+            if (Object.prototype.hasOwnProperty.call(i, c)) return i[c];
+        },
+        o = n(e);
+      if (o !== void 0) return o;
+      const r = n(t);
+      if (r !== void 0) return r;
+    },
+    P = async (e) => {
+      var u, f, p;
+      if (_.has(e)) return _.get(e);
+      const t = M();
+      t.add(F());
+      const a = ((u = window.panel) == null ? void 0 : u.config) || {},
+        n = e.replace("/", "."),
+        o = (a == null ? void 0 : a[e]) || (a == null ? void 0 : a[n]) || {};
+      t.add(o.locales),
+        t.add(o.languages),
+        [
+          `${e}.locales`,
+          `${e}.languages`,
+          `${n}.locales`,
+          `${n}.languages`,
+        ].forEach((s) => {
+          const g = a == null ? void 0 : a[s];
+          g && t.add(g);
+        }),
+        t.add(a.locales),
+        t.add(a.languages);
+      let i = [];
+      if ((p = (f = window.panel) == null ? void 0 : f.api) != null && p.get) {
+        try {
+          const s = await window.panel.api.get(`${e}/locales`);
+          (i = b((s == null ? void 0 : s.data) || s)), t.add(i);
+        } catch (s) {
+          (s == null ? void 0 : s.status) !== 404 &&
+            console.warn(
+              `[${e}] Unable to fetch locales via plugin endpoint.`,
+              s
+            );
+        }
+        try {
+          const s = await window.panel.api.get("languages");
+          t.add(b((s == null ? void 0 : s.data) || s));
+        } catch (s) {
+          console.warn(`[${e}] Unable to fetch locales via Panel API.`, s);
+        }
+      }
+      const c = z(o, {
+        ...a,
+        [e]: a == null ? void 0 : a[e],
+        [n]: a == null ? void 0 : a[n],
+      });
+      c && c !== !0 && t.add(c);
+      const d = t.list();
+      return (
+        d.length === 0 &&
+          console.warn(
+            `[${e}] No locales available. Configure \`grommasdietz.kirby-locales\` or enable the plugin API route.`
+          ),
+        _.set(e, d),
+        d
+      );
+    },
+    k = (e = [], t = null, a = []) => {
+      const n = [],
+        o = new Set(),
+        r = new Set(a.map((l) => m(l)).filter(Boolean)),
+        i = (l) => (typeof l == "string" && l.trim() ? m(l) : ""),
+        c = (l) => {
+          const w = l == null ? void 0 : l.group;
+          return typeof w == "string" && w.trim() ? w.trim() : "";
+        },
+        d = (l) => {
+          if (!l || !l.code) return;
+          const w = v(l.code),
+            y = m(w);
+          !w ||
+            !y ||
+            o.has(y) ||
+            (o.add(y),
+            n.push({
+              value: l.code,
+              text:
+                l.name && l.name !== l.code ? `${l.name} (${l.code})` : l.code,
+            }));
+        };
+      let u = null;
+      const f = (l, w = !1) => {
+          w && (u = null),
+            l.forEach((y) => {
+              const L = c(y),
+                A = L ? i(L) : "";
+              L &&
+                A !== u &&
+                (n.push({
+                  value: `__group__${A || n.length}`,
+                  text: L,
+                  disabled: !0,
+                }),
+                (u = A)),
+                L || (u = null),
+                d(y);
+            });
+        },
+        p = e.filter((l) => r.has(m(l.code))),
+        s = e.filter((l) => r.has(m(l.code)) === !1);
+      f(p, !0),
+        p.length &&
+          s.length &&
+          (n.push({ value: "__separator__", text: "──────────", disabled: !0 }),
+          (u = null)),
+        f(s, !0);
+      const g = v(t);
+      if (g && g !== "__separator__") {
+        const l = m(g);
+        l && o.has(l) === !1 && (n.unshift({ value: t, text: t }), o.add(l));
+      }
+      return n;
+    },
+    $ = (e, t, a) => {
+      var o;
+      const n = `${e.replace("/", ".")}.${t}`;
+      if (typeof ((o = window.panel) == null ? void 0 : o.$t) == "function") {
+        const r = window.panel.$t(n);
+        if (r !== n) return r;
+      }
+      return a ?? n;
+    },
+    B = (e, t, a) => {
+      const n = O(),
+        o = k(a, t, n),
+        r = o.filter((u) => u.disabled !== !0),
+        i = r.length > 0,
+        c = {
+          label: $(e, "locale.dialog.selectLabel", "Locale"),
+          autofocus: !0,
+        },
+        d = i
+          ? {
+              ...c,
+              type: "select",
+              empty: { text: $(e, "locale.dialog.empty", "No locale") },
+              options: o,
+              searchable: r.length > 7,
+            }
+          : {
+              ...c,
+              type: "text",
+              placeholder: $(
+                e,
+                "locale.prompt",
+                "Enter the locale code (e.g. de, en-GB)"
+              ),
+            };
+      return {
+        component: "k-form-dialog",
+        props: {
+          icon: "translate",
+          size: "medium",
+          headline: $(
+            e,
+            "locale.dialog.headline",
+            "Choose locale for selection"
+          ),
+          cancelButton: !0,
+          submitButton: !0,
+          fields: { locale: d },
+          value: { locale: t },
+        },
+      };
+    },
+    D = ({ pluginId: e, value: t = "", locales: a = [] }) => {
+      var o, r;
+      if (
+        !(
+          (r = (o = window.panel) == null ? void 0 : o.dialog) != null && r.open
+        )
+      )
+        return (
+          console.warn(
+            `[${e}] Kirby Panel dialog API is not available. Cannot open locale dialog.`
+          ),
+          Promise.resolve(null)
+        );
+      const n = B(e, t, a);
+      return new Promise((i) => {
+        let c = !1;
+        const d = (p) => {
+            var s, g;
+            c ||
+              ((c = !0),
+              typeof ((g = (s = window.panel) == null ? void 0 : s.dialog) ==
+              null
+                ? void 0
+                : g.close) == "function" && window.panel.dialog.close(),
+              i(p));
+          },
+          u = (p) => {
+            const s = p == null ? void 0 : p.locale;
+            if (typeof s != "string") {
+              d(null);
+              return;
+            }
+            const g = s.trim();
+            if (!g || g === "__separator__") {
+              d(null);
+              return;
+            }
+            d(g);
+          },
+          f = () => {
+            d(!1);
+          };
+        try {
+          const p = window.panel.dialog.open(n, {
+            on: { submit: u, cancel: f, close: f },
+          });
+          typeof (p == null ? void 0 : p.catch) == "function" &&
+            p.catch((s) => {
+              console.error(`[${e}] Failed to open locale dialog.`, s), f();
+            });
+        } catch (p) {
+          console.error(`[${e}] Failed to open locale dialog.`, p), f();
+        }
+      });
+    },
+    E = (e) => ({
+      get button() {
+        return {
+          icon: "translate",
+          label: window.panel.$t(`${e.replace("/", ".")}.locale.label`),
+        };
+      },
+      commands() {
+        return async () => {
+          const t = this.editor.getMarkAttrs("locale") || {},
+            a = typeof t.lang == "string" ? t.lang : "",
+            n = await P(e),
+            o = await D({ pluginId: e, value: a, locales: n });
+          if (o !== !1) {
+            if (!o) {
+              this.remove();
+              return;
+            }
+            this.update({ lang: o });
+          }
+        };
+      },
+      get name() {
+        return "locale";
+      },
+      get schema() {
+        return {
+          attrs: { lang: { default: null } },
+          parseDOM: [
+            {
+              tag: "span.notranslate[lang]",
+              getAttrs: (t) => ({ lang: t.getAttribute("lang") }),
+            },
+          ],
+          toDOM: (t) => [
+            "span",
+            { class: "notranslate", lang: t.attrs.lang || null },
+            0,
+          ],
+        };
+      },
+    }),
+    h = "grommasdietz/kirby-locale",
+    C = (e, t = null, a = null) => {
+      const n = O(),
+        o = k(e, t, n),
+        r = o.filter((d) => d.disabled !== !0),
+        i = a ? { ...a } : {};
+      let c = typeof t == "string" && t.trim() !== "" ? t : null;
+      if (!c && r.length > 0) {
+        const d = r.find(
+          (u) => typeof u.value == "string" && n.includes(u.value)
+        );
+        if (d) c = d.value;
+        else {
+          const u = r[0].value;
+          c = typeof u == "string" && u !== "" ? u : null;
+        }
+      }
+      return {
+        field: {
+          ...i,
+          name: "titleLocale",
+          label: window.panel.$t("grommasdietz.kirby-locale.label"),
+          type: "select",
+          options: o,
+          empty: {
+            text: window.panel.$t("grommasdietz.kirby-locale.dialog.empty"),
+          },
+          search: r.length > 7,
+          icon: "translate",
+          width: "1/3",
+          value: c,
+        },
+        value: c,
+      };
+    },
+    K = (e, t, a) => {
+      var i, c;
+      if (
+        !(
+          (c =
+            (i = e == null ? void 0 : e.props) == null ? void 0 : i.fields) !=
+            null && c.titleLocale
+        )
+      )
+        return e;
+      const n = e.props.fields ?? {},
+        o = { ...(n.titleLocale || {}), ...t },
+        r = n.title ? { ...n.title, width: "2/3" } : n.title;
+      return {
+        ...e,
+        props: {
+          ...e.props,
+          fields: { ...n, ...(r ? { title: r } : {}), titleLocale: o },
+          value: { ...e.props.value, titleLocale: a ?? null },
+        },
+      };
+    },
+    U = async (e, t) => {
+      var a, n;
+      if (
+        !e ||
+        !((n = (a = window.panel) == null ? void 0 : a.api) != null && n.get)
+      )
+        return null;
+      try {
+        const o = await window.panel.api.get(`${h}/title-locale`, {
+            id: e,
+            language: t,
+          }),
+          r = (o == null ? void 0 : o.data) || o,
+          i = r == null ? void 0 : r.titleLocale;
+        if (typeof i == "string" && i.trim()) return i;
+      } catch (o) {
+        console.warn(`[${h}] Unable to load stored title locale.`, o);
+      }
+      return null;
+    },
+    j = (e = {}) => {
+      var a, n, o, r;
+      if (typeof e.language == "string" && e.language) return e.language;
+      const t =
+        (r =
+          (o =
+            (n = (a = window.panel) == null ? void 0 : a.$store) == null
+              ? void 0
+              : n.state) == null
+            ? void 0
+            : o.languages) == null
+          ? void 0
+          : r.current;
+      return typeof t == "string" && t ? t : null;
+    },
+    G = (e = {}) => {
+      var t, a;
+      return (t = e == null ? void 0 : e.page) != null && t.id
+        ? e.page.id
+        : (a = e == null ? void 0 : e.model) != null && a.id
+        ? e.model.id
+        : e != null && e.id
+        ? e.id
+        : null;
+    };
+  window.panel.plugin(h, {
+    writerMarks: { locale: E(h) },
+    dialogs: {
+      async "page.create"(e) {
+        var i, c, d, u;
+        const t = await P(h),
+          a =
+            ((c =
+              (i = e == null ? void 0 : e.props) == null ? void 0 : i.value) ==
+            null
+              ? void 0
+              : c.titleLocale) ?? null,
+          n =
+            ((u =
+              (d = e == null ? void 0 : e.props) == null ? void 0 : d.fields) ==
+            null
+              ? void 0
+              : u.titleLocale) ?? null;
+        if (!n) return e;
+        const { field: o, value: r } = C(t, a, n);
+        return K(e, o, r);
+      },
+      async "page.changeTitle"(e, t = {}) {
+        var u, f, p, s;
+        const a = G(t),
+          n = j(t),
+          o = await P(h),
+          r =
+            ((f =
+              (u = e == null ? void 0 : e.props) == null ? void 0 : u.fields) ==
+            null
+              ? void 0
+              : f.titleLocale) ?? null;
+        if (!r) return e;
+        let i =
+          ((s =
+            (p = e == null ? void 0 : e.props) == null ? void 0 : p.value) ==
+          null
+            ? void 0
+            : s.titleLocale) ?? null;
+        i || (i = await U(a, n));
+        const { field: c, value: d } = C(o, i, r);
+        return K(e, c, d);
+      },
+    },
+  });
+})();

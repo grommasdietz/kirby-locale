@@ -7,7 +7,7 @@ export const normaliseLocales = (maybeLocales) => {
         return null;
       }
 
-      if (typeof locale === 'string') {
+      if (typeof locale === "string") {
         return {
           code: locale,
           name: locale,
@@ -21,7 +21,7 @@ export const normaliseLocales = (maybeLocales) => {
       const groupCandidate =
         locale.group || locale.continent || locale.region || locale.category;
       const group =
-        typeof groupCandidate === 'string' && groupCandidate.trim()
+        typeof groupCandidate === "string" && groupCandidate.trim()
           ? groupCandidate.trim()
           : null;
 
@@ -39,11 +39,11 @@ export const normaliseLocales = (maybeLocales) => {
 };
 
 export const normaliseLocaleCode = (code) =>
-  typeof code === 'string' ? code.trim() : '';
+  typeof code === "string" ? code.trim() : "";
 
 export const localeKey = (code) => {
   const normalised = normaliseLocaleCode(code);
-  return normalised ? normalised.toLowerCase() : '';
+  return normalised ? normalised.toLowerCase() : "";
 };
 
 export const createLocaleCollector = () => {
@@ -70,7 +70,7 @@ export const createLocaleCollector = () => {
           code,
           name: locale.name && locale.name !== code ? locale.name : code,
           group:
-            typeof locale.group === 'string' && locale.group.trim()
+            typeof locale.group === "string" && locale.group.trim()
               ? locale.group.trim()
               : null,
         });
@@ -98,12 +98,12 @@ export const clearLocaleCache = () => {
 
 const resolveCatalogPreference = (pluginConfig = {}, panelConfig = {}) => {
   const candidateKeys = [
-    'catalog',
-    'catalogLocales',
-    'localeCatalog',
-    'fallbackLocales',
-    'defaultLocales',
-    'builtinLocales',
+    "catalog",
+    "catalogLocales",
+    "localeCatalog",
+    "fallbackLocales",
+    "defaultLocales",
+    "builtinLocales",
   ];
 
   const search = (config) => {
@@ -133,7 +133,7 @@ const resolveCatalogPreference = (pluginConfig = {}, panelConfig = {}) => {
 
 export const fetchLocales = async (pluginId) => {
   if (!pluginId) {
-    throw new Error('fetchLocales requires a plugin id');
+    throw new Error("fetchLocales requires a plugin id");
   }
 
   if (localeCache.has(pluginId)) {
@@ -145,7 +145,7 @@ export const fetchLocales = async (pluginId) => {
   collector.add(getSiteLocales());
 
   const panelConfig = window.panel?.config || {};
-  const dottedPluginId = pluginId.replace('/', '.');
+  const dottedPluginId = pluginId.replace("/", ".");
   const pluginConfig =
     panelConfig?.[pluginId] || panelConfig?.[dottedPluginId] || {};
 
@@ -181,18 +181,18 @@ export const fetchLocales = async (pluginId) => {
       if (error?.status !== 404) {
         console.warn(
           `[${pluginId}] Unable to fetch locales via plugin endpoint.`,
-          error,
+          error
         );
       }
     }
 
     try {
-      const response = await window.panel.api.get('languages');
+      const response = await window.panel.api.get("languages");
       collector.add(normaliseLocales(response?.data || response));
     } catch (error) {
       console.warn(
         `[${pluginId}] Unable to fetch locales via Panel API.`,
-        error,
+        error
       );
     }
   }
@@ -211,7 +211,7 @@ export const fetchLocales = async (pluginId) => {
 
   if (locales.length === 0) {
     console.warn(
-      `[${pluginId}] No locales available. Configure \`grommasdietz.gd-locale.locales\` or enable the plugin API route.`,
+      `[${pluginId}] No locales available. Configure \`grommasdietz.kirby-locales\` or enable the plugin API route.`
     );
   }
 
@@ -223,20 +223,20 @@ export const fetchLocales = async (pluginId) => {
 export const createLocaleOptions = (
   locales = [],
   currentValue = null,
-  preferredCodes = [],
+  preferredCodes = []
 ) => {
   const options = [];
   const seen = new Set();
   const preferredSet = new Set(
-    preferredCodes.map((code) => localeKey(code)).filter(Boolean),
+    preferredCodes.map((code) => localeKey(code)).filter(Boolean)
   );
 
   const groupKey = (label) =>
-    typeof label === 'string' && label.trim() ? localeKey(label) : '';
+    typeof label === "string" && label.trim() ? localeKey(label) : "";
 
   const groupLabel = (locale) => {
     const raw = locale?.group;
-    return typeof raw === 'string' && raw.trim() ? raw.trim() : '';
+    return typeof raw === "string" && raw.trim() ? raw.trim() : "";
   };
 
   const pushOption = (locale) => {
@@ -271,7 +271,7 @@ export const createLocaleOptions = (
 
     items.forEach((locale) => {
       const label = groupLabel(locale);
-      const key = label ? groupKey(label) : '';
+      const key = label ? groupKey(label) : "";
 
       if (label && key !== lastGroupKey) {
         options.push({
@@ -291,18 +291,18 @@ export const createLocaleOptions = (
   };
 
   const preferredLocales = locales.filter((locale) =>
-    preferredSet.has(localeKey(locale.code)),
+    preferredSet.has(localeKey(locale.code))
   );
   const otherLocales = locales.filter(
-    (locale) => preferredSet.has(localeKey(locale.code)) === false,
+    (locale) => preferredSet.has(localeKey(locale.code)) === false
   );
 
   appendLocales(preferredLocales, true);
 
   if (preferredLocales.length && otherLocales.length) {
     options.push({
-      value: '__separator__',
-      text: '──────────',
+      value: "__separator__",
+      text: "──────────",
       disabled: true,
     });
     lastGroupKey = null;
@@ -312,7 +312,7 @@ export const createLocaleOptions = (
 
   const normalisedCurrent = normaliseLocaleCode(currentValue);
 
-  if (normalisedCurrent && normalisedCurrent !== '__separator__') {
+  if (normalisedCurrent && normalisedCurrent !== "__separator__") {
     const currentKey = localeKey(normalisedCurrent);
 
     if (currentKey && seen.has(currentKey) === false) {

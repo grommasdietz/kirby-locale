@@ -1,26 +1,30 @@
-import { createLocaleMark } from './marks/locale.js';
+import { createLocaleMark } from "./marks/locale.js";
 import {
   fetchLocales,
   createLocaleOptions,
   getSiteLocaleCodes,
-} from './utils/locales.js';
+} from "./utils/locales.js";
 
-const pluginId = 'grommasdietz/gd-locale';
+const pluginId = "grommasdietz/kirby-locale";
 
-const buildLocaleField = (locales, currentValue = null, existingField = null) => {
+const buildLocaleField = (
+  locales,
+  currentValue = null,
+  existingField = null
+) => {
   const siteLocaleCodes = getSiteLocaleCodes();
   const options = createLocaleOptions(locales, currentValue, siteLocaleCodes);
   const enabledOptions = options.filter((option) => option.disabled !== true);
   const baseField = existingField ? { ...existingField } : {};
   let value =
-    typeof currentValue === 'string' && currentValue.trim() !== ''
+    typeof currentValue === "string" && currentValue.trim() !== ""
       ? currentValue
       : null;
 
   if (!value && enabledOptions.length > 0) {
     const preferredOption = enabledOptions.find((option) => {
       return (
-        typeof option.value === 'string' &&
+        typeof option.value === "string" &&
         siteLocaleCodes.includes(option.value)
       );
     });
@@ -29,23 +33,24 @@ const buildLocaleField = (locales, currentValue = null, existingField = null) =>
       value = preferredOption.value;
     } else {
       const firstValue = enabledOptions[0].value;
-      value = typeof firstValue === 'string' && firstValue !== '' ? firstValue : null;
+      value =
+        typeof firstValue === "string" && firstValue !== "" ? firstValue : null;
     }
   }
 
   return {
     field: {
       ...baseField,
-      name: 'titleLocale',
-      label: window.panel.$t('grommasdietz.gd-locale.locale.label'),
-      type: 'select',
+      name: "titleLocale",
+      label: window.panel.$t("grommasdietz.kirby-locale.label"),
+      type: "select",
       options,
       empty: {
-        text: window.panel.$t('grommasdietz.gd-locale.locale.dialog.empty'),
+        text: window.panel.$t("grommasdietz.kirby-locale.dialog.empty"),
       },
       search: enabledOptions.length > 7,
-      icon: 'translate',
-      width: '1/3',
+      icon: "translate",
+      width: "1/3",
       value,
     },
     value,
@@ -65,7 +70,7 @@ const injectLocaleField = (dialog, fieldConfig, value) => {
   const mergedTitleField = originalFields.title
     ? {
         ...originalFields.title,
-        width: '2/3',
+        width: "2/3",
       }
     : originalFields.title;
 
@@ -100,7 +105,7 @@ const fetchStoredLocale = async (pageId, language) => {
     const data = response?.data || response;
     const locale = data?.titleLocale;
 
-    if (typeof locale === 'string' && locale.trim()) {
+    if (typeof locale === "string" && locale.trim()) {
       return locale;
     }
   } catch (error) {
@@ -111,12 +116,12 @@ const fetchStoredLocale = async (pageId, language) => {
 };
 
 const resolveContextLanguage = (context = {}) => {
-  if (typeof context.language === 'string' && context.language) {
+  if (typeof context.language === "string" && context.language) {
     return context.language;
   }
 
   const current = window.panel?.$store?.state?.languages?.current;
-  return typeof current === 'string' && current ? current : null;
+  return typeof current === "string" && current ? current : null;
 };
 
 const resolveContextPageId = (context = {}) => {
@@ -140,7 +145,7 @@ window.panel.plugin(pluginId, {
     locale: createLocaleMark(pluginId),
   },
   dialogs: {
-    async 'page.create'(dialog) {
+    async "page.create"(dialog) {
       const locales = await fetchLocales(pluginId);
       const currentValue = dialog?.props?.value?.titleLocale ?? null;
       const existingField = dialog?.props?.fields?.titleLocale ?? null;
@@ -149,11 +154,15 @@ window.panel.plugin(pluginId, {
         return dialog;
       }
 
-      const { field, value } = buildLocaleField(locales, currentValue, existingField);
+      const { field, value } = buildLocaleField(
+        locales,
+        currentValue,
+        existingField
+      );
 
       return injectLocaleField(dialog, field, value);
     },
-    async 'page.changeTitle'(dialog, context = {}) {
+    async "page.changeTitle"(dialog, context = {}) {
       const pageId = resolveContextPageId(context);
       const language = resolveContextLanguage(context);
       const locales = await fetchLocales(pluginId);
@@ -169,7 +178,11 @@ window.panel.plugin(pluginId, {
         currentValue = await fetchStoredLocale(pageId, language);
       }
 
-      const { field, value } = buildLocaleField(locales, currentValue, existingField);
+      const { field, value } = buildLocaleField(
+        locales,
+        currentValue,
+        existingField
+      );
 
       return injectLocaleField(dialog, field, value);
     },

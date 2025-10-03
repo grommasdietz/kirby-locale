@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'grommasdietz.gd-locale.locale.label' => 'Sprog',
-    'grommasdietz.gd-locale.locale.dialog.headline' => 'Vælg sprog til markeringen',
-    'grommasdietz.gd-locale.locale.dialog.selectLabel' => 'Sprog',
-    'grommasdietz.gd-locale.locale.dialog.empty' => 'Intet sprog',
+    'grommasdietz.kirby-locale.label' => 'Sprog',
+    'grommasdietz.kirby-locale.dialog.headline' => 'Vælg sprog til markeringen',
+    'grommasdietz.kirby-locale.dialog.selectLabel' => 'Sprog',
+    'grommasdietz.kirby-locale.dialog.empty' => 'Intet sprog',
 ];

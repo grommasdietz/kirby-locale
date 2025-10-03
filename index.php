@@ -25,11 +25,11 @@ $translationFiles = [
 $translations = [];
 
 $defaultEnglish = [
-    'grommasdietz.gd-locale.locale.label'              => 'Locale',
-    'grommasdietz.gd-locale.locale.dialog.headline'    => 'Choose locale for selection',
-    'grommasdietz.gd-locale.locale.dialog.selectLabel' => 'Locale',
-    'grommasdietz.gd-locale.locale.dialog.empty'       => 'No locale',
-    'grommasdietz.gd-locale.locale.prompt'             => 'Enter the locale code (e.g. de, en-GB)',
+    'grommasdietz.kirby-locale.label'              => 'Locale',
+    'grommasdietz.kirby-locale.dialog.headline'    => 'Choose locale for selection',
+    'grommasdietz.kirby-locale.dialog.selectLabel' => 'Locale',
+    'grommasdietz.kirby-locale.dialog.empty'       => 'No locale',
+    'grommasdietz.kirby-locale.prompt'             => 'Enter the locale code (e.g. de, en-GB)',
 ];
 
 foreach ($translationFiles as $locale => $path) {
@@ -121,7 +121,7 @@ $collectLocales = static function (App $kirby) use ($normaliseLocaleDefinition, 
         }
     }
 
-    $pluginLocales = $kirby->option('grommasdietz.gd-locale.locales', []);
+    $pluginLocales = $kirby->option('grommasdietz.kirby-locales', []);
 
     if (is_callable($pluginLocales)) {
         $pluginLocales = $pluginLocales($kirby);
@@ -133,7 +133,7 @@ $collectLocales = static function (App $kirby) use ($normaliseLocaleDefinition, 
         }
     }
 
-    $catalogPreference = $kirby->option('grommasdietz.gd-locale.catalog');
+    $catalogPreference = $kirby->option('grommasdietz.kirby-locale.catalog');
 
     if ($catalogPreference !== false) {
         $fallback = $catalogPreference && $catalogPreference !== true ? $catalogPreference : $isoLanguageCatalog;
@@ -259,7 +259,7 @@ $normaliseTemplateList = static function ($templates) {
 };
 
 $getEnabledTitleLocaleTemplates = static function (App $kirby) use ($normaliseTemplateList) {
-    $option = $kirby->option('grommasdietz.gd-locale.intendedTemplate');
+    $option = $kirby->option('grommasdietz.kirby-locale.intendedTemplate');
 
     return $normaliseTemplateList($option);
 };
@@ -318,7 +318,7 @@ $storeTitleLocale = static function ($page, mixed $rawValue, ?string $languageCo
         }
     } catch (\Throwable $exception) {
         if (method_exists($kirby, 'logger')) {
-            $kirby->logger('grommasdietz/gd-locale')->error($exception->getMessage(), [
+            $kirby->logger('grommasdietz/kirby-locale')->error($exception->getMessage(), [
                 'exception' => $exception,
                 'page'      => $page->id(),
                 'language'  => $languageCode,
@@ -530,14 +530,14 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
     }
 
     $field = [
-        'label'     => I18n::translate('grommasdietz.gd-locale.locale.label', 'Locale'),
+        'label'     => I18n::translate('grommasdietz.kirby-locale.label', 'Locale'),
         'type'      => 'select',
         'icon'      => 'translate',
         'width'     => '1/3',
         'name'      => 'titleLocale',
         'options'   => $options,
         'empty'     => [
-            'text' => I18n::translate('grommasdietz.gd-locale.locale.dialog.empty', 'No locale'),
+            'text' => I18n::translate('grommasdietz.kirby-locale.dialog.empty', 'No locale'),
         ],
         'search'    => count($options) > 7,
         'translate' => false,
@@ -594,7 +594,7 @@ $extendDialogWithLocaleField = static function (array $dialog, ?string $value = 
     return $dialog;
 };
 
-App::plugin('grommasdietz/gd-locale', [
+App::plugin('grommasdietz/kirby-locale', [
     'translations' => $translations,
     'areas' => [
         'site' => function (App $kirby) use (
@@ -731,7 +731,7 @@ App::plugin('grommasdietz/gd-locale', [
     'api' => [
         'routes' => [
             [
-                'pattern' => 'grommasdietz/gd-locale/locales',
+                'pattern' => 'grommasdietz/kirby-locale/locales',
                 'method'  => 'GET',
                 'action'  => function () use ($collectLocales) {
                     $kirby = App::instance();
@@ -744,7 +744,7 @@ App::plugin('grommasdietz/gd-locale', [
                 },
             ],
             [
-                'pattern' => 'grommasdietz/gd-locale/title-locale',
+                'pattern' => 'grommasdietz/kirby-locale/title-locale',
                 'method'  => 'GET',
                 'action'  => function () {
                     $kirby = App::instance();
