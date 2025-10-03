@@ -1,0 +1,17 @@
+{
+    "name": "grommasdietz/gd-locale",
+    "description": "Locale picker Writer mark for Kirby",
+    "type": "kirby-plugin",
+    "license": "MIT",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Grommas Dietz",
+            "email": "info@grommas-dietz.com",
+            "homepage": "https://grommas-dietz.com"
+        }
+    ],
+    "require": {
+        "getkirby/composer-installer": "^1.2"
+    }
+}
