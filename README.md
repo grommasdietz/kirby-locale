@@ -1,6 +1,6 @@
 # Kirby Locale
 
-Kirby plugin to enable multilingual fragment definitions. If you have pages with titles, phrases or names which should stay in there original languages this plugin is for you.
+Kirby plugin to enable multilingual fragment definitions. If you have pages with titles and/or phrases in writer fields which should stay in there original language this plugin might be handy.
 
 The plugin ships two tools:
 
@@ -9,7 +9,7 @@ The plugin ships two tools:
 
 ## Requirements
 
-- Kirby 4+
+- Kirby 5+
 
 ## Installation
 
@@ -42,12 +42,10 @@ fields:
   text:
     type: writer
     marks:
-      - bold
-      - italic
       - locale
 ```
 
-Once enabled, the Writer displays the locale mark in the toolbar and highlights tagged segments so language switches stay obvious. Published markup wraps the selection in `<span lang="…">` automatically.
+Once enabled, the Writer displays the locale mark in the toolbar and highlights tagged segments so language switches stay obvious. The selection gets wrapped in `<span lang="…">`.
 
 ### Title
 
@@ -65,12 +63,12 @@ For multiple templates:
 return [
     'grommasdietz.kirby-locale.intendedTemplate' => [
         'project',
-        'case-study',
+        'note',
     ],
 ];
 ```
 
-After configuration, Kirby’s create and rename dialogs automatically show the **Locale** dropdown and persist the choice as `titlelocale`. Retrieve it in templates with `$page->titlelocale()->value()` (or `$page->content('de')->titlelocale()->value()` in multi-language sites).
+After configuration, Kirby’s create and rename dialogs automatically show the **Locale** dropdown and save the choice as `titlelocale`. Retrieve it in templates with `$page->titlelocale()`.
 
 #### Keep the stored value
 
@@ -80,7 +78,7 @@ If your deployment runs cleanup commands such as `kirby content:clean`, declare 
 fields:
   titlelocale:
     type: hidden
-    translate: true # or false
+    translate: false
 ```
 
 ## Locale sources
@@ -112,7 +110,7 @@ return [
 ];
 ```
 
-Values may be simple strings (`'fr-CA'`) or associative arrays containing `code` and `name` keys. Closures are supported and evaluated at runtime. The same dataset powers both the Writer mark and the title dialogs, so you only need to maintain it once.
+Values may be simple strings (`'fr'`) or associative arrays containing `code` and `name` keys. Closures are supported and evaluated at runtime. The same dataset powers both the Writer mark and the title dialogs, so you only need to maintain it once.
 
 ## Development
 
