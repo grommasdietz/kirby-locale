@@ -1039,33 +1039,29 @@ $extendDialogWithLocaleField = static function (array $dialog, ?string $value = 
 App::plugin('grommasdietz/kirby-locale', [
     'translations' => $translations,
     'fields' => [
-        'locale' => static function (array $fieldProps = []) {
-            return array_replace_recursive($fieldProps, [
+        'locale' => static function (array $fieldProps = []): array {
+            $defaults = [
                 'extends'   => 'select',
                 'component' => 'k-locale-field',
-                'props'     => static function (array $props): array {
-                    if (!isset($props['plugin']) || !is_string($props['plugin']) || trim($props['plugin']) === '') {
-                        $props['plugin'] = 'grommasdietz/kirby-locale';
-                    }
+                'props'     => [
+                    'plugin' => 'grommasdietz/kirby-locale',
+                    'reset'  => true,
+                    'empty'  => [
+                        'text'  => I18n::translate('grommasdietz.kirby-locale.dialog.empty', '–'),
+                        'value' => '',
+                    ],
+                    'search' => null,
+                ],
+            ];
 
-                    if (array_key_exists('reset', $props) === false) {
-                        $props['reset'] = true;
-                    }
+            $config = array_replace_recursive($defaults, $fieldProps);
 
-                    if (array_key_exists('empty', $props) === false) {
-                        $props['empty'] = [
-                            'text'  => I18n::translate('grommasdietz.kirby-locale.dialog.empty', '–'),
-                            'value' => '',
-                        ];
-                    }
+            $plugin = $config['props']['plugin'] ?? 'grommasdietz/kirby-locale';
+            $config['props']['plugin'] = is_string($plugin) && trim($plugin) !== ''
+                ? trim($plugin)
+                : 'grommasdietz/kirby-locale';
 
-                    if (array_key_exists('search', $props) === false) {
-                        $props['search'] = null;
-                    }
-
-                    return $props;
-                },
-            ]);
+            return $config;
         },
     ],
     'queries' => [
