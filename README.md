@@ -87,7 +87,10 @@ The Writer dialog and the title selector share a single locale collector. Entrie
 2. Kirby’s configured site languages
 3. The bundled ISO 639-1 catalog (unless disabled)
 
-Values can be plain strings (`'en'` or more explicit `'en-GB'`) or associative arrays with `code`, `name`, and optional `group` keys. When you provide the list via `kirby()->option('grommasdietz.kirby-locale.locales')`, the option may also be a closure that returns an array at runtime.
+> [!TIP]
+> Catalog entries adopt the current Panel language when the browser supports `Intl.DisplayNames`, so editors always see familiar labels.
+
+Values must be associative arrays that include at least a `code` and `name`, with an optional `group`. The `kirby()->option('grommasdietz.kirby-locale.locales')` option may also be a closure that returns such an array at runtime.
 
 Set `kirby()->option('grommasdietz.kirby-locale.catalog', false)` to disable the ISO fallback entirely, or pass a custom array to replace it.
 
@@ -106,17 +109,29 @@ return [
 ];
 ```
 
-Values may be simple strings (`'fr'`) or associative arrays containing `code` and `name` keys. You can also supply a closure for the Kirby option if the list should be computed dynamically. The same dataset powers both the Writer mark and the title dialogs, so you only need to maintain it once.
+Each entry must provide a `code` and `name` (and optionally `group`). You can also supply a closure for the Kirby option if the list should be computed dynamically. The same dataset powers both the Writer mark and the title dialogs, so you only need to maintain it once.
 
 ## Development
 
 ```shell
 npm install
+npm run generate:iso
 npm run dev
 npm run build
 ```
 
 The project uses [kirbyup](https://github.com/johannschopplich/kirbyup) to bundle the Panel assets from `src/index.js` into `index.js`.
+
+### ISO catalog maintenance
+
+- Edit `resources/source/iso-639-1.json` to tweak the canonical ISO 639-1 dataset or add missing codes.
+- Add a translation file to `translations/` (e.g. `it.php`) to expose a new Panel language.
+- Run `npm run generate:iso` to rebuild:
+    - `resources/iso-639-1.php` (PHP fallback catalog)
+    - `src/utils/isoTranslations.json` (Panel bundle input)
+- Re-run `npm run build` so the Panel bundle picks up the regenerated JSON.
+
+The generator relies on CLDR data via FormatJS, so every supported Panel language automatically receives translations for each ISO code. Where CLDR does not supply a label the script falls back to the English entry from the canonical dataset.
 
 ## License
 

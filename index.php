@@ -56,41 +56,38 @@ foreach ($translations as $locale => $strings) {
 
 $isoLanguageCatalog = require __DIR__ . '/resources/iso-639-1.php';
 
-$normaliseLocaleDefinition = static function ($locale, ?string $defaultGroup = null) {
-    if (is_string($locale) && $locale !== '') {
-        return [
-            'code'  => $locale,
-            'name'  => $locale,
-            'group' => $defaultGroup,
-        ];
+$normaliseLocaleDefinition = static function ($locale, ?string $defaultGroup = null, string $source = 'plugin') {
+    if (is_array($locale) === false || empty($locale['code'])) {
+        return null;
     }
 
-    if (is_array($locale) && isset($locale['code'])) {
-        $name = $locale['name'] ?? $locale['label'] ?? $locale['text'] ?? $locale['code'];
-        $group = $locale['group'] ?? $locale['continent'] ?? $locale['region'] ?? $defaultGroup;
+    $nameProvided = array_key_exists('name', $locale);
+    $name = $locale['name'] ?? $locale['label'] ?? $locale['text'] ?? $locale['code'];
+    $group = $locale['group'] ?? $locale['continent'] ?? $locale['region'] ?? $defaultGroup;
 
-        if (is_string($group)) {
-            $group = trim($group) ?: null;
-        } else {
-            $group = null;
-        }
-
-        return [
-            'code'  => $locale['code'],
-            'name'  => is_string($name) && $name !== '' ? $name : $locale['code'],
-            'group' => $group,
-        ];
+    if (is_string($group)) {
+        $group = trim($group) ?: null;
+    } else {
+        $group = null;
     }
 
-    return null;
+    return [
+        'code'          => $locale['code'],
+        'name'          => is_string($name) && $name !== '' ? $name : $locale['code'],
+        'group'         => $group,
+        'source'        => $locale['source'] ?? $source,
+        'nameProvided'  => array_key_exists('nameProvided', $locale)
+            ? (bool) $locale['nameProvided']
+            : ($source !== 'catalog' && $nameProvided),
+    ];
 };
 
 $collectLocales = static function (App $kirby) use ($normaliseLocaleDefinition, $isoLanguageCatalog) {
     $collected = [];
     $seen      = [];
 
-    $push = static function ($locale) use (&$collected, &$seen, $normaliseLocaleDefinition) {
-        $normalised = $normaliseLocaleDefinition($locale);
+    $push = static function ($locale, string $source = 'plugin', ?string $defaultGroup = null) use (&$collected, &$seen, $normaliseLocaleDefinition) {
+        $normalised = $normaliseLocaleDefinition($locale, $defaultGroup, $source);
 
         if ($normalised === null) {
             return;
@@ -104,9 +101,11 @@ $collectLocales = static function (App $kirby) use ($normaliseLocaleDefinition, 
 
         $seen[$code] = true;
         $collected[]  = [
-            'code'  => $normalised['code'],
-            'name'  => $normalised['name'],
-            'group' => $normalised['group'] ?? null,
+            'code'         => $normalised['code'],
+            'name'         => $normalised['name'],
+            'group'        => $normalised['group'] ?? null,
+            'source'       => $normalised['source'] ?? $source,
+            'nameProvided' => $normalised['nameProvided'] ?? false,
         ];
     };
 
@@ -117,7 +116,7 @@ $collectLocales = static function (App $kirby) use ($normaliseLocaleDefinition, 
     }
 
     foreach ((array) $pluginLocales as $locale) {
-        $push($locale);
+        $push($locale, 'plugin');
     }
 
     $languages = $kirby->languages();
@@ -127,7 +126,7 @@ $collectLocales = static function (App $kirby) use ($normaliseLocaleDefinition, 
             $push([
                 'code'  => $language->code(),
                 'name'  => $language->name(),
-            ]);
+            ], 'site-language');
         }
     }
 
@@ -137,7 +136,7 @@ $collectLocales = static function (App $kirby) use ($normaliseLocaleDefinition, 
         $fallback = $catalogPreference && $catalogPreference !== true ? $catalogPreference : $isoLanguageCatalog;
 
         foreach ((array) $fallback as $locale) {
-            $push($locale);
+            $push($locale, 'catalog');
         }
     }
 

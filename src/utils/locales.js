@@ -1,22 +1,17 @@
+import isoTranslations from "./isoTranslations.json";
+
 export const ensureArray = (value) => (Array.isArray(value) ? value : []);
 
-export const normaliseLocales = (maybeLocales) => {
+export const normaliseLocales = (maybeLocales, defaultSource = "unknown") => {
   return ensureArray(maybeLocales)
     .map((locale) => {
-      if (!locale) {
+      if (!locale || typeof locale !== "object") {
         return null;
-      }
-
-      if (typeof locale === "string") {
-        return {
-          code: locale,
-          name: locale,
-          group: null,
-        };
       }
 
       const code =
         locale.code || locale.id || locale.value || locale.slug || locale.name;
+
       const name = locale.name || locale.label || locale.code;
       const groupCandidate =
         locale.group || locale.continent || locale.region || locale.category;
@@ -29,10 +24,23 @@ export const normaliseLocales = (maybeLocales) => {
         return null;
       }
 
+      const source =
+        typeof locale.source === "string" && locale.source.trim()
+          ? locale.source.trim()
+          : defaultSource;
+
+      const nameProvided =
+        typeof locale.nameProvided === "boolean"
+          ? locale.nameProvided
+          : source !== "catalog" &&
+            Object.prototype.hasOwnProperty.call(locale, "name");
+
       return {
         code,
         name: name || code,
         group,
+        source,
+        nameProvided,
       };
     })
     .filter((locale) => locale && locale.code);
@@ -51,8 +59,8 @@ export const createLocaleCollector = () => {
   const seen = new Set();
 
   return {
-    add(maybeLocales) {
-      normaliseLocales(maybeLocales).forEach((locale) => {
+    add(maybeLocales, source) {
+      normaliseLocales(maybeLocales, source).forEach((locale) => {
         if (!locale || !locale.code) {
           return;
         }
@@ -73,6 +81,8 @@ export const createLocaleCollector = () => {
             typeof locale.group === "string" && locale.group.trim()
               ? locale.group.trim()
               : null,
+          source: locale.source || source || "unknown",
+          nameProvided: Boolean(locale.nameProvided),
         });
       });
     },
@@ -83,7 +93,10 @@ export const createLocaleCollector = () => {
 };
 
 export const getSiteLocales = () =>
-  normaliseLocales(window.panel?.$store?.state?.languages?.all);
+  normaliseLocales(
+    window.panel?.$store?.state?.languages?.all,
+    "site-language"
+  );
 
 export const getSiteLocaleCodes = () =>
   getSiteLocales()
@@ -177,7 +190,7 @@ export const fetchLocales = async (pluginId) => {
     });
 
     if (catalogPreference && catalogPreference !== true) {
-      collector.add(catalogPreference);
+      collector.add(catalogPreference, "catalog");
     }
   }
 
@@ -199,6 +212,108 @@ export const createLocaleOptions = (
   currentValue = null,
   preferredCodes = []
 ) => {
+  const resolvePanelLocale = () => {
+    const direct = window.panel?.config?.translation;
+
+    if (typeof direct === "string" && direct) {
+      return direct;
+    }
+
+    const storeTranslation = window.panel?.$store?.state?.translation;
+
+    if (storeTranslation) {
+      if (
+        typeof storeTranslation === "string" &&
+        storeTranslation.trim() !== ""
+      ) {
+        return storeTranslation;
+      }
+
+      if (
+        typeof storeTranslation === "object" &&
+        typeof storeTranslation.code === "string" &&
+        storeTranslation.code.trim() !== ""
+      ) {
+        return storeTranslation.code;
+      }
+    }
+
+    return navigator.language || "en";
+  };
+
+  const panelLocale = resolvePanelLocale();
+
+  let languageDisplayNames = null;
+
+  try {
+    languageDisplayNames = new Intl.DisplayNames([panelLocale], {
+      type: "language",
+    });
+  } catch (error) {
+    languageDisplayNames = null;
+  }
+
+  const fallbackIsoName = (code) => {
+    if (!code) {
+      return null;
+    }
+
+    const candidates = [];
+
+    if (typeof panelLocale === "string" && panelLocale.trim() !== "") {
+      const lower = panelLocale.toLowerCase();
+
+      if (isoTranslations[lower]) {
+        candidates.push(lower);
+      }
+
+      const base = lower.split("-")[0];
+
+      if (base && isoTranslations[base] && base !== lower) {
+        candidates.push(base);
+      }
+    }
+
+    if (isoTranslations.en) {
+      candidates.push("en");
+    }
+
+    for (const candidate of candidates) {
+      const translated = isoTranslations[candidate]?.[code];
+
+      if (translated) {
+        return translated;
+      }
+    }
+
+    return null;
+  };
+
+  const resolveName = (locale, code) => {
+    const baseName =
+      typeof locale.name === "string" && locale.name.trim()
+        ? locale.name.trim()
+        : code;
+
+    if (locale.source === "catalog" && locale.nameProvided === false) {
+      if (languageDisplayNames) {
+        const displayName = languageDisplayNames.of(code);
+
+        if (displayName && displayName !== code) {
+          return displayName;
+        }
+      }
+
+      const translated = fallbackIsoName(code);
+
+      if (translated) {
+        return translated;
+      }
+    }
+
+    return baseName;
+  };
+
   const options = [];
   const seen = new Set();
   const preferredSet = new Set(
@@ -227,12 +342,11 @@ export const createLocaleOptions = (
 
     seen.add(key);
 
+    const label = resolveName(locale, code);
+
     options.push({
       value: locale.code,
-      text:
-        locale.name && locale.name !== locale.code
-          ? `${locale.name} (${locale.code})`
-          : locale.code,
+      text: label && label !== code ? `${label} (${locale.code})` : locale.code,
     });
   };
 

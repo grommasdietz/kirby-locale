@@ -2,6 +2,11 @@
   "scripts": {
     "dev": "npx -y kirbyup src/index.js --watch",
     "serve": "npx -y kirbyup serve src/index.js",
-    "build": "npx -y kirbyup src/index.js"
+    "build": "npx -y kirbyup src/index.js",
+    "generate:iso": "node scripts/generate-iso-data.mjs"
+  },
+  "devDependencies": {
+    "@formatjs/intl-displaynames": "^6.8.12",
+    "@formatjs/intl-locale": "^4.2.12"
   }
 }
