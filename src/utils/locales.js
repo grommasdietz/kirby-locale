@@ -422,9 +422,39 @@ export const createLocaleOptions = (
 
   const options = [];
   const seen = new Set();
-  const preferredSet = new Set(
-    preferredCodes.map((code) => localeKey(code)).filter(Boolean)
-  );
+  const preferredSet = new Set();
+
+  const registerPreferredCode = (rawCode) => {
+    const normalised = normaliseLocaleCode(rawCode);
+
+    if (!normalised) {
+      return;
+    }
+
+    const normalisedKey = localeKey(normalised);
+
+    if (normalisedKey) {
+      preferredSet.add(normalisedKey);
+    }
+
+    const hyphenated = normalised.replace(/_/g, "-").toLowerCase();
+
+    if (hyphenated && hyphenated !== normalisedKey) {
+      preferredSet.add(hyphenated);
+    }
+
+    const [base] = hyphenated.split("-");
+
+    if (base) {
+      preferredSet.add(base);
+
+      if (base === "nb") {
+        preferredSet.add("no");
+      }
+    }
+  };
+
+  preferredCodes.forEach((code) => registerPreferredCode(code));
   const siteGroupLabel = translatePanel("dialog.group.site", "Site languages");
   const otherGroupLabel = translatePanel(
     "dialog.group.other",

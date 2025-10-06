@@ -35,7 +35,6 @@ const buildLocaleField = (
       },
       search: enabledOptions.length > 7,
       icon: "translate",
-      width: "1/3",
       value,
     },
     value,
@@ -52,12 +51,6 @@ const injectLocaleField = (dialog, fieldConfig, value) => {
     ...(originalFields.titleLocale || {}),
     ...fieldConfig,
   };
-  const mergedTitleField = originalFields.title
-    ? {
-        ...originalFields.title,
-        width: "2/3",
-      }
-    : originalFields.title;
 
   return {
     ...dialog,
@@ -65,7 +58,6 @@ const injectLocaleField = (dialog, fieldConfig, value) => {
       ...dialog.props,
       fields: {
         ...originalFields,
-        ...(mergedTitleField ? { title: mergedTitleField } : {}),
         titleLocale: mergedLocaleField,
       },
       value: {

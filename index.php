@@ -615,6 +615,39 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
         $siteLocales      = [];
         $remainingLocales = [];
 
+        $registerPreferredCode = static function (string $rawCode) use (&$preferredSet, $normaliseLowercase) {
+            $trimmed = trim($rawCode);
+
+            if ($trimmed === '') {
+                return;
+            }
+
+            $normalised = $normaliseLowercase($trimmed);
+
+            if ($normalised === '') {
+                return;
+            }
+
+            $preferredSet[$normalised] = true;
+
+            $hyphenated = str_replace('_', '-', $normalised);
+
+            if ($hyphenated !== '' && $hyphenated !== $normalised) {
+                $preferredSet[$hyphenated] = true;
+            }
+
+            $parts = explode('-', $hyphenated, 2);
+            $base = $parts[0] ?? '';
+
+            if ($base !== '') {
+                $preferredSet[$base] = true;
+
+                if ($base === 'nb') {
+                    $preferredSet['no'] = true;
+                }
+            }
+        };
+
         $getIsoTranslation = static function (string $code) use ($translations, $candidateLocales) {
             foreach ($candidateLocales as $candidate) {
                 if (!isset($translations[$candidate][$code])) {
@@ -713,11 +746,7 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
                     continue;
                 }
 
-                $normalised = $normaliseLowercase($code);
-
-                if ($normalised !== '') {
-                    $preferredSet[$normalised] = true;
-                }
+                $registerPreferredCode($code);
             }
         }
 
@@ -861,7 +890,6 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
         'label'     => I18n::translate('grommasdietz.kirby-locale.label', 'Locale'),
         'type'      => 'select',
         'icon'      => 'translate',
-        'width'     => '1/3',
         'name'      => 'titleLocale',
         'options'   => $options,
         'empty'     => [
@@ -901,12 +929,6 @@ $extendDialogWithLocaleField = static function (array $dialog, ?string $value = 
     $field['value'] = $value;
 
     $fields['titleLocale'] = $field;
-
-    if (isset($fields['title']) && is_array($fields['title'])) {
-        $fields['title'] = array_replace($fields['title'], [
-            'width' => '2/3',
-        ]);
-    }
 
     $values = $dialog['props']['value'] ?? [];
 
