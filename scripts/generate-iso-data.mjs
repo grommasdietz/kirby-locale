@@ -13,6 +13,11 @@ const rootDir = path.resolve(__dirname, "..");
 
 const dataPath = path.join(rootDir, "resources", "source", "iso-639-1.json");
 const phpCatalogPath = path.join(rootDir, "resources", "iso-639-1.php");
+const phpTranslationsPath = path.join(
+  rootDir,
+  "resources",
+  "iso-639-1-translations.php"
+);
 const jsonTranslationsPath = path.join(
   rootDir,
   "src",
@@ -269,6 +274,28 @@ const writeJsonTranslations = (translations) => {
   );
 };
 
+const writePhpTranslations = (translations) => {
+  const localeKeys = orderLocales(Object.keys(translations));
+  const lines = ["<?php", "", "return ["];
+
+  for (const locale of localeKeys) {
+    lines.push(`    '${locale}' => [`);
+
+    const codes = Object.keys(translations[locale]).sort();
+
+    for (const code of codes) {
+      const label = escapePhpString(translations[locale][code]);
+      lines.push(`        '${code}' => '${label}',`);
+    }
+
+    lines.push("    ],");
+  }
+
+  lines.push("];", "");
+
+  fs.writeFileSync(phpTranslationsPath, lines.join("\n"));
+};
+
 const main = async () => {
   const isoCatalog = loadIsoCatalog();
   const panelLocales = collectPanelLocales();
@@ -299,6 +326,7 @@ const main = async () => {
 
   writePhpCatalog(isoCatalog, new Map(Object.entries(translations.en)));
   writeJsonTranslations(translations);
+  writePhpTranslations(translations);
 
   console.log(
     `[generate-iso-data] Generated translations for ${panelLocales.length} panel locale(s).`

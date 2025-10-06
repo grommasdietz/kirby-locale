@@ -55,6 +55,33 @@ foreach ($translations as $locale => $strings) {
 }
 
 $isoLanguageCatalog = require __DIR__ . '/resources/iso-639-1.php';
+$isoLanguageTranslationsPath = __DIR__ . '/resources/iso-639-1-translations.php';
+$isoLanguageTranslations = [];
+
+if (is_file($isoLanguageTranslationsPath)) {
+    $translationsData = require $isoLanguageTranslationsPath;
+
+    if (is_array($translationsData)) {
+        $isoLanguageTranslations = $translationsData;
+    }
+}
+
+if (!isset($isoLanguageTranslations['en']) || !is_array($isoLanguageTranslations['en'])) {
+    $isoLanguageTranslations['en'] = [];
+}
+
+foreach ($isoLanguageCatalog as $entry) {
+    $code = $entry['code'] ?? null;
+    $name = $entry['name'] ?? null;
+
+    if (!is_string($code) || $code === '') {
+        continue;
+    }
+
+    if (!isset($isoLanguageTranslations['en'][$code]) || !is_string($isoLanguageTranslations['en'][$code])) {
+        $isoLanguageTranslations['en'][$code] = is_string($name) && $name !== '' ? $name : $code;
+    }
+}
 
 $normaliseLocaleDefinition = static function ($locale, ?string $defaultGroup = null, string $source = 'plugin') {
     if (is_string($locale)) {
