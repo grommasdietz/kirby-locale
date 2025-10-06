@@ -29,7 +29,7 @@ const normaliseValue = (value) => {
 
 export const createLocaleField = (defaultPluginId) => ({
   name: "locale-field",
-  inheritAttrs: false,
+  emits: ["input", "change", "focus", "blur"],
   props: {
     value: {
       type: [String, null],
@@ -311,7 +311,6 @@ export const createLocaleField = (defaultPluginId) => ({
     >
       <k-select-input
         v-bind="inputProps"
-        v-bind="$attrs"
         :value="internalValue"
         :options="internalOptions"
         :placeholder="placeholder"
@@ -320,9 +319,10 @@ export const createLocaleField = (defaultPluginId) => ({
         :icon="icon"
         :disabled="disabled || loading"
         :reset="reset"
-        v-on="$listeners"
         @input="handleInput"
         @reset="handleReset"
+        @focus="$emit('focus', $event)"
+        @blur="$emit('blur', $event)"
       />
     </k-field>
   `,
