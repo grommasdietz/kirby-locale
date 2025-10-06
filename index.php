@@ -771,7 +771,13 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
                 continue;
             }
 
-            if (isset($preferredSet[$key])) {
+            $rawSource = $locale['source'] ?? null;
+            $normalisedSource = is_string($rawSource)
+                ? strtolower(preg_replace('/[^a-z]/', '', $rawSource))
+                : '';
+            $isSiteSource = $normalisedSource === 'sitelanguage';
+
+            if (isset($preferredSet[$key]) || $isSiteSource) {
                 $siteLocales[] = $locale;
             } else {
                 $remainingLocales[] = $locale;
@@ -896,6 +902,7 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
             'text' => I18n::translate('grommasdietz.kirby-locale.dialog.empty', '–'),
         ],
         'search'    => $enabledCount > 7,
+        'reset'     => true,
         'translate' => false,
         'value'     => $currentValue,
     ];

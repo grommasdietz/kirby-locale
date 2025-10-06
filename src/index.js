@@ -35,6 +35,7 @@ const buildLocaleField = (
       },
       search: enabledOptions.length > 7,
       icon: "translate",
+      reset: baseField.reset ?? true,
       value,
     },
     value,

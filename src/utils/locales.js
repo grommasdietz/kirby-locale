@@ -471,12 +471,18 @@ export const createLocaleOptions = (
 
     const code = normaliseLocaleCode(locale.code);
     const key = localeKey(code);
+    const rawSource =
+      typeof locale.source === "string" ? locale.source.trim() : "";
+    const normalisedSource = rawSource
+      .toLowerCase()
+      .replace(/[^a-z]/g, "");
+    const isSiteSource = normalisedSource === "sitelanguage";
 
     if (!code || !key) {
       return;
     }
 
-    if (preferredSet.has(key)) {
+    if (preferredSet.has(key) || isSiteSource) {
       siteLocales.push(locale);
     } else {
       remainingLocales.push(locale);
