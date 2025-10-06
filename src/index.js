@@ -14,13 +14,6 @@ const buildLocaleField = (
 ) => {
   const siteLocaleCodes = getSiteLocaleCodes();
   const options = createLocaleOptions(locales, currentValue, siteLocaleCodes);
-  if (typeof console !== "undefined" && console.debug) {
-    console.debug("kirby-locale:title-dialog options", {
-      panelLocale: window.panel?.config?.translation,
-      firstOption: options[0],
-      optionCount: options.length,
-    });
-  }
   const enabledOptions = options.filter((option) => option.disabled !== true);
   const baseField = existingField ? { ...existingField } : {};
   let value =
