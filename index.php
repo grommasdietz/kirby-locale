@@ -57,6 +57,22 @@ foreach ($translations as $locale => $strings) {
 $isoLanguageCatalog = require __DIR__ . '/resources/iso-639-1.php';
 
 $normaliseLocaleDefinition = static function ($locale, ?string $defaultGroup = null, string $source = 'plugin') {
+    if (is_string($locale)) {
+        $trimmed = trim($locale);
+
+        if ($trimmed === '') {
+            return null;
+        }
+
+        return [
+            'code'          => $trimmed,
+            'name'          => $trimmed,
+            'group'         => $defaultGroup,
+            'source'        => $source,
+            'nameProvided'  => false,
+        ];
+    }
+
     if (is_array($locale) === false || empty($locale['code'])) {
         return null;
     }

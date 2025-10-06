@@ -5,7 +5,27 @@ export const ensureArray = (value) => (Array.isArray(value) ? value : []);
 export const normaliseLocales = (maybeLocales, defaultSource = "unknown") => {
   return ensureArray(maybeLocales)
     .map((locale) => {
-      if (!locale || typeof locale !== "object") {
+      if (!locale) {
+        return null;
+      }
+
+      if (typeof locale === "string") {
+        const trimmed = locale.trim();
+
+        if (!trimmed) {
+          return null;
+        }
+
+        return {
+          code: trimmed,
+          name: trimmed,
+          group: null,
+          source: defaultSource,
+          nameProvided: false,
+        };
+      }
+
+      if (typeof locale !== "object") {
         return null;
       }
 
@@ -52,6 +72,65 @@ export const normaliseLocaleCode = (code) =>
 export const localeKey = (code) => {
   const normalised = normaliseLocaleCode(code);
   return normalised ? normalised.toLowerCase() : "";
+};
+
+const normaliseLocaleTag = (value) =>
+  typeof value === "string"
+    ? value.trim().replace(/_/g, "-").replace(/\s+/g, "")
+    : "";
+
+const canonicaliseLocale = (value) => {
+  const tag = normaliseLocaleTag(value);
+
+  if (!tag) {
+    return "";
+  }
+
+  if (
+    typeof Intl !== "undefined" &&
+    typeof Intl.getCanonicalLocales === "function"
+  ) {
+    try {
+      const result = Intl.getCanonicalLocales(tag);
+
+      if (
+        Array.isArray(result) &&
+        result.length > 0 &&
+        typeof result[0] === "string"
+      ) {
+        return result[0];
+      }
+    } catch (error) {
+      // ignore and fall back to manual handling below
+    }
+  }
+
+  return tag;
+};
+
+const localeCandidateKeys = (value) => {
+  const canonical = canonicaliseLocale(value);
+
+  if (!canonical) {
+    return [];
+  }
+
+  const lowered = canonical.toLowerCase();
+  const candidates = [];
+
+  candidates.push(lowered);
+
+  const [base] = lowered.split("-");
+
+  if (base && base !== lowered) {
+    candidates.push(base);
+  }
+
+  if (lowered === "nb" && base !== "no") {
+    candidates.push("no");
+  }
+
+  return Array.from(new Set(candidates));
 };
 
 export const createLocaleCollector = () => {
@@ -241,12 +320,15 @@ export const createLocaleOptions = (
     return navigator.language || "en";
   };
 
-  const panelLocale = resolvePanelLocale();
+  const rawPanelLocale = resolvePanelLocale();
+  const canonicalPanelLocale =
+    canonicaliseLocale(rawPanelLocale) || canonicaliseLocale("en") || "en";
+  const candidateLocales = localeCandidateKeys(canonicalPanelLocale);
 
   let languageDisplayNames = null;
 
   try {
-    languageDisplayNames = new Intl.DisplayNames([panelLocale], {
+    languageDisplayNames = new Intl.DisplayNames([canonicalPanelLocale], {
       type: "language",
     });
   } catch (error) {
@@ -258,23 +340,9 @@ export const createLocaleOptions = (
       return null;
     }
 
-    const candidates = [];
+    const candidates = candidateLocales.length ? [...candidateLocales] : [];
 
-    if (typeof panelLocale === "string" && panelLocale.trim() !== "") {
-      const lower = panelLocale.toLowerCase();
-
-      if (isoTranslations[lower]) {
-        candidates.push(lower);
-      }
-
-      const base = lower.split("-")[0];
-
-      if (base && isoTranslations[base] && base !== lower) {
-        candidates.push(base);
-      }
-    }
-
-    if (isoTranslations.en) {
+    if (isoTranslations.en && candidates.includes("en") === false) {
       candidates.push("en");
     }
 

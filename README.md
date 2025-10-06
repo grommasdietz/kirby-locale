@@ -127,8 +127,8 @@ The project uses [kirbyup](https://github.com/johannschopplich/kirbyup) to bundl
 - Edit `resources/source/iso-639-1.json` to tweak the canonical ISO 639-1 dataset or add missing codes.
 - Add a translation file to `translations/` (e.g. `it.php`) to expose a new Panel language.
 - Run `npm run generate:iso` to rebuild:
-    - `resources/iso-639-1.php` (PHP fallback catalog)
-    - `src/utils/isoTranslations.json` (Panel bundle input)
+  - `resources/iso-639-1.php` (PHP fallback catalog)
+  - `src/utils/isoTranslations.json` (Panel bundle input)
 - Re-run `npm run build` so the Panel bundle picks up the regenerated JSON.
 
 The generator relies on CLDR data via FormatJS, so every supported Panel language automatically receives translations for each ISO code. Where CLDR does not supply a label the script falls back to the English entry from the canonical dataset.

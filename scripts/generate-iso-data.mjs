@@ -23,6 +23,58 @@ const jsonTranslationsPath = path.join(
 const escapePhpString = (value) =>
   value.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
 
+const normaliseLocaleTag = (value) =>
+  typeof value === "string"
+    ? value.trim().replace(/_/g, "-").replace(/\s+/g, "")
+    : "";
+
+const canonicaliseLocale = (value) => {
+  const tag = normaliseLocaleTag(value);
+
+  if (!tag) {
+    return "";
+  }
+
+  if (
+    typeof Intl !== "undefined" &&
+    typeof Intl.getCanonicalLocales === "function"
+  ) {
+    try {
+      const result = Intl.getCanonicalLocales(tag);
+
+      if (Array.isArray(result) && result.length > 0) {
+        return result[0];
+      }
+    } catch (error) {
+      // ignore and fall back below
+    }
+  }
+
+  return tag;
+};
+
+const localeCandidateKeys = (value) => {
+  const canonical = canonicaliseLocale(value);
+
+  if (!canonical) {
+    return [];
+  }
+
+  const lowered = canonical.toLowerCase();
+  const candidates = new Set([lowered]);
+  const [base] = lowered.split("-");
+
+  if (base && base !== lowered) {
+    candidates.add(base);
+  }
+
+  if (lowered === "nb" && base !== "no") {
+    candidates.add("no");
+  }
+
+  return Array.from(candidates);
+};
+
 const loadIsoCatalog = () => {
   if (fs.existsSync(dataPath) === false) {
     throw new Error(`Missing ISO dataset at ${dataPath}`);
@@ -33,7 +85,9 @@ const loadIsoCatalog = () => {
 
   return data
     .map((entry) => ({
-      code: String(entry.code || "").trim().toLowerCase(),
+      code: String(entry.code || "")
+        .trim()
+        .toLowerCase(),
       name: typeof entry.name === "string" ? entry.name.trim() : "",
     }))
     .filter((entry) => entry.code !== "")
@@ -71,17 +125,30 @@ const loadedLocaleData = new Set();
 
 const ensureLocaleData = async (locale) => {
   const attempts = new Set();
-  const normalised = locale.toLowerCase();
+  const canonical = canonicaliseLocale(locale);
+  const lowered = canonical.toLowerCase();
 
-  attempts.add(normalised);
-
-  const [base] = normalised.split("-");
-
-  if (base && base !== normalised) {
-    attempts.add(base);
+  if (canonical) {
+    attempts.add(canonical);
   }
 
-  if (normalised === "nb") {
+  if (lowered !== canonical) {
+    attempts.add(lowered);
+  }
+
+  const [base] = canonical.split("-");
+
+  if (base && base !== canonical) {
+    attempts.add(base);
+
+    const lowerBase = base.toLowerCase();
+
+    if (lowerBase !== base) {
+      attempts.add(lowerBase);
+    }
+  }
+
+  if (lowered === "nb") {
     attempts.add("no");
   }
 
@@ -150,7 +217,11 @@ const resolveDisplayName = (getDisplayNames, locale, code, fallback) => {
 
     const rendered = displayNames.of(code);
 
-    if (typeof rendered === "string" && rendered.trim() !== "" && rendered !== code) {
+    if (
+      typeof rendered === "string" &&
+      rendered.trim() !== "" &&
+      rendered !== code
+    ) {
       return rendered.trim();
     }
   }
@@ -162,7 +233,7 @@ const resolveDisplayName = (getDisplayNames, locale, code, fallback) => {
 };
 
 const writePhpCatalog = (records, englishMap) => {
-  const lines = ["<?php", "", "return ["]; 
+  const lines = ["<?php", "", "return ["];
 
   for (const record of records) {
     const name = englishMap.get(record.code) || record.name || record.code;
@@ -188,7 +259,8 @@ const writeJsonTranslations = (translations) => {
 
       acc[locale] = codes;
       return acc;
-    }, {}
+    },
+    {}
   );
 
   fs.writeFileSync(
