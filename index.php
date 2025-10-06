@@ -3,6 +3,7 @@
 use Kirby\Cms\App;
 use Kirby\Cms\Find;
 use Kirby\Cms\Structure;
+use Kirby\Query\Query;
 use Kirby\Sane\Html;
 use Kirby\Toolkit\I18n;
 
@@ -955,6 +956,14 @@ $buildLocaleQueryOptions = static function () use ($buildDialogLocaleField): arr
     return $items;
 };
 
+$createLocaleQueryResult = static function () use ($buildLocaleQueryOptions) {
+    return Structure::factory($buildLocaleQueryOptions());
+};
+
+Query::$entries['locale'] = static function () use ($createLocaleQueryResult) {
+    return $createLocaleQueryResult();
+};
+
 $extendDialogWithLocaleField = static function (array $dialog, ?string $value = null, array $fieldOverrides = []) use ($buildDialogLocaleField) {
     if (!isset($dialog['props']) || !is_array($dialog['props'])) {
         return $dialog;
@@ -996,8 +1005,8 @@ App::plugin('grommasdietz/kirby-locale', [
         'locale' => [],
     ],
     'queries' => [
-        'locale' => function (App $kirby, array $arguments = []) use ($buildLocaleQueryOptions) {
-            return Structure::factory($buildLocaleQueryOptions());
+        'locale' => function (App $kirby, array $arguments = []) use ($createLocaleQueryResult) {
+            return $createLocaleQueryResult();
         },
     ],
     'areas' => [
