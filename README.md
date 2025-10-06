@@ -80,25 +80,25 @@ fields:
     translate: false
 ```
 
-### Locale field
+### Blueprints & custom dialogs
 
-Use the field anywhere in your Panel by setting `type: locale` in a blueprint or custom dialog:
+Reuse the shared locale dataset in any blueprint select field via the bundled query:
 
 ```yaml
 fields:
   locale:
-    type: locale
+    type: select
     label: Locale
     translate: false
+    reset: true
+    options:
+      type: query
+      query: locale # alias: locales
+      text: "{{ item.text }}"
+      value: "{{ item.value }}"
 ```
 
-The field automatically:
-
-- Groups site languages above the rest of the catalog
-- Localises option labels to the current Panel language
-- Offers a one-click reset to clear the selection (submits an empty value)
-
-You can fine-tune the dropdown with the same props you would pass to Kirby’s built-in select field (`placeholder`, `help`, `required`, `reset`, etc.). For custom datasets, supply either a `locales` array (of `{ code, name, group }`) or a ready-made `options` array—otherwise the field falls back to the shared locale collector used by the Writer mark and title dialog.
+The query returns the same grouped and localised option list used by the Writer mark and the title dialogs, so every locale picker stays in sync. If you prefer the bespoke Vue component, the custom `type: locale` field remains available and accepts the same props as Kirby’s select field (plus optional `locales` or `options` overrides).
 
 ## Locale sources
 

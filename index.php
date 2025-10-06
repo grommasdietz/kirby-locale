@@ -915,6 +915,45 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
     return $field;
 };
 
+$buildLocaleQueryOptions = static function () use ($buildDialogLocaleField): array {
+    $field = $buildDialogLocaleField();
+    $options = $field['options'] ?? [];
+    $items = [];
+
+    foreach ($options as $option) {
+        if (!is_array($option)) {
+            continue;
+        }
+
+        $value = $option['value'] ?? null;
+
+        if (!is_string($value) || $value === '') {
+            continue;
+        }
+
+        if (isset($option['disabled']) && $option['disabled'] === true) {
+            continue;
+        }
+
+        if (strpos($value, '__group__') === 0) {
+            continue;
+        }
+
+        $text = $option['text'] ?? $value;
+
+        if (!is_string($text) || $text === '') {
+            $text = $value;
+        }
+
+        $items[] = [
+            'value' => $value,
+            'text'  => $text,
+        ];
+    }
+
+    return $items;
+};
+
 $extendDialogWithLocaleField = static function (array $dialog, ?string $value = null, array $fieldOverrides = []) use ($buildDialogLocaleField) {
     if (!isset($dialog['props']) || !is_array($dialog['props'])) {
         return $dialog;
@@ -956,21 +995,11 @@ App::plugin('grommasdietz/kirby-locale', [
         'locale' => [],
     ],
     'queries' => [
-        'locales' => function (App $kirby) use ($buildDialogLocaleField) {
-            $field = $buildDialogLocaleField();
-            $options = $field['options'] ?? [];
-
-            return array_values(array_filter($options, static function ($option) {
-                return is_array($option) && isset($option['value']);
-            }));
+        'locale' => function () use ($buildLocaleQueryOptions) {
+            return $buildLocaleQueryOptions();
         },
-        'locale' => function (App $kirby) use ($buildDialogLocaleField) {
-            $field = $buildDialogLocaleField();
-            $options = $field['options'] ?? [];
-
-            return array_values(array_filter($options, static function ($option) {
-                return is_array($option) && isset($option['value']);
-            }));
+        'locales' => function () use ($buildLocaleQueryOptions) {
+            return $buildLocaleQueryOptions();
         },
     ],
     'areas' => [
