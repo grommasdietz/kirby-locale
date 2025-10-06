@@ -1039,30 +1039,19 @@ $extendDialogWithLocaleField = static function (array $dialog, ?string $value = 
 App::plugin('grommasdietz/kirby-locale', [
     'translations' => $translations,
     'fields' => [
-        'locale' => static function (array $fieldProps = []): array {
-            $defaults = [
-                'extends'   => 'select',
-                'component' => 'k-locale-field',
-                'props'     => [
-                    'plugin' => 'grommasdietz/kirby-locale',
-                    'reset'  => true,
-                    'empty'  => [
-                        'text'  => I18n::translate('grommasdietz.kirby-locale.dialog.empty', '–'),
-                        'value' => '',
-                    ],
-                    'search' => null,
+        'locale' => [
+            'extends'   => 'select',
+            'component' => 'k-locale-field',
+            'props'     => [
+                'plugin' => 'grommasdietz/kirby-locale',
+                'reset'  => true,
+                'empty'  => [
+                    'text'  => I18n::translate('grommasdietz.kirby-locale.dialog.empty', '–'),
+                    'value' => '',
                 ],
-            ];
-
-            $config = array_replace_recursive($defaults, $fieldProps);
-
-            $plugin = $config['props']['plugin'] ?? 'grommasdietz/kirby-locale';
-            $config['props']['plugin'] = is_string($plugin) && trim($plugin) !== ''
-                ? trim($plugin)
-                : 'grommasdietz/kirby-locale';
-
-            return $config;
-        },
+                'search' => null,
+            ],
+        ],
     ],
     'queries' => [
         'locale' => function (App $kirby, array $arguments = []) use ($createLocaleQueryResult) {
