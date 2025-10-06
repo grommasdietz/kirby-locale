@@ -1,10 +1,10 @@
 # Kirby Locale
 
-Kirby plugin to enable multilingual fragment definitions. If you have pages with titles and/or phrases in writer fields which should stay in there original language this plugin might be handy.
+Kirby plugin to enable multilingual fragment definitions. If you have pages with titles and/or phrases in Writer fields which should stay in there original language this plugin might be handy.
 
 The plugin ships two tools:
 
-- A `locale` writer mark that wraps inline selections in a `<span lang="…">`
+- A `locale` Writer mark that wraps inline selections in a `<span lang="…">`
 - A locale picker in Kirby’s page create and title rename dialogs to save `titlelocale` to your content so you can read and write it individually on templates and snippets
 
 ## Requirements
