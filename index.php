@@ -605,6 +605,8 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
 
     $currentValue = is_string($currentValue) ? trim($currentValue) : '';
 
+    $currentGroupLabel = null;
+
     if ($kirby) {
         $translations     = $isoLanguageTranslations;
         $panelLocale      = I18n::locale() ?: 'en';
@@ -784,7 +786,7 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
 
         $lastGroupKey = null;
 
-        $pushGroupHeading = static function (string $label) use (&$options, &$lastGroupKey, $normaliseLowercase) {
+        $pushGroupHeading = static function (string $label) use (&$options, &$lastGroupKey, $normaliseLowercase, &$currentGroupLabel) {
             $trimmed = trim($label);
 
             if ($trimmed === '') {
@@ -804,9 +806,10 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
             ];
 
             $lastGroupKey = $key;
+            $currentGroupLabel = $trimmed;
         };
 
-        $pushOption = static function (array $locale, string $code) use (&$options, &$seen, $normaliseLowercase, $resolveLabel) {
+        $pushOption = static function (array $locale, string $code) use (&$options, &$seen, $normaliseLowercase, $resolveLabel, &$currentGroupLabel) {
             $key = $normaliseLowercase($code);
 
             if ($key === '' || isset($seen[$key])) {
@@ -817,10 +820,16 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
 
             $label = $resolveLabel($locale, $code);
 
-            $options[] = [
+            $option = [
                 'value' => $locale['code'],
                 'text'  => $label !== $code ? sprintf('%s (%s)', $label, $code) : $code,
             ];
+
+            if (is_string($currentGroupLabel) && $currentGroupLabel !== '') {
+                $option['group'] = $currentGroupLabel;
+            }
+
+            $options[] = $option;
         };
 
         if ($siteLocales !== []) {
@@ -843,10 +852,12 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
             }
 
             $lastGroupKey = null;
+            $currentGroupLabel = null;
         }
 
         if ($remainingLocales !== []) {
             $lastGroupKey = null;
+            $currentGroupLabel = null;
 
             foreach ($remainingLocales as $locale) {
                 $code = $locale['code'] ?? null;
@@ -947,10 +958,22 @@ $buildLocaleQueryOptions = static function () use ($buildDialogLocaleField): arr
             $text = $value;
         }
 
-        $items[] = [
+        $group = $option['group'] ?? null;
+
+        if (!is_string($group) || trim($group) === '') {
+            $group = null;
+        }
+
+        $item = [
             'value' => $value,
             'text'  => $text,
         ];
+
+        if ($group !== null) {
+            $item['group'] = $group;
+        }
+
+        $items[] = $item;
     }
 
     return $items;
