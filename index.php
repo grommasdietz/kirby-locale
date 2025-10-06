@@ -465,7 +465,6 @@ $storeTitleLocale = static function ($page, mixed $rawValue, ?string $languageCo
     if ($updateSucceeded === false) {
         return;
     }
-
 };
 
 $handlePageLocaleUpdate = static function ($page, mixed $explicitLanguage = null) use ($resolveLanguageCode, $storeTitleLocale, $extractLocaleFromRequest, $templateAllowsLocale, $getEnabledTitleLocaleTemplates) {
@@ -1039,10 +1038,6 @@ $extendDialogWithLocaleField = static function (array $dialog, ?string $value = 
 
 App::plugin('grommasdietz/kirby-locale', [
     'translations' => $translations,
-    'panel' => [
-        'js' => 'index.js',
-        'css' => 'index.css',
-    ],
     'fields' => [
         'locale' => [],
     ],

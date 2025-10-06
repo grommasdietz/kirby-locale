@@ -28,6 +28,7 @@ const normaliseValue = (value) => {
 };
 
 export const createLocaleField = (defaultPluginId) => ({
+  extends: "k-select-field",
   name: "locale-field",
   props: {
     value: {
