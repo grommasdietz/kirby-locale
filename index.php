@@ -1039,7 +1039,34 @@ $extendDialogWithLocaleField = static function (array $dialog, ?string $value = 
 App::plugin('grommasdietz/kirby-locale', [
     'translations' => $translations,
     'fields' => [
-        'locale' => [],
+        'locale' => static function (array $fieldProps = []) {
+            return array_replace_recursive($fieldProps, [
+                'extends'   => 'select',
+                'component' => 'k-locale-field',
+                'props'     => static function (array $props): array {
+                    if (!isset($props['plugin']) || !is_string($props['plugin']) || trim($props['plugin']) === '') {
+                        $props['plugin'] = 'grommasdietz/kirby-locale';
+                    }
+
+                    if (array_key_exists('reset', $props) === false) {
+                        $props['reset'] = true;
+                    }
+
+                    if (array_key_exists('empty', $props) === false) {
+                        $props['empty'] = [
+                            'text'  => I18n::translate('grommasdietz.kirby-locale.dialog.empty', '–'),
+                            'value' => '',
+                        ];
+                    }
+
+                    if (array_key_exists('search', $props) === false) {
+                        $props['search'] = null;
+                    }
+
+                    return $props;
+                },
+            ]);
+        },
     ],
     'queries' => [
         'locale' => function (App $kirby, array $arguments = []) use ($createLocaleQueryResult) {
