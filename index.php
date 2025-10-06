@@ -2,8 +2,8 @@
 
 use Kirby\Cms\App;
 use Kirby\Cms\Find;
+use Kirby\Cms\Structure;
 use Kirby\Sane\Html;
-use Kirby\Toolkit\Collection;
 use Kirby\Toolkit\I18n;
 
 Html::$allowedTags['span'] = ['lang', 'class'];
@@ -997,7 +997,7 @@ App::plugin('grommasdietz/kirby-locale', [
     ],
     'queries' => [
         'locale' => function (App $kirby, array $arguments = []) use ($buildLocaleQueryOptions) {
-            return Collection::factory($buildLocaleQueryOptions());
+            return Structure::factory($buildLocaleQueryOptions());
         },
     ],
     'areas' => [
