@@ -953,6 +953,10 @@ $extendDialogWithLocaleField = static function (array $dialog, ?string $value = 
 
 App::plugin('grommasdietz/kirby-locale', [
     'translations' => $translations,
+    'panel' => [
+        'css' => 'index.css',
+        'js'  => 'index.js',
+    ],
     'fields' => [
         'locale' => [],
     ],
