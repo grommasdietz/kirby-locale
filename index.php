@@ -27,7 +27,7 @@ $translations = [];
 $defaultEnglish = [
     'grommasdietz.kirby-locale.label'              => 'Locale',
     'grommasdietz.kirby-locale.dialog.headline'    => 'Choose locale for selection',
-    'grommasdietz.kirby-locale.dialog.selectLabel' => 'Locale',
+    'grommasdietz.kirby-locale.dialog.select.label' => 'Locale',
     'grommasdietz.kirby-locale.dialog.empty'       => 'No locale',
     'grommasdietz.kirby-locale.prompt'             => 'Enter the locale code (e.g. de, en-GB)',
 ];
@@ -121,16 +121,14 @@ $collectLocales = static function (App $kirby) use ($normaliseLocaleDefinition, 
         }
     }
 
-    $pluginLocales = $kirby->option('grommasdietz.kirby-locales', []);
+    $pluginLocales = $kirby->option('grommasdietz.kirby-locale.locales', []);
 
     if (is_callable($pluginLocales)) {
         $pluginLocales = $pluginLocales($kirby);
     }
 
-    if ($pluginLocales) {
-        foreach ((array) $pluginLocales as $locale) {
-            $push($locale);
-        }
+    foreach ((array) $pluginLocales as $locale) {
+        $push($locale);
     }
 
     $catalogPreference = $kirby->option('grommasdietz.kirby-locale.catalog');

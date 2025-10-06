@@ -211,7 +211,7 @@ export const fetchLocales = async (pluginId) => {
 
   if (locales.length === 0) {
     console.warn(
-      `[${pluginId}] No locales available. Configure \`grommasdietz.kirby-locales\` or enable the plugin API route.`
+      `[${pluginId}] No locales available. Configure \`grommasdietz.kirby-locale.locales\` or enable the plugin API route.`
     );
   }
 
