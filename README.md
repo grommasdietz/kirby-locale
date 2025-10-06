@@ -2,10 +2,11 @@
 
 Kirby plugin to enable multilingual fragment definitions. If you have pages with titles and/or phrases in Writer fields which should stay in there original language this plugin might be handy.
 
-The plugin ships two tools:
+The plugin ships three tools:
 
 - A `locale` Writer mark that wraps inline selections in a `<span lang="…">`
 - A locale picker in Kirby’s page create and title rename dialogs to save `titlelocale` to your content so you can read and write it individually on templates and snippets
+- A reusable `locale` Panel field for blueprints and custom dialogs that mirrors the same grouped locale selector
 
 ## Requirements
 
@@ -78,6 +79,26 @@ fields:
     type: hidden
     translate: false
 ```
+
+### Locale field
+
+Use the field anywhere in your Panel by setting `type: locale` in a blueprint or custom dialog:
+
+```yaml
+fields:
+  locale:
+    type: locale
+    label: Locale
+    translate: false
+```
+
+The field automatically:
+
+- Groups site languages above the rest of the catalog
+- Localises option labels to the current Panel language
+- Offers a one-click reset to clear the selection (submits an empty value)
+
+You can fine-tune the dropdown with the same props you would pass to Kirby’s built-in select field (`placeholder`, `help`, `required`, `reset`, etc.). For custom datasets, supply either a `locales` array (of `{ code, name, group }`) or a ready-made `options` array—otherwise the field falls back to the shared locale collector used by the Writer mark and title dialog.
 
 ## Locale sources
 

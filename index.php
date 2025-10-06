@@ -601,11 +601,7 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
         'Other languages'
     );
 
-    $currentValue = is_string($currentValue) ? trim($currentValue) : null;
-
-    if ($currentValue === '') {
-        $currentValue = null;
-    }
+    $currentValue = is_string($currentValue) ? trim($currentValue) : '';
 
     if ($kirby) {
         $translations     = $isoLanguageTranslations;
@@ -876,7 +872,7 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
 
     $normalisedCurrent = $normaliseLowercase($currentValue);
 
-    if ($currentValue !== null && $normalisedCurrent !== '' && !isset($seen[$normalisedCurrent])) {
+    if ($currentValue !== '' && $normalisedCurrent !== '' && !isset($seen[$normalisedCurrent])) {
         array_unshift($options, [
             'value' => $currentValue,
             'text'  => $currentValue,
@@ -894,15 +890,19 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
 
     $field = [
         'label'     => I18n::translate('grommasdietz.kirby-locale.label', 'Locale'),
-        'type'      => 'select',
+        'type'      => 'locale',
+        'plugin'    => 'grommasdietz/kirby-locale',
         'icon'      => 'translate',
         'name'      => 'titleLocale',
         'options'   => $options,
+    'locales'   => $locales,
         'empty'     => [
-            'text' => I18n::translate('grommasdietz.kirby-locale.dialog.empty', '–'),
+            'text'  => I18n::translate('grommasdietz.kirby-locale.dialog.empty', '–'),
+            'value' => '',
         ],
         'search'    => $enabledCount > 7,
         'reset'     => true,
+        'default'   => '',
         'translate' => false,
         'value'     => $currentValue,
     ];

@@ -1,43 +1,39 @@
 import { createLocaleMark } from "./marks/locale.js";
-import {
-  fetchLocales,
-  createLocaleOptions,
-  getSiteLocaleCodes,
-} from "./utils/locales.js";
+import { createLocaleField } from "./fields/locale.js";
 
 const pluginId = "grommasdietz/kirby-locale";
 
-const buildLocaleField = (
-  locales,
-  currentValue = null,
-  existingField = null
-) => {
-  const siteLocaleCodes = getSiteLocaleCodes();
-  const options = createLocaleOptions(locales, currentValue, siteLocaleCodes, {
-    pluginId,
-  });
-  const enabledOptions = options.filter((option) => option.disabled !== true);
+const normaliseDialogValue = (value) =>
+  typeof value === "string" ? value.trim() : "";
+
+const buildLocaleField = (currentValue = null, existingField = null) => {
   const baseField = existingField ? { ...existingField } : {};
-  const value =
-    typeof currentValue === "string" && currentValue.trim() !== ""
-      ? currentValue
-      : null;
+  delete baseField.type;
+  delete baseField.options;
+  delete baseField.empty;
+  delete baseField.icon;
+  delete baseField.default;
+  const label = window.panel.$t("grommasdietz.kirby-locale.label");
+  const emptyText = window.panel.$t("grommasdietz.kirby-locale.dialog.empty");
+  const value = normaliseDialogValue(currentValue);
+
+  const field = {
+    ...baseField,
+    name: "titleLocale",
+    label,
+    type: "locale",
+    plugin: pluginId,
+    empty: baseField.empty ?? { text: emptyText, value: "" },
+    search: baseField.search,
+    icon: baseField.icon ?? "translate",
+    reset: baseField.reset ?? true,
+    default: "",
+    translate: false,
+    value,
+  };
 
   return {
-    field: {
-      ...baseField,
-      name: "titleLocale",
-      label: window.panel.$t("grommasdietz.kirby-locale.label"),
-      type: "select",
-      options,
-      empty: {
-        text: window.panel.$t("grommasdietz.kirby-locale.dialog.empty"),
-      },
-      search: enabledOptions.length > 7,
-      icon: "translate",
-      reset: baseField.reset ?? true,
-      value,
-    },
+    field,
     value,
   };
 };
@@ -63,7 +59,7 @@ const injectLocaleField = (dialog, fieldConfig, value) => {
       },
       value: {
         ...dialog.props.value,
-        titleLocale: value ?? null,
+        titleLocale: value,
       },
     },
   };
@@ -83,14 +79,14 @@ const fetchStoredLocale = async (pageId, language) => {
     const data = response?.data || response;
     const locale = data?.titleLocale;
 
-    if (typeof locale === "string" && locale.trim()) {
-      return locale;
+    if (typeof locale === "string") {
+      return locale.trim();
     }
   } catch (error) {
     console.warn(`[${pluginId}] Unable to load stored title locale.`, error);
   }
 
-  return null;
+  return "";
 };
 
 const resolveContextLanguage = (context = {}) => {
@@ -122,9 +118,11 @@ window.panel.plugin(pluginId, {
   writerMarks: {
     locale: createLocaleMark(pluginId),
   },
+  fields: {
+    locale: createLocaleField(pluginId),
+  },
   dialogs: {
     async "page.create"(dialog) {
-      const locales = await fetchLocales(pluginId);
       const currentValue = dialog?.props?.value?.titleLocale ?? null;
       const existingField = dialog?.props?.fields?.titleLocale ?? null;
 
@@ -132,18 +130,13 @@ window.panel.plugin(pluginId, {
         return dialog;
       }
 
-      const { field, value } = buildLocaleField(
-        locales,
-        currentValue,
-        existingField
-      );
+      const { field, value } = buildLocaleField(currentValue, existingField);
 
       return injectLocaleField(dialog, field, value);
     },
     async "page.changeTitle"(dialog, context = {}) {
       const pageId = resolveContextPageId(context);
       const language = resolveContextLanguage(context);
-      const locales = await fetchLocales(pluginId);
       const existingField = dialog?.props?.fields?.titleLocale ?? null;
 
       if (!existingField) {
@@ -152,15 +145,11 @@ window.panel.plugin(pluginId, {
 
       let currentValue = dialog?.props?.value?.titleLocale ?? null;
 
-      if (!currentValue) {
+      if (currentValue === null || currentValue === undefined) {
         currentValue = await fetchStoredLocale(pageId, language);
       }
 
-      const { field, value } = buildLocaleField(
-        locales,
-        currentValue,
-        existingField
-      );
+      const { field, value } = buildLocaleField(currentValue, existingField);
 
       return injectLocaleField(dialog, field, value);
     },
