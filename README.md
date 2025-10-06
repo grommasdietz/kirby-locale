@@ -89,9 +89,9 @@ The Writer dialog and the title selector share a single locale collector. Entrie
 2. `panel.config['grommasdietz/kirby-locale'].locales` (or `...languages`)
 3. `window.panel.config.locales` / `...languages`
 4. Kirby’s configured site languages
-5. The bundled ISO\u00a0639-1 catalog (unless disabled)
+5. The bundled ISO 639-1 catalog (unless disabled)
 
-Values can be plain strings (`'en-GB'`) or associative arrays with `code`, `name`, and optional `group` keys. Closures are supported on both the Panel and Kirby options.
+Values can be plain strings (`'en'` or more explicit `'en-GB'`) or associative arrays with `code`, `name`, and optional `group` keys. Closures are supported on both the Panel and Kirby options.
 
 Set `kirby()->option('grommasdietz.kirby-locale.catalog', false)` to disable the ISO fallback entirely, or provide your own array/callback to replace it.
 
@@ -120,7 +120,7 @@ npm run dev
 npm run build
 ```
 
-The project uses [kirbyup](https://github.com/getkirby/kirbyup) to bundle the Panel assets from `src/index.js` into `index.js`.
+The project uses [kirbyup](https://github.com/johannschopplich/kirbyup) to bundle the Panel assets from `src/index.js` into `index.js`.
 
 ## License
 
