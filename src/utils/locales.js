@@ -364,18 +364,18 @@ export const createLocaleOptions = (
         : code;
 
     if (locale.source === "catalog" && locale.nameProvided === false) {
+      const translated = fallbackIsoName(code);
+
+      if (translated) {
+        return translated;
+      }
+
       if (languageDisplayNames) {
         const displayName = languageDisplayNames.of(code);
 
         if (displayName && displayName !== code) {
           return displayName;
         }
-      }
-
-      const translated = fallbackIsoName(code);
-
-      if (translated) {
-        return translated;
       }
     }
 
