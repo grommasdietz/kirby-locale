@@ -110,6 +110,16 @@ $collectLocales = static function (App $kirby) use ($normaliseLocaleDefinition, 
         ];
     };
 
+    $pluginLocales = $kirby->option('grommasdietz.kirby-locale.locales', []);
+
+    if (is_callable($pluginLocales)) {
+        $pluginLocales = $pluginLocales($kirby);
+    }
+
+    foreach ((array) $pluginLocales as $locale) {
+        $push($locale);
+    }
+
     $languages = $kirby->languages();
 
     if ($languages) {
@@ -119,16 +129,6 @@ $collectLocales = static function (App $kirby) use ($normaliseLocaleDefinition, 
                 'name'  => $language->name(),
             ]);
         }
-    }
-
-    $pluginLocales = $kirby->option('grommasdietz.kirby-locale.locales', []);
-
-    if (is_callable($pluginLocales)) {
-        $pluginLocales = $pluginLocales($kirby);
-    }
-
-    foreach ((array) $pluginLocales as $locale) {
-        $push($locale);
     }
 
     $catalogPreference = $kirby->option('grommasdietz.kirby-locale.catalog');

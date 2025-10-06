@@ -142,41 +142,21 @@ export const fetchLocales = async (pluginId) => {
 
   const collector = createLocaleCollector();
 
-  collector.add(getSiteLocales());
-
   const panelConfig = window.panel?.config || {};
   const dottedPluginId = pluginId.replace("/", ".");
   const pluginConfig =
     panelConfig?.[pluginId] || panelConfig?.[dottedPluginId] || {};
-
-  collector.add(pluginConfig.locales);
-  collector.add(pluginConfig.languages);
-
-  const legacyKeys = [
-    `${pluginId}.locales`,
-    `${pluginId}.languages`,
-    `${dottedPluginId}.locales`,
-    `${dottedPluginId}.languages`,
-  ];
-
-  legacyKeys.forEach((key) => {
-    const value = panelConfig?.[key];
-
-    if (value) {
-      collector.add(value);
-    }
-  });
-
-  collector.add(panelConfig.locales);
-  collector.add(panelConfig.languages);
-
-  let apiLocales = [];
+  let fetchedFromApi = false;
 
   if (window.panel?.api?.get) {
     try {
       const response = await window.panel.api.get(`${pluginId}/locales`);
-      apiLocales = normaliseLocales(response?.data || response);
-      collector.add(apiLocales);
+      const apiLocales = normaliseLocales(response?.data || response);
+
+      if (apiLocales.length) {
+        collector.add(apiLocales);
+        fetchedFromApi = true;
+      }
     } catch (error) {
       if (error?.status !== 404) {
         console.warn(
@@ -185,26 +165,20 @@ export const fetchLocales = async (pluginId) => {
         );
       }
     }
-
-    try {
-      const response = await window.panel.api.get("languages");
-      collector.add(normaliseLocales(response?.data || response));
-    } catch (error) {
-      console.warn(
-        `[${pluginId}] Unable to fetch locales via Panel API.`,
-        error
-      );
-    }
   }
 
-  const catalogPreference = resolveCatalogPreference(pluginConfig, {
-    ...panelConfig,
-    [pluginId]: panelConfig?.[pluginId],
-    [dottedPluginId]: panelConfig?.[dottedPluginId],
-  });
+  if (fetchedFromApi === false) {
+    collector.add(getSiteLocales());
 
-  if (catalogPreference && catalogPreference !== true) {
-    collector.add(catalogPreference);
+    const catalogPreference = resolveCatalogPreference(pluginConfig, {
+      ...panelConfig,
+      [pluginId]: panelConfig?.[pluginId],
+      [dottedPluginId]: panelConfig?.[dottedPluginId],
+    });
+
+    if (catalogPreference && catalogPreference !== true) {
+      collector.add(catalogPreference);
+    }
   }
 
   const locales = collector.list();

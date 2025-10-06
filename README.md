@@ -70,9 +70,7 @@ return [
 
 After configuration, Kirby’s create and rename dialogs automatically show the **Locale** dropdown and save the choice as `titlelocale`. Retrieve it in templates with `$page->titlelocale()`.
 
-#### Keep the stored value
-
-If your deployment runs cleanup commands such as `kirby content:clean`, declare `titlelocale` as a hidden field in the affected blueprints:
+If your deployment runs cleanup commands such as `kirby clean:content`, declare `titlelocale` as a hidden field in the affected blueprints:
 
 ```yaml
 fields:
@@ -86,14 +84,12 @@ fields:
 The Writer dialog and the title selector share a single locale collector. Entries are deduplicated and gathered in this order:
 
 1. `kirby()->option('grommasdietz.kirby-locale.locales')`
-2. `panel.config['grommasdietz/kirby-locale'].locales` (or `...languages`)
-3. `window.panel.config.locales` / `...languages`
-4. Kirby’s configured site languages
-5. The bundled ISO 639-1 catalog (unless disabled)
+2. Kirby’s configured site languages
+3. The bundled ISO 639-1 catalog (unless disabled)
 
-Values can be plain strings (`'en'` or more explicit `'en-GB'`) or associative arrays with `code`, `name`, and optional `group` keys. Closures are supported on both the Panel and Kirby options.
+Values can be plain strings (`'en'` or more explicit `'en-GB'`) or associative arrays with `code`, `name`, and optional `group` keys. When you provide the list via `kirby()->option('grommasdietz.kirby-locale.locales')`, the option may also be a closure that returns an array at runtime.
 
-Set `kirby()->option('grommasdietz.kirby-locale.catalog', false)` to disable the ISO fallback entirely, or provide your own array/callback to replace it.
+Set `kirby()->option('grommasdietz.kirby-locale.catalog', false)` to disable the ISO fallback entirely, or pass a custom array to replace it.
 
 ## Optional configuration
 
@@ -110,7 +106,7 @@ return [
 ];
 ```
 
-Values may be simple strings (`'fr'`) or associative arrays containing `code` and `name` keys. Closures are supported and evaluated at runtime. The same dataset powers both the Writer mark and the title dialogs, so you only need to maintain it once.
+Values may be simple strings (`'fr'`) or associative arrays containing `code` and `name` keys. You can also supply a closure for the Kirby option if the list should be computed dynamically. The same dataset powers both the Writer mark and the title dialogs, so you only need to maintain it once.
 
 ## Development
 
