@@ -29,10 +29,9 @@ const normaliseValue = (value) => {
 
 export const createLocaleField = (defaultPluginId) => ({
   name: "locale-field",
-  emits: ["input", "change", "focus", "blur"],
   props: {
     value: {
-      type: [String, null],
+      type: String,
       default: "",
     },
     label: {
@@ -321,8 +320,6 @@ export const createLocaleField = (defaultPluginId) => ({
         :reset="reset"
         @input="handleInput"
         @reset="handleReset"
-        @focus="$emit('focus', $event)"
-        @blur="$emit('blur', $event)"
       />
     </k-field>
   `,
