@@ -1,19 +1,19 @@
-import { fetchLocales } from '../utils/locales.js';
-import { openLocaleDialog } from '../dialogs/locale.js';
+import { fetchLocales } from "../utils/locales.js";
+import { openLocaleDialog } from "../dialogs/locale.js";
 
 export const createLocaleMark = (pluginId) => ({
   get button() {
     return {
-      icon: 'translate',
-      label: window.panel.$t(`${pluginId.replace('/', '.')}.label`),
+      icon: "translate",
+      label: window.panel.$t(`${pluginId.replace("/", ".")}.label`),
     };
   },
 
   commands() {
     return async () => {
-      const currentAttrs = this.editor.getMarkAttrs('locale') || {};
+      const currentAttrs = this.editor.getMarkAttrs("locale") || {};
       const currentValue =
-        typeof currentAttrs.lang === 'string' ? currentAttrs.lang : '';
+        typeof currentAttrs.lang === "string" ? currentAttrs.lang : "";
 
       const locales = await fetchLocales(pluginId);
       const result = await openLocaleDialog({
@@ -38,7 +38,7 @@ export const createLocaleMark = (pluginId) => ({
   },
 
   get name() {
-    return 'locale';
+    return "locale";
   },
 
   get schema() {
@@ -50,9 +50,9 @@ export const createLocaleMark = (pluginId) => ({
       },
       parseDOM: [
         {
-          tag: 'span.notranslate[lang]',
+          tag: "span.notranslate[lang]",
           getAttrs: (dom) => {
-            const lang = dom.getAttribute('lang');
+            const lang = dom.getAttribute("lang");
 
             return {
               lang,
@@ -62,11 +62,11 @@ export const createLocaleMark = (pluginId) => ({
       ],
       toDOM: (node) => {
         const attrs = {
-          class: 'notranslate',
+          class: "notranslate",
           lang: node.attrs.lang || null,
         };
 
-        return ['span', attrs, 0];
+        return ["span", attrs, 0];
       },
     };
   },

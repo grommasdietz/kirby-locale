@@ -8,29 +8,45 @@ const normaliseDialogValue = (value) =>
 
 const buildLocaleField = (currentValue = null, existingField = null) => {
   const baseField = existingField ? { ...existingField } : {};
-  delete baseField.type;
-  delete baseField.options;
-  delete baseField.empty;
-  delete baseField.icon;
-  delete baseField.default;
+  const {
+    type: existingType,
+    options: existingOptions,
+    plugin: existingPlugin,
+    empty: existingEmpty,
+    icon: existingIcon,
+    default: existingDefault,
+    ...rest
+  } = baseField;
   const label = window.panel.$t("grommasdietz.kirby-locale.label");
   const emptyText = window.panel.$t("grommasdietz.kirby-locale.dialog.empty");
   const value = normaliseDialogValue(currentValue);
+  const type = existingType || "select";
 
   const field = {
-    ...baseField,
+    ...rest,
     name: "titleLocale",
     label,
-    type: "locale",
-    plugin: pluginId,
-    empty: baseField.empty ?? { text: emptyText, value: "" },
-    search: baseField.search,
-    icon: baseField.icon ?? "translate",
-    reset: baseField.reset ?? true,
-    default: "",
+    type,
+    empty: existingEmpty ?? { text: emptyText, value: "" },
+    search: rest.search,
+    icon: existingIcon ?? "translate",
+    reset: rest.reset ?? true,
+    default: existingDefault ?? "",
     translate: false,
     value,
   };
+
+  if (type === "locale") {
+    field.plugin = pluginId;
+  } else if (existingPlugin) {
+    field.plugin = existingPlugin;
+  } else {
+    delete field.plugin;
+  }
+
+  if (existingOptions !== undefined) {
+    field.options = existingOptions;
+  }
 
   return {
     field,

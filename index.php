@@ -890,12 +890,11 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
 
     $field = [
         'label'     => I18n::translate('grommasdietz.kirby-locale.label', 'Locale'),
-        'type'      => 'locale',
-        'plugin'    => 'grommasdietz/kirby-locale',
+        'type'      => 'select',
         'icon'      => 'translate',
         'name'      => 'titleLocale',
         'options'   => $options,
-    'locales'   => $locales,
+        'locales'   => $locales,
         'empty'     => [
             'text'  => I18n::translate('grommasdietz.kirby-locale.dialog.empty', '–'),
             'value' => '',
@@ -955,6 +954,24 @@ App::plugin('grommasdietz/kirby-locale', [
     'translations' => $translations,
     'fields' => [
         'locale' => [],
+    ],
+    'queries' => [
+        'locales' => function (App $kirby) use ($buildDialogLocaleField) {
+            $field = $buildDialogLocaleField();
+            $options = $field['options'] ?? [];
+
+            return array_values(array_filter($options, static function ($option) {
+                return is_array($option) && isset($option['value']);
+            }));
+        },
+        'locale' => function (App $kirby) use ($buildDialogLocaleField) {
+            $field = $buildDialogLocaleField();
+            $options = $field['options'] ?? [];
+
+            return array_values(array_filter($options, static function ($option) {
+                return is_array($option) && isset($option['value']);
+            }));
+        },
     ],
     'areas' => [
         'site' => function (App $kirby) use (

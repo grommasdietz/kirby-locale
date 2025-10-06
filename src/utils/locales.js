@@ -473,9 +473,7 @@ export const createLocaleOptions = (
     const key = localeKey(code);
     const rawSource =
       typeof locale.source === "string" ? locale.source.trim() : "";
-    const normalisedSource = rawSource
-      .toLowerCase()
-      .replace(/[^a-z]/g, "");
+    const normalisedSource = rawSource.toLowerCase().replace(/[^a-z]/g, "");
     const isSiteSource = normalisedSource === "sitelanguage";
 
     if (!code || !key) {
