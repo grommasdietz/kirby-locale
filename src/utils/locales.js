@@ -289,8 +289,28 @@ export const fetchLocales = async (pluginId) => {
 export const createLocaleOptions = (
   locales = [],
   currentValue = null,
-  preferredCodes = []
+  preferredCodes = [],
+  settings = {}
 ) => {
+  const pluginIdOption =
+    settings && typeof settings === "object" && settings.pluginId
+      ? settings.pluginId
+      : "grommasdietz/kirby-locale";
+  const dottedPluginId = pluginIdOption.replace("/", ".");
+
+  const translatePanel = (key, fallback) => {
+    if (typeof window.panel?.$t === "function") {
+      const fullKey = `${dottedPluginId}.${key}`;
+      const translated = window.panel.$t(fullKey);
+
+      if (translated && translated !== fullKey) {
+        return translated;
+      }
+    }
+
+    return fallback;
+  };
+
   const resolvePanelLocale = () => {
     const direct = window.panel?.config?.translation;
 
@@ -405,14 +425,33 @@ export const createLocaleOptions = (
   const preferredSet = new Set(
     preferredCodes.map((code) => localeKey(code)).filter(Boolean)
   );
+  const siteGroupLabel = translatePanel("dialog.group.site", "Site languages");
+  const otherGroupLabel = translatePanel(
+    "dialog.group.other",
+    "Other languages"
+  );
 
-  const groupKey = (label) =>
-    typeof label === "string" && label.trim() ? localeKey(label) : "";
+  const siteLocales = [];
+  const remainingLocales = [];
 
-  const groupLabel = (locale) => {
-    const raw = locale?.group;
-    return typeof raw === "string" && raw.trim() ? raw.trim() : "";
-  };
+  locales.forEach((locale) => {
+    if (!locale || !locale.code) {
+      return;
+    }
+
+    const code = normaliseLocaleCode(locale.code);
+    const key = localeKey(code);
+
+    if (!code || !key) {
+      return;
+    }
+
+    if (preferredSet.has(key)) {
+      siteLocales.push(locale);
+    } else {
+      remainingLocales.push(locale);
+    }
+  });
 
   const pushOption = (locale) => {
     if (!locale || !locale.code) {
@@ -435,58 +474,56 @@ export const createLocaleOptions = (
       text: label && label !== code ? `${label} (${locale.code})` : locale.code,
     });
   };
-
   let lastGroupKey = null;
 
-  const appendLocales = (items, resetGroup = false) => {
-    if (resetGroup) {
-      lastGroupKey = null;
+  const pushGroupHeading = (label) => {
+    const trimmed = typeof label === "string" ? label.trim() : "";
+
+    if (!trimmed) {
+      return;
     }
 
-    items.forEach((locale) => {
-      const label = groupLabel(locale);
-      const key = label ? groupKey(label) : "";
+    const key = localeKey(trimmed);
 
-      if (label && key !== lastGroupKey) {
-        options.push({
-          value: `__group__${key || options.length}`,
-          text: label,
-          disabled: true,
-        });
-        lastGroupKey = key;
-      }
+    if (key && key === lastGroupKey) {
+      return;
+    }
 
-      if (!label) {
-        lastGroupKey = null;
-      }
-
-      pushOption(locale);
+    options.push({
+      value: `__group__${key || options.length}`,
+      text: trimmed,
+      disabled: true,
     });
+
+    lastGroupKey = key;
   };
 
-  const preferredLocales = locales.filter((locale) =>
-    preferredSet.has(localeKey(locale.code))
-  );
-  const otherLocales = locales.filter(
-    (locale) => preferredSet.has(localeKey(locale.code)) === false
-  );
-
-  appendLocales(preferredLocales, true);
-
-  if (preferredLocales.length && otherLocales.length) {
-    options.push({
-      value: "__separator__",
-      text: "──────────",
-      disabled: true,
+  if (siteLocales.length) {
+    pushGroupHeading(siteGroupLabel);
+    siteLocales.forEach((locale) => {
+      pushOption(locale);
     });
     lastGroupKey = null;
   }
 
-  appendLocales(otherLocales, true);
+  if (remainingLocales.length) {
+    lastGroupKey = null;
+
+    remainingLocales.forEach((locale) => {
+      const rawGroup =
+        typeof locale?.group === "string" && locale.group.trim()
+          ? locale.group.trim()
+          : "";
+      const label = rawGroup || otherGroupLabel;
+
+      pushGroupHeading(label);
+      pushOption(locale);
+    });
+  }
 
   const normalisedCurrent = normaliseLocaleCode(currentValue);
 
-  if (normalisedCurrent && normalisedCurrent !== "__separator__") {
+  if (normalisedCurrent) {
     const currentKey = localeKey(normalisedCurrent);
 
     if (currentKey && seen.has(currentKey) === false) {

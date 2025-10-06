@@ -5,7 +5,7 @@ export const createLocaleMark = (pluginId) => ({
   get button() {
     return {
       icon: 'translate',
-      label: window.panel.$t(`${pluginId.replace('/', '.')}.locale.label`),
+      label: window.panel.$t(`${pluginId.replace('/', '.')}.label`),
     };
   },
 

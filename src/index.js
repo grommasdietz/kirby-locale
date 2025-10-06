@@ -13,30 +13,15 @@ const buildLocaleField = (
   existingField = null
 ) => {
   const siteLocaleCodes = getSiteLocaleCodes();
-  const options = createLocaleOptions(locales, currentValue, siteLocaleCodes);
+  const options = createLocaleOptions(locales, currentValue, siteLocaleCodes, {
+    pluginId,
+  });
   const enabledOptions = options.filter((option) => option.disabled !== true);
   const baseField = existingField ? { ...existingField } : {};
-  let value =
+  const value =
     typeof currentValue === "string" && currentValue.trim() !== ""
       ? currentValue
       : null;
-
-  if (!value && enabledOptions.length > 0) {
-    const preferredOption = enabledOptions.find((option) => {
-      return (
-        typeof option.value === "string" &&
-        siteLocaleCodes.includes(option.value)
-      );
-    });
-
-    if (preferredOption) {
-      value = preferredOption.value;
-    } else {
-      const firstValue = enabledOptions[0].value;
-      value =
-        typeof firstValue === "string" && firstValue !== "" ? firstValue : null;
-    }
-  }
 
   return {
     field: {

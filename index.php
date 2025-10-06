@@ -28,7 +28,9 @@ $defaultEnglish = [
     'grommasdietz.kirby-locale.label'              => 'Locale',
     'grommasdietz.kirby-locale.dialog.headline'    => 'Choose locale for selection',
     'grommasdietz.kirby-locale.dialog.select.label' => 'Locale',
-    'grommasdietz.kirby-locale.dialog.empty'       => 'No locale',
+    'grommasdietz.kirby-locale.dialog.empty'       => '–',
+    'grommasdietz.kirby-locale.dialog.group.site' => 'Site languages',
+    'grommasdietz.kirby-locale.dialog.group.other' => 'Other languages',
     'grommasdietz.kirby-locale.prompt'             => 'Enter the locale code (e.g. de, en-GB)',
 ];
 
@@ -588,12 +590,30 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
 ) {
     $kirby          = App::instance();
     $options        = [];
-    $preferredCodes = [];
+    $seen           = [];
+
+    $siteGroupLabel = I18n::translate(
+        'grommasdietz.kirby-locale.dialog.group.site',
+        'Site languages'
+    );
+    $otherGroupLabel = I18n::translate(
+        'grommasdietz.kirby-locale.dialog.group.other',
+        'Other languages'
+    );
+
+    $currentValue = is_string($currentValue) ? trim($currentValue) : null;
+
+    if ($currentValue === '') {
+        $currentValue = null;
+    }
 
     if ($kirby) {
-        $panelLocale     = I18n::locale();
+        $translations     = $isoLanguageTranslations;
+        $panelLocale      = I18n::locale() ?: 'en';
         $candidateLocales = $localeCandidateKeys($panelLocale);
-        $translations    = $isoLanguageTranslations;
+        $preferredSet     = [];
+        $siteLocales      = [];
+        $remainingLocales = [];
 
         $getIsoTranslation = static function (string $code) use ($translations, $candidateLocales) {
             foreach ($candidateLocales as $candidate) {
@@ -641,7 +661,6 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
 
         $resolveLabel = static function (array $locale, string $code) use (
             $translations,
-            $candidateLocales,
             $normaliseLowercase,
             $getIsoTranslation,
             $getIntlDisplayName
@@ -684,6 +703,24 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
             return $baseName;
         };
 
+        $languages = $kirby->languages();
+
+        if ($languages) {
+            foreach ($languages as $language) {
+                $code = $language->code();
+
+                if (!is_string($code)) {
+                    continue;
+                }
+
+                $normalised = $normaliseLowercase($code);
+
+                if ($normalised !== '') {
+                    $preferredSet[$normalised] = true;
+                }
+            }
+        }
+
         $locales = $collectLocales($kirby);
 
         foreach ($locales as $locale) {
@@ -693,63 +730,131 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
                 continue;
             }
 
-            $code = trim($code);
+            $trimmed = trim($code);
 
-            if ($code === '') {
+            if ($trimmed === '') {
                 continue;
             }
+
+            $key = $normaliseLowercase($trimmed);
+
+            if ($key === '') {
+                continue;
+            }
+
+            if (isset($preferredSet[$key])) {
+                $siteLocales[] = $locale;
+            } else {
+                $remainingLocales[] = $locale;
+            }
+        }
+
+        $lastGroupKey = null;
+
+        $pushGroupHeading = static function (string $label) use (&$options, &$lastGroupKey, $normaliseLowercase) {
+            $trimmed = trim($label);
+
+            if ($trimmed === '') {
+                return;
+            }
+
+            $key = $normaliseLowercase($trimmed);
+
+            if ($key !== '' && $key === $lastGroupKey) {
+                return;
+            }
+
+            $options[] = [
+                'value'    => '__group__' . ($key !== '' ? $key : count($options)),
+                'text'     => $trimmed,
+                'disabled' => true,
+            ];
+
+            $lastGroupKey = $key;
+        };
+
+        $pushOption = static function (array $locale, string $code) use (&$options, &$seen, $normaliseLowercase, $resolveLabel) {
+            $key = $normaliseLowercase($code);
+
+            if ($key === '' || isset($seen[$key])) {
+                return;
+            }
+
+            $seen[$key] = true;
 
             $label = $resolveLabel($locale, $code);
 
             $options[] = [
-                'value' => $code,
+                'value' => $locale['code'],
                 'text'  => $label !== $code ? sprintf('%s (%s)', $label, $code) : $code,
             ];
+        };
+
+        if ($siteLocales !== []) {
+            $pushGroupHeading($siteGroupLabel);
+
+            foreach ($siteLocales as $locale) {
+                $code = $locale['code'] ?? null;
+
+                if (!is_string($code)) {
+                    continue;
+                }
+
+                $trimmed = trim($code);
+
+                if ($trimmed === '') {
+                    continue;
+                }
+
+                $pushOption($locale, $trimmed);
+            }
+
+            $lastGroupKey = null;
         }
 
-        $languages = $kirby->languages();
+        if ($remainingLocales !== []) {
+            $lastGroupKey = null;
 
-        if ($languages) {
-            foreach ($languages as $language) {
-                $code = $language->code();
+            foreach ($remainingLocales as $locale) {
+                $code = $locale['code'] ?? null;
 
-                if (is_string($code) && $code !== '') {
-                    $preferredCodes[] = strtolower($code);
+                if (!is_string($code)) {
+                    continue;
                 }
+
+                $trimmed = trim($code);
+
+                if ($trimmed === '') {
+                    continue;
+                }
+
+                $rawGroup = $locale['group'] ?? null;
+                $groupLabel = is_string($rawGroup) && trim($rawGroup) !== ''
+                    ? trim($rawGroup)
+                    : $otherGroupLabel;
+
+                $pushGroupHeading($groupLabel);
+                $pushOption($locale, $trimmed);
             }
         }
     }
 
-    $enabledOptions = array_values(array_filter($options, static function ($option) {
-        return !isset($option['disabled']) || $option['disabled'] !== true;
-    }));
+    $normalisedCurrent = $normaliseLowercase($currentValue);
 
-    $value = $currentValue;
+    if ($currentValue !== null && $normalisedCurrent !== '' && !isset($seen[$normalisedCurrent])) {
+        array_unshift($options, [
+            'value' => $currentValue,
+            'text'  => $currentValue,
+        ]);
+        $seen[$normalisedCurrent] = true;
+    }
 
-    if ($value === null && $enabledOptions !== []) {
-        $preferred = null;
+    $enabledCount = 0;
 
-        if ($preferredCodes !== []) {
-            foreach ($enabledOptions as $option) {
-                $optionValue = $option['value'] ?? null;
-
-                if (!is_string($optionValue) || $optionValue === '') {
-                    continue;
-                }
-
-                if (in_array(strtolower($optionValue), $preferredCodes, true)) {
-                    $preferred = $optionValue;
-                    break;
-                }
-            }
+    foreach ($options as $option) {
+        if (!isset($option['disabled']) || $option['disabled'] !== true) {
+            ++$enabledCount;
         }
-
-        if ($preferred === null) {
-            $firstValue = $enabledOptions[0]['value'] ?? null;
-            $preferred = is_string($firstValue) && $firstValue !== '' ? $firstValue : null;
-        }
-
-        $value = $preferred;
     }
 
     $field = [
@@ -760,18 +865,18 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
         'name'      => 'titleLocale',
         'options'   => $options,
         'empty'     => [
-            'text' => I18n::translate('grommasdietz.kirby-locale.dialog.empty', 'No locale'),
+            'text' => I18n::translate('grommasdietz.kirby-locale.dialog.empty', '–'),
         ],
-        'search'    => count($enabledOptions) > 7,
+        'search'    => $enabledCount > 7,
         'translate' => false,
-        'value'     => $value,
+        'value'     => $currentValue,
     ];
 
     if ($overrides !== []) {
         $field = array_replace($field, $overrides);
     }
 
-    $field['value'] = $value;
+    $field['value'] = $currentValue;
 
     return $field;
 };

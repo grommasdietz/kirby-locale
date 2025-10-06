@@ -16,12 +16,14 @@ const translate = (pluginId, key, fallback) => {
 
 const buildDialogProps = (pluginId, value, locales) => {
   const siteLocaleCodes = getSiteLocaleCodes();
-  const options = createLocaleOptions(locales, value, siteLocaleCodes);
+  const options = createLocaleOptions(locales, value, siteLocaleCodes, {
+    pluginId,
+  });
   const enabledOptions = options.filter((option) => option.disabled !== true);
   const hasOptions = enabledOptions.length > 0;
 
   const baseField = {
-    label: translate(pluginId, 'locale.dialog.selectLabel', 'Locale'),
+  label: translate(pluginId, 'dialog.select.label', 'Locale'),
     autofocus: true,
   };
 
@@ -30,7 +32,7 @@ const buildDialogProps = (pluginId, value, locales) => {
         ...baseField,
         type: 'select',
         empty: {
-          text: translate(pluginId, 'locale.dialog.empty', 'No locale'),
+          text: translate(pluginId, 'dialog.empty', '–'),
         },
         options,
         searchable: enabledOptions.length > 7,
@@ -40,7 +42,7 @@ const buildDialogProps = (pluginId, value, locales) => {
         type: 'text',
         placeholder: translate(
           pluginId,
-          'locale.prompt',
+          'prompt',
           'Enter the locale code (e.g. de, en-GB)',
         ),
       };
@@ -52,7 +54,7 @@ const buildDialogProps = (pluginId, value, locales) => {
       size: 'medium',
       headline: translate(
         pluginId,
-        'locale.dialog.headline',
+        'dialog.headline',
         'Choose locale for selection',
       ),
       cancelButton: true,
