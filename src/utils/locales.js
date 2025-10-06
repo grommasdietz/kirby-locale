@@ -363,7 +363,25 @@ export const createLocaleOptions = (
         ? locale.name.trim()
         : code;
 
-    if (locale.source === "catalog" && locale.nameProvided === false) {
+    const englishName =
+      typeof isoTranslations.en?.[code] === "string"
+        ? isoTranslations.en[code]
+        : null;
+
+    const normalisedBase =
+      typeof baseName === "string" ? baseName.trim().toLowerCase() : "";
+    const normalisedCode =
+      typeof code === "string" ? code.trim().toLowerCase() : "";
+    const normalisedEnglish =
+      typeof englishName === "string" ? englishName.trim().toLowerCase() : "";
+
+    const shouldLocalise =
+      locale.nameProvided === false ||
+      !normalisedBase ||
+      (normalisedCode && normalisedBase === normalisedCode) ||
+      (normalisedEnglish && normalisedBase === normalisedEnglish);
+
+    if (shouldLocalise) {
       const translated = fallbackIsoName(code);
 
       if (translated) {
