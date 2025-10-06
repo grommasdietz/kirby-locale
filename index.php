@@ -1128,6 +1128,7 @@ App::plugin('grommasdietz/kirby-locale', [
             $getStoredTitleLocale,
             $getEnabledTitleLocaleTemplates,
             $templateAllowsLocale,
+            $wasTitleLocaleCleared,
             $storeTitleLocale,
             $resolvePageAfterTitleDialog
         ) {
