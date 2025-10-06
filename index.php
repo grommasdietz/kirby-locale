@@ -995,10 +995,7 @@ App::plugin('grommasdietz/kirby-locale', [
         'locale' => [],
     ],
     'queries' => [
-        'locale' => function () use ($buildLocaleQueryOptions) {
-            return $buildLocaleQueryOptions();
-        },
-        'locales' => function () use ($buildLocaleQueryOptions) {
+        'locale' => function (App $kirby, array $arguments = []) use ($buildLocaleQueryOptions) {
             return $buildLocaleQueryOptions();
         },
     ],

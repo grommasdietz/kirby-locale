@@ -93,7 +93,7 @@ fields:
     reset: true
     options:
       type: query
-      query: locale # alias: locales
+      query: locale
       text: "{{ item.text }}"
       value: "{{ item.value }}"
 ```
