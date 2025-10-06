@@ -406,7 +406,78 @@ $templateAllowsLocale = static function (?string $template, ?array $allowed) {
     return in_array($template, $allowed, true);
 };
 
-$storeTitleLocale = static function ($page, mixed $rawValue, ?string $languageCode) use ($normaliseTitleLocale, $templateAllowsLocale, $getEnabledTitleLocaleTemplates) {
+$getTitleLocaleCacheKey = static function (?string $pageId, ?string $languageCode): ?string {
+    if (!is_string($pageId)) {
+        return null;
+    }
+
+    $trimmedId = trim($pageId);
+
+    if ($trimmedId === '') {
+        return null;
+    }
+
+    $key = 'title-locale.' . $trimmedId;
+
+    if (is_string($languageCode) && $languageCode !== '') {
+        $key .= '.' . strtolower($languageCode);
+    }
+
+    return $key;
+};
+
+$markTitleLocaleCleared = static function (?string $pageId, ?string $languageCode) use ($getTitleLocaleCacheKey) {
+    $key   = $getTitleLocaleCacheKey($pageId, $languageCode);
+    $kirby = App::instance();
+
+    if ($key === null || !$kirby) {
+        return;
+    }
+
+    try {
+        $kirby->cache('grommasdietz/kirby-locale')->set($key, true);
+    } catch (\Throwable $exception) {
+        // ignore cache errors
+    }
+};
+
+$clearTitleLocaleMarker = static function (?string $pageId, ?string $languageCode) use ($getTitleLocaleCacheKey) {
+    $key   = $getTitleLocaleCacheKey($pageId, $languageCode);
+    $kirby = App::instance();
+
+    if ($key === null || !$kirby) {
+        return;
+    }
+
+    try {
+        $kirby->cache('grommasdietz/kirby-locale')->remove($key);
+    } catch (\Throwable $exception) {
+        // ignore cache errors
+    }
+};
+
+$wasTitleLocaleCleared = static function (?string $pageId, ?string $languageCode) use ($getTitleLocaleCacheKey): bool {
+    $key   = $getTitleLocaleCacheKey($pageId, $languageCode);
+    $kirby = App::instance();
+
+    if ($key === null || !$kirby) {
+        return false;
+    }
+
+    try {
+        return (bool) $kirby->cache('grommasdietz/kirby-locale')->get($key);
+    } catch (\Throwable $exception) {
+        return false;
+    }
+};
+
+$storeTitleLocale = static function ($page, mixed $rawValue, ?string $languageCode) use (
+    $normaliseTitleLocale,
+    $templateAllowsLocale,
+    $getEnabledTitleLocaleTemplates,
+    $markTitleLocaleCleared,
+    $clearTitleLocaleMarker
+) {
     if (!$page) {
         return;
     }
@@ -432,6 +503,8 @@ $storeTitleLocale = static function ($page, mixed $rawValue, ?string $languageCo
         return;
     }
 
+    $updateSucceeded = false;
+
     try {
         try {
             $page->update([
@@ -442,6 +515,8 @@ $storeTitleLocale = static function ($page, mixed $rawValue, ?string $languageCo
                 'titleLocale' => $value,
             ], $languageCode);
         }
+
+        $updateSucceeded = true;
     } catch (\Throwable $exception) {
         if (method_exists($kirby, 'logger')) {
             $kirby->logger('grommasdietz/kirby-locale')->error($exception->getMessage(), [
@@ -450,6 +525,18 @@ $storeTitleLocale = static function ($page, mixed $rawValue, ?string $languageCo
                 'language'  => $languageCode,
             ]);
         }
+
+        return;
+    }
+
+    if ($updateSucceeded === false) {
+        return;
+    }
+
+    if ($value === null) {
+        $markTitleLocaleCleared($page->id(), $languageCode);
+    } else {
+        $clearTitleLocaleMarker($page->id(), $languageCode);
     }
 };
 
@@ -1096,6 +1183,7 @@ App::plugin('grommasdietz/kirby-locale', [
                         $normaliseTitleLocale,
                         $resolveLanguageCode,
                         $getStoredTitleLocale,
+                        $wasTitleLocaleCleared,
                         $templateAllowsLocale,
                         $allowedTemplates
                     ) {
@@ -1116,11 +1204,13 @@ App::plugin('grommasdietz/kirby-locale', [
                             return $dialog;
                         }
 
+                        $wasCleared = $page ? $wasTitleLocaleCleared($page->id(), $languageCode) : false;
+
                         if ($value === null && $page) {
                             $value = $getStoredTitleLocale($page, $languageCode);
                         }
 
-                        if ($value === null && is_string($languageCode) && $languageCode !== '') {
+                        if ($value === null && $wasCleared === false && is_string($languageCode) && $languageCode !== '') {
                             $value = $languageCode;
                         }
 
