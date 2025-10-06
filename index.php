@@ -186,6 +186,88 @@ $collectLocales = static function (App $kirby) use ($normaliseLocaleDefinition, 
     return $collected;
 };
 
+$normaliseLocaleTag = static function (?string $value): string {
+    if (!is_string($value)) {
+        return '';
+    }
+
+    $trimmed = trim($value);
+
+    if ($trimmed === '') {
+        return '';
+    }
+
+    $collapsed = preg_replace('/\s+/', '', $trimmed);
+
+    return str_replace('_', '-', $collapsed ?? $trimmed);
+};
+
+$canonicaliseLocaleTag = static function (?string $value) use ($normaliseLocaleTag): string {
+    $tag = $normaliseLocaleTag($value);
+
+    if ($tag === '') {
+        return '';
+    }
+
+    if (class_exists('\\Locale') && method_exists('\\Locale', 'canonicalize')) {
+        try {
+            $canonical = \Locale::canonicalize($tag);
+
+            if (is_string($canonical) && $canonical !== '') {
+                return str_replace('_', '-', $canonical);
+            }
+        } catch (\Throwable $exception) {
+            // ignore and fall back to the normalised tag
+        }
+    }
+
+    return $tag;
+};
+
+$localeCandidateKeys = static function (?string $value) use ($canonicaliseLocaleTag): array {
+    $canonical = $canonicaliseLocaleTag($value);
+
+    if ($canonical === '') {
+        return ['en'];
+    }
+
+    $lowered = strtolower($canonical);
+    $candidates = [$lowered];
+
+    $parts = explode('-', $lowered, 2);
+    $base = $parts[0] ?? '';
+
+    if ($base !== '' && $base !== $lowered) {
+        $candidates[] = $base;
+    }
+
+    if ($lowered === 'nb' && $base !== 'no') {
+        $candidates[] = 'no';
+    }
+
+    if (!in_array('en', $candidates, true)) {
+        $candidates[] = 'en';
+    }
+
+    return array_values(array_unique($candidates));
+};
+
+$normaliseLowercase = static function (?string $value): string {
+    if (!is_string($value)) {
+        return '';
+    }
+
+    $trimmed = trim($value);
+
+    if ($trimmed === '') {
+        return '';
+    }
+
+    return function_exists('mb_strtolower')
+        ? mb_strtolower($trimmed, 'UTF-8')
+        : strtolower($trimmed);
+};
+
 $normaliseTitleLocale = static function ($value) {
     if ($value === null) {
         return null;
@@ -498,31 +580,132 @@ $getStoredTitleLocale = static function ($page, ?string $languageCode) use ($nor
     return $normaliseTitleLocale($value);
 };
 
-$buildDialogLocaleField = static function (?string $currentValue = null, array $overrides = []) use ($collectLocales) {
+$buildDialogLocaleField = static function (?string $currentValue = null, array $overrides = []) use (
+    $collectLocales,
+    $isoLanguageTranslations,
+    $localeCandidateKeys,
+    $normaliseLowercase
+) {
     $kirby          = App::instance();
     $options        = [];
     $preferredCodes = [];
 
     if ($kirby) {
-        $locales = $collectLocales($kirby);
+        $panelLocale     = I18n::locale();
+        $candidateLocales = $localeCandidateKeys($panelLocale);
+        $translations    = $isoLanguageTranslations;
 
-        $options = array_map(static function ($locale) {
-            $code = $locale['code'] ?? null;
+        $getIsoTranslation = static function (string $code) use ($translations, $candidateLocales) {
+            foreach ($candidateLocales as $candidate) {
+                if (!isset($translations[$candidate][$code])) {
+                    continue;
+                }
 
-            if (!is_string($code) || $code === '') {
+                $label = $translations[$candidate][$code];
+
+                if (is_string($label)) {
+                    $label = trim($label);
+
+                    if ($label !== '') {
+                        return $label;
+                    }
+                }
+            }
+
+            return null;
+        };
+
+        $getIntlDisplayName = static function (string $code) use ($candidateLocales) {
+            if (!class_exists('\\Locale') || !method_exists('\\Locale', 'getDisplayLanguage')) {
                 return null;
             }
 
-            $name = $locale['name'] ?? $code;
-            $text = $name === $code ? $code : sprintf('%s (%s)', $name, $code);
+            foreach ($candidateLocales as $candidate) {
+                try {
+                    $value = \Locale::getDisplayLanguage($code, $candidate);
+                } catch (\Throwable $exception) {
+                    $value = null;
+                }
 
-            return [
+                if (is_string($value)) {
+                    $value = trim($value);
+
+                    if ($value !== '' && $value !== $code) {
+                        return $value;
+                    }
+                }
+            }
+
+            return null;
+        };
+
+        $resolveLabel = static function (array $locale, string $code) use (
+            $translations,
+            $candidateLocales,
+            $normaliseLowercase,
+            $getIsoTranslation,
+            $getIntlDisplayName
+        ) {
+            $rawName = $locale['name'] ?? null;
+            $baseName = is_string($rawName) ? trim($rawName) : '';
+
+            if ($baseName === '') {
+                $baseName = $code;
+            }
+
+            $englishName = $translations['en'][$code] ?? null;
+
+            $normalisedBase     = $normaliseLowercase($baseName);
+            $normalisedCode     = $normaliseLowercase($code);
+            $normalisedEnglish  = $normaliseLowercase($englishName);
+            $nameProvided       = array_key_exists('nameProvided', $locale)
+                ? (bool) $locale['nameProvided']
+                : false;
+
+            $shouldLocalise = $nameProvided === false
+                || $normalisedBase === ''
+                || ($normalisedCode !== '' && $normalisedBase === $normalisedCode)
+                || ($normalisedEnglish !== '' && $normalisedBase === $normalisedEnglish);
+
+            if ($shouldLocalise) {
+                $translated = $getIsoTranslation($code);
+
+                if (is_string($translated) && $translated !== '') {
+                    return $translated;
+                }
+
+                $intlName = $getIntlDisplayName($code);
+
+                if (is_string($intlName) && $intlName !== '') {
+                    return $intlName;
+                }
+            }
+
+            return $baseName;
+        };
+
+        $locales = $collectLocales($kirby);
+
+        foreach ($locales as $locale) {
+            $code = $locale['code'] ?? null;
+
+            if (!is_string($code)) {
+                continue;
+            }
+
+            $code = trim($code);
+
+            if ($code === '') {
+                continue;
+            }
+
+            $label = $resolveLabel($locale, $code);
+
+            $options[] = [
                 'value' => $code,
-                'text'  => $text,
+                'text'  => $label !== $code ? sprintf('%s (%s)', $label, $code) : $code,
             ];
-        }, $locales);
-
-        $options = array_values(array_filter($options));
+        }
 
         $languages = $kirby->languages();
 
@@ -579,7 +762,7 @@ $buildDialogLocaleField = static function (?string $currentValue = null, array $
         'empty'     => [
             'text' => I18n::translate('grommasdietz.kirby-locale.dialog.empty', 'No locale'),
         ],
-        'search'    => count($options) > 7,
+        'search'    => count($enabledOptions) > 7,
         'translate' => false,
         'value'     => $value,
     ];
