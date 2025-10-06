@@ -5,7 +5,7 @@ Kirby plugin to enable multilingual fragment definitions. If you have pages with
 The plugin ships two tools:
 
 - A `locale` writer mark that wraps inline selections in a `<span lang="…">`
-- A locale picker in Kirby’s page create and title rename dialogs to save `titlelocale`to your content so you can read and write it individually on templates and snippets
+- A locale picker in Kirby’s page create and title rename dialogs to save `titlelocale` to your content so you can read and write it individually on templates and snippets
 
 ## Requirements
 
@@ -15,17 +15,17 @@ The plugin ships two tools:
 
 You can install the plugin via one of three methods:
 
-1. **Download**
+1. ### Download
 
    Download and copy this repository to `site/plugins/kirby-locale`.
 
-2. **Git Submodule**
+2. ### Git Submodule
 
    ```shell
    git submodule add https://github.com/grommasdietz/kirby-locale.git site/plugins/kirby-locale
    ```
 
-3. **Composer**
+3. ### Composer
 
    ```shell
    composer require grommasdietz/kirby-locale
@@ -102,8 +102,8 @@ Define custom labels or additional locales in `site/config/config.php`:
 ```php
 return [
     'grommasdietz.kirby-locale.locales' => [
-        ['code' => 'en', 'name' => 'English'],
-        ['code' => 'de', 'name' => 'Deutsch'],
+        ['code' => 'en-GB', 'name' => 'English, United Kingdom'],
+        ['code' => 'en-US', 'name' => 'English, United States'],
     ],
     // Optional: disable the ISO fallback if you only want the entries above
     // 'grommasdietz.kirby-locale.catalog' => false,
