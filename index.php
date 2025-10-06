@@ -1043,13 +1043,70 @@ App::plugin('grommasdietz/kirby-locale', [
             'extends'   => 'select',
             'component' => 'k-locale-field',
             'props'     => [
-                'plugin' => 'grommasdietz/kirby-locale',
-                'reset'  => true,
-                'empty'  => [
-                    'text'  => I18n::translate('grommasdietz.kirby-locale.dialog.empty', '–'),
-                    'value' => '',
-                ],
-                'search' => null,
+                'plugin' => static function ($plugin = null): string {
+                    if (is_string($plugin)) {
+                        $trimmed = trim($plugin);
+
+                        if ($trimmed !== '') {
+                            return $trimmed;
+                        }
+                    }
+
+                    return 'grommasdietz/kirby-locale';
+                },
+                'reset' => static function ($reset = null): bool {
+                    return $reset === null ? true : (bool) $reset;
+                },
+                'empty' => static function ($empty = null): array {
+                    if (is_string($empty)) {
+                        $text = trim($empty);
+
+                        return [
+                            'text'  => $text === ''
+                                ? I18n::translate('grommasdietz.kirby-locale.dialog.empty', '–')
+                                : $text,
+                            'value' => '',
+                        ];
+                    }
+
+                    if (is_array($empty)) {
+                        $text = $empty['text'] ?? null;
+                        $value = $empty['value'] ?? '';
+
+                        if (!is_string($text) || trim($text) === '') {
+                            $text = I18n::translate('grommasdietz.kirby-locale.dialog.empty', '–');
+                        }
+
+                        if (!is_string($value)) {
+                            $value = '';
+                        }
+
+                        return [
+                            'text'  => $text,
+                            'value' => trim($value),
+                        ];
+                    }
+
+                    return [
+                        'text'  => I18n::translate('grommasdietz.kirby-locale.dialog.empty', '–'),
+                        'value' => '',
+                    ];
+                },
+                'search' => static function ($search = null) {
+                    if ($search === null) {
+                        return null;
+                    }
+
+                    if (is_bool($search)) {
+                        return $search;
+                    }
+
+                    if (is_numeric($search)) {
+                        return (int) $search;
+                    }
+
+                    return null;
+                },
             ],
         ],
     ],
