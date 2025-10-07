@@ -6,7 +6,7 @@
   color: inherit;
   display: inline;
   margin-block: calc(var(--spacing-1) * -1);
-  margin-inline: calc(var(--spacing-1) * -1);
+  margin-inline: calc((var(--spacing-1) + 1.25px) * -1);
   padding-block: 0.75px calc(1cap - 1ex);
   padding-inline: var(--spacing-1);
 }
