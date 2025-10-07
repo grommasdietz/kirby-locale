@@ -1,5 +1,5 @@
 :where(.k-writer .ProseMirror) span.notranslate[lang] {
-  background-color: var(--input-color-back);
+  background-color: inherit; // var(--input-color-back)
   border-color: light-dark(var(--color-gray-400), var(--color-gray-600));
   /* border-radius: var(--button-rounded); */
   border-style: solid;
@@ -22,6 +22,7 @@
   letter-spacing: 0.05em;
   padding-inline-end: 0.1rem;
   text-transform: uppercase;
+  text-decoration-color: none;
 }
 
 :where(.k-writer .ProseMirror) span.notranslate[lang] + span.notranslate[lang] {
