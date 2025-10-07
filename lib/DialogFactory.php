@@ -317,7 +317,7 @@ final class DialogFactory
       'options'   => $options,
       'locales'   => $locales,
       'empty'     => [
-        'text'  => I18n::translate('grommasdietz.kirby-locale.dialog.empty'),
+        'text'  => I18n::translate('grommasdietz.kirby-locale.dialog.empty', 'No locale'),
         'value' => '',
       ],
       'search'    => $enabledCount > 7,

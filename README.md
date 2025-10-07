@@ -99,9 +99,9 @@ The Writer dialog and the title selector share a single locale collector. Entrie
 > [!TIP]
 > Catalog entries adopt the current Panel language when the browser supports `Intl.DisplayNames`, so editors always see familiar labels.
 
-Values must be associative arrays that include at least a `code` and `name`, with an optional `group`. The `kirby()->option('grommasdietz.kirby-locale.locales')` option may also be a closure that returns such an array at runtime.
+Values must be associative arrays that include at least a `code` and `name`, with an optional `group`. The kirby option `'grommasdietz.kirby-locale.locales'` may also be a closure that returns such an array at runtime.
 
-Set `kirby()->option('grommasdietz.kirby-locale.catalog', false)` to disable the ISO fallback entirely, or pass a custom array to replace it.
+Set the kirby option `'grommasdietz.kirby-locale.catalog'` to disable the ISO fallback entirely, or pass a custom array to replace it.
 
 ## Optional configuration
 
