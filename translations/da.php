@@ -7,5 +7,5 @@ return [
     'grommasdietz.kirby-locale.dialog.empty' => '–',
     'grommasdietz.kirby-locale.dialog.group.site' => 'Webstedets sprog',
     'grommasdietz.kirby-locale.dialog.group.other' => 'Andre sprog',
-        'grommasdietz.kirby-locale.prompt' => 'Indtast sprogkoden (fx de, en-GB)',
+    'grommasdietz.kirby-locale.prompt' => 'Indtast sprogkoden (fx de, en-GB)',
 ];

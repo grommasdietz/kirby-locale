@@ -2,11 +2,10 @@
 
 Kirby plugin to enable multilingual fragment definitions. If you have pages with titles and/or phrases in Writer fields which should stay in there original language this plugin might be handy.
 
-The plugin ships three tools:
+The plugin ships two tools:
 
 - A `locale` Writer mark that wraps inline selections in a `<span lang="…">`
 - A locale picker in Kirby’s page create and title rename dialogs to save `titlelocale` to your content so you can read and write it individually on templates and snippets
-- A reusable `locale` Panel field for blueprints and custom dialogs that mirrors the same grouped locale selector
 
 ## Requirements
 
@@ -80,25 +79,14 @@ fields:
     translate: false
 ```
 
-### Blueprints & custom dialogs
+### Custom integrations
 
-Reuse the shared locale dataset in any blueprint select field via the bundled query:
+Need the locale list elsewhere? Reuse the shared dataset via the plugin’s API endpoints:
 
-```yaml
-fields:
-  locale:
-    type: select
-    label: Locale
-    translate: false
-    reset: true
-    options:
-      type: query
-      query: locale
-      text: "{{ item.text }}"
-      value: "{{ item.value }}"
-```
+- `GET grommasdietz/kirby-locale/locales` &mdash; returns the raw locale definitions (code, name, group, source)
+- `GET grommasdietz/kirby-locale/options` &mdash; returns the grouped select options shown in the dialogs
 
-The query returns the same grouped and localised option list used by the Writer mark and the title dialogs, so every locale picker stays in sync. If you prefer the bespoke Vue component, the custom `type: locale` field remains available and accepts the same props as Kirby’s select field (plus optional `locales` or `options` overrides).
+Fetch the data inside custom Panel plugins or fields with Kirby’s [`window.panel.api`](https://getkirby.com/docs/reference/panel/api#api-client) and wire it into your UI of choice. The API payloads stay in sync with the Writer mark and dialog pickers, so every consumer uses the same locale catalogue.
 
 ## Locale sources
 
