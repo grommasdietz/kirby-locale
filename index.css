@@ -1,23 +1,18 @@
 :where(.k-writer .ProseMirror) span.notranslate[lang] {
-  color: inherit;
   background-color: inherit;
   border-color: color-mix(in sRGB, currentColor, var(--input-color-back) 60%);
-
   border-style: solid;
   border-width: 1.25px;
+  color: inherit;
   display: inline;
   margin-block: calc(var(--spacing-1) * -1);
+  margin-inline: calc(var(--spacing-1) * -1);
   padding-block: 0.75px calc(1cap - 1ex);
   padding-inline: var(--spacing-1);
-  margin-inline: calc(var(--spacing-1) * -1);
 }
 
 :where(.k-writer .ProseMirror) span.notranslate[lang]::before {
-  color: color-mix(
-    in sRGB,
-    currentColor,
-    var(--input-color-back) 60%
-  ); // light-dark(var(--color-gray-400), var(--color-gray-600));
+  color: color-mix(in sRGB, currentColor, var(--input-color-back) 60%);
   content: attr(lang);
   display: inline;
   font-size: 0.7em;
