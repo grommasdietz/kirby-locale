@@ -4,7 +4,7 @@
   border-color: color-mix(
     in sRGB,
     currentColor,
-    transparent 40%
+    transparent 60%
   ); // light-dark(var(--color-gray-400), var(--color-gray-600));
   /* border-radius: var(--button-rounded); */
   border-style: solid;
@@ -22,7 +22,7 @@
   color: color-mix(
     in sRGB,
     currentColor,
-    transparent 40%
+    transparent 60%
   ); // light-dark(var(--color-gray-400), var(--color-gray-600));
   content: attr(lang);
   display: inline;
