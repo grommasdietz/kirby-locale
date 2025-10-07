@@ -1,6 +1,10 @@
 :where(.k-writer .ProseMirror) span.notranslate[lang] {
   background-color: inherit; // var(--input-color-back)
-  border-color: light-dark(var(--color-gray-400), var(--color-gray-600));
+  border-color: color-mix(
+    in sRGB,
+    currentColor,
+    transparent 40%
+  ); // light-dark(var(--color-gray-400), var(--color-gray-600));
   /* border-radius: var(--button-rounded); */
   border-style: solid;
   border-width: 1.25px;
@@ -14,7 +18,11 @@
 }
 
 :where(.k-writer .ProseMirror) span.notranslate[lang]::before {
-  color: light-dark(var(--color-gray-400), var(--color-gray-600));
+  color: color-mix(
+    in sRGB,
+    currentColor,
+    transparent 40%
+  ); // light-dark(var(--color-gray-400), var(--color-gray-600));
   content: attr(lang);
   display: inline;
   font-size: 0.7em;
