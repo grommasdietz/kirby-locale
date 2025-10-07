@@ -1,4 +1,5 @@
 :where(.k-writer .ProseMirror) span.notranslate[lang] {
+  color: inherit;
   background-color: inherit; // var(--input-color-back)
   border-color: color-mix(
     in sRGB,
