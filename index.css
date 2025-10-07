@@ -1,14 +1,15 @@
 :where(.k-writer .ProseMirror) span.notranslate[lang] {
   background-color: var(--input-color-back);
   border-color: light-dark(var(--color-gray-400), var(--color-gray-600));
-  border-radius: var(--button-rounded);
+  /* border-radius: var(--button-rounded); */
   border-style: solid;
   border-width: 1.25px;
   color: var(--color-text);
   display: inline;
   margin-block: calc(var(--spacing-1) * -1);
-  margin-inline: 0.1rem;
-  padding-block: var(--spacing-1);
+  /* margin-inline: 0.1rem; */
+  /* padding-block: var(--spacing-1); */
+  padding-block: 0.325px calc(1cap - 1ex + 0.325px);
   padding-inline: var(--spacing-1);
 }
 
