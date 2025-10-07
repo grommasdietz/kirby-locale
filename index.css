@@ -38,6 +38,6 @@
   margin-inline-start: var(--spacing-1);
 }
 
-:where(.k-writer .ProseMirror a) span.notranslate[lang] {
+:where(.k-writer .ProseMirror) a:has(span.notranslate[lang]) {
   text-decoration: none;
 }
