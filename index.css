@@ -9,7 +9,7 @@
   margin-block: calc(var(--spacing-1) * -1);
   /* margin-inline: 0.1rem; */
   /* padding-block: var(--spacing-1); */
-  padding-block: 0.325px calc(1cap - 1ex + 0.325px);
+  padding-block: 0.75px calc(1cap - 1ex);
   padding-inline: var(--spacing-1);
 }
 
