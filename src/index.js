@@ -1,5 +1,4 @@
 import { createLocaleMark } from "./marks/locale.js";
-import { createLocaleField } from "./fields/locale.js";
 
 const pluginId = "grommasdietz/kirby-locale";
 
@@ -133,9 +132,6 @@ const resolveContextPageId = (context = {}) => {
 window.panel.plugin(pluginId, {
   writerMarks: {
     locale: createLocaleMark(pluginId),
-  },
-  fields: {
-    locale: createLocaleField(pluginId),
   },
   dialogs: {
     async "page.create"(dialog) {

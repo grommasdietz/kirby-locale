@@ -7,4 +7,5 @@ return [
     'grommasdietz.kirby-locale.dialog.empty' => '–',
     'grommasdietz.kirby-locale.dialog.group.site' => 'Webbplatsens språk',
     'grommasdietz.kirby-locale.dialog.group.other' => 'Andra språk',
+    'grommasdietz.kirby-locale.prompt' => 'Ange språkkoden (t.ex. de, en-GB)',
 ];

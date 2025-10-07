@@ -7,4 +7,5 @@ return [
     'grommasdietz.kirby-locale.dialog.empty' => '–',
     'grommasdietz.kirby-locale.dialog.group.site' => 'Jazyky webu',
     'grommasdietz.kirby-locale.dialog.group.other' => 'Další jazyky',
+    'grommasdietz.kirby-locale.prompt' => 'Zadejte kód jazyka (např. de, en-GB)',
 ];
