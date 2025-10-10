@@ -1,6 +1,6 @@
 {
     "name": "grommasdietz/kirby-locale",
-    "description": "Locale picker Writer mark for Kirby",
+    "description": "Locale utilities for Kirby",
     "type": "kirby-plugin",
     "license": "MIT",
     "version": "1.0.0",
