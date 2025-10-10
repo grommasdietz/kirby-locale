@@ -1,9 +1,15 @@
 import { createLocaleMark } from "./marks/locale.js";
 
 const pluginId = "grommasdietz/kirby-locale";
+const FIELD_NAME = "title_locale";
 
 const normaliseDialogValue = (value) =>
   typeof value === "string" ? value.trim() : "";
+
+const readLocaleValue = (collection = {}) =>
+  collection && typeof collection === "object"
+    ? collection[FIELD_NAME] ?? null
+    : null;
 
 const buildLocaleField = (currentValue = null, existingField = null) => {
   const baseField = existingField ? { ...existingField } : {};
@@ -23,7 +29,7 @@ const buildLocaleField = (currentValue = null, existingField = null) => {
 
   const field = {
     ...rest,
-    name: "titleLocale",
+    name: FIELD_NAME,
     label,
     type,
     empty: existingEmpty ?? { text: emptyText, value: "" },
@@ -54,28 +60,33 @@ const buildLocaleField = (currentValue = null, existingField = null) => {
 };
 
 const injectLocaleField = (dialog, fieldConfig, value) => {
-  if (!dialog?.props?.fields?.titleLocale) {
+  if (!dialog?.props?.fields) {
     return dialog;
   }
 
   const originalFields = dialog.props.fields ?? {};
   const mergedLocaleField = {
-    ...(originalFields.titleLocale || {}),
+    ...(originalFields[FIELD_NAME] || {}),
     ...fieldConfig,
+  };
+
+  const nextFields = {
+    ...originalFields,
+    [FIELD_NAME]: mergedLocaleField,
+  };
+
+  const originalValues = dialog.props.value ?? {};
+  const nextValues = {
+    ...originalValues,
+    [FIELD_NAME]: value,
   };
 
   return {
     ...dialog,
     props: {
       ...dialog.props,
-      fields: {
-        ...originalFields,
-        titleLocale: mergedLocaleField,
-      },
-      value: {
-        ...dialog.props.value,
-        titleLocale: value,
-      },
+      fields: nextFields,
+      value: nextValues,
     },
   };
 };
@@ -92,7 +103,7 @@ const fetchStoredLocale = async (pageId, language) => {
     });
 
     const data = response?.data || response;
-    const locale = data?.titleLocale;
+    const locale = data?.[FIELD_NAME];
 
     if (typeof locale === "string") {
       return locale.trim();
@@ -135,8 +146,8 @@ window.panel.plugin(pluginId, {
   },
   dialogs: {
     async "page.create"(dialog) {
-      const currentValue = dialog?.props?.value?.titleLocale ?? null;
-      const existingField = dialog?.props?.fields?.titleLocale ?? null;
+      const existingField = dialog?.props?.fields?.[FIELD_NAME] ?? null;
+      const currentValue = readLocaleValue(dialog?.props?.value);
 
       if (!existingField) {
         return dialog;
@@ -149,13 +160,13 @@ window.panel.plugin(pluginId, {
     async "page.changeTitle"(dialog, context = {}) {
       const pageId = resolveContextPageId(context);
       const language = resolveContextLanguage(context);
-      const existingField = dialog?.props?.fields?.titleLocale ?? null;
+      const existingField = dialog?.props?.fields?.[FIELD_NAME] ?? null;
 
       if (!existingField) {
         return dialog;
       }
 
-      let currentValue = dialog?.props?.value?.titleLocale ?? null;
+      let currentValue = readLocaleValue(dialog?.props?.value);
 
       if (currentValue === null || currentValue === undefined) {
         currentValue = await fetchStoredLocale(pageId, language);

@@ -110,7 +110,13 @@ final class LocaleHelper
     $catalogPreference = $kirby->option('grommasdietz.kirby-locale.catalog');
 
     if ($catalogPreference !== false) {
-      $fallback = $catalogPreference && $catalogPreference !== true ? $catalogPreference : IsoCatalog::catalog();
+      if (is_callable($catalogPreference)) {
+        $catalogPreference = $catalogPreference($kirby);
+      }
+
+      $fallback = ($catalogPreference === null || $catalogPreference === true)
+        ? IsoCatalog::catalog()
+        : $catalogPreference;
 
       foreach ((array) $fallback as $locale) {
         $push($locale, 'catalog');
@@ -245,22 +251,25 @@ final class LocaleHelper
    */
   public static function extractLocaleFromRequest(Request $request): array
   {
-    $value = $request->get('titleLocale');
+    $fieldKey = TitleLocale::FIELD_KEY;
+    $value = $request->get($fieldKey);
     $provided = $value !== null;
 
-    $data = $request->data();
+    if ($provided === false) {
+      $data = $request->data();
 
-    if ($provided === false && is_array($data)) {
-      if (array_key_exists('titleLocale', $data)) {
-        $value = $data['titleLocale'];
-        $provided = true;
-      } elseif (
-        isset($data['content']) &&
-        is_array($data['content']) &&
-        array_key_exists('titleLocale', $data['content'])
-      ) {
-        $value = $data['content']['titleLocale'];
-        $provided = true;
+      if (is_array($data)) {
+        if (array_key_exists($fieldKey, $data)) {
+          $value = $data[$fieldKey];
+          $provided = true;
+        } elseif (
+          isset($data['content']) &&
+          is_array($data['content']) &&
+          array_key_exists($fieldKey, $data['content'])
+        ) {
+          $value = $data['content'][$fieldKey];
+          $provided = true;
+        }
       }
     }
 

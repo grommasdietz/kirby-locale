@@ -5,7 +5,7 @@ Kirby plugin to enable multilingual fragment definitions. If you have pages with
 The plugin ships two tools:
 
 - A `locale` Writer mark that wraps inline selections in a `<span lang="…">`
-- A locale picker in Kirby’s page create and title rename dialogs to save `titlelocale` to your content so you can read and write it individually on templates and snippets
+- A locale picker in Kirby’s page create and title rename dialogs to save `title_locale` to your content so you can read and write it individually on templates and snippets
 
 ## Requirements
 
@@ -68,13 +68,13 @@ return [
 ];
 ```
 
-After configuration, Kirby’s create and rename dialogs automatically show the **Locale** dropdown and save the choice as `titlelocale`. Retrieve it in templates with `$page->titlelocale()`.
+After configuration, Kirby’s create and rename dialogs automatically show the **Locale** dropdown and save the choice as `title_locale`. Retrieve it in templates with `$page->title_locale()`.
 
-If your deployment runs cleanup commands such as `kirby clean:content`, declare `titlelocale` as a hidden field in the affected blueprints:
+If your deployment runs cleanup commands such as `kirby clean:content`, declare `title_locale` as a hidden field in the affected blueprints:
 
 ```yaml
 fields:
-  titlelocale:
+  title_locale:
     type: hidden
     translate: false
 ```
@@ -116,6 +116,8 @@ return [
     // Optional: disable the ISO fallback if you only want the entries above
     // 'grommasdietz.kirby-locale.catalog' => false,
 ];
+
+Passing an empty array (or a closure that returns one) keeps the plugin’s API active while skipping the bundled ISO catalog entirely.
 ```
 
 Each entry must provide a `code` and `name` (and optionally `group`). You can also supply a closure for the Kirby option if the list should be computed dynamically. The same dataset powers both the Writer mark and the title dialogs, so you only need to maintain it once.

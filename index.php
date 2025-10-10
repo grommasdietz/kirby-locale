@@ -13,7 +13,11 @@ require_once __DIR__ . '/lib/LocaleHelper.php';
 require_once __DIR__ . '/lib/DialogFactory.php';
 require_once __DIR__ . '/lib/TitleLocale.php';
 
-Html::$allowedTags['span'] = ['lang', 'class'];
+$existingSpanAttributes = Html::$allowedTags['span'] ?? [];
+Html::$allowedTags['span'] = array_values(array_unique(array_merge(
+    is_array($existingSpanAttributes) ? $existingSpanAttributes : [],
+    ['lang', 'class']
+)));
 
 $translations = Translations::load();
 
@@ -157,7 +161,7 @@ App::plugin('grommasdietz/kirby-locale', [
 
                     if (!$kirby) {
                         return [
-                            'titleLocale' => null,
+                            TitleLocale::FIELD_KEY => null,
                         ];
                     }
 
@@ -167,7 +171,7 @@ App::plugin('grommasdietz/kirby-locale', [
 
                     if ($id === '') {
                         return [
-                            'titleLocale' => null,
+                            TitleLocale::FIELD_KEY => null,
                         ];
                     }
 
@@ -175,7 +179,7 @@ App::plugin('grommasdietz/kirby-locale', [
 
                     if ($page === null) {
                         return [
-                            'titleLocale' => null,
+                            TitleLocale::FIELD_KEY => null,
                         ];
                     }
 
@@ -190,7 +194,7 @@ App::plugin('grommasdietz/kirby-locale', [
                     }
 
                     return [
-                        'titleLocale' => TitleLocale::getStored($page, $languageCode),
+                        TitleLocale::FIELD_KEY => TitleLocale::getStored($page, $languageCode),
                     ];
                 },
             ],
