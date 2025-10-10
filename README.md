@@ -99,9 +99,6 @@ The Writer dialog and the title selector share a single locale collector. Entrie
 2. Kirby’s configured site languages
 3. The bundled ISO 639-1 catalog (unless disabled)
 
-> [!TIP]
-> Catalog entries adopt the current Panel language when the browser supports `Intl.DisplayNames`, so editors always see familiar labels.
-
 Values must be associative arrays that include at least a `code` and `name`, with an optional `group`. The kirby option `'grommasdietz.kirby-locale.locales'` may also be a closure that returns such an array at runtime.
 
 Set the kirby option `'grommasdietz.kirby-locale.catalog'` to disable the ISO fallback entirely, or pass a custom array to replace it.
@@ -119,10 +116,7 @@ return [
     // Optional: disable the ISO fallback if you only want the entries above
     // 'grommasdietz.kirby-locale.catalog' => false,
 ];
-
-Passing an empty array (or a closure that returns one) keeps the plugin’s API active while skipping the bundled ISO catalog entirely.
 ```
-
 Each entry must provide a `code` and `name` (and optionally `group`). You can also supply a closure for the Kirby option if the list should be computed dynamically. The same dataset powers both the Writer mark and the title dialogs, so you only need to maintain it once.
 
 ## Development
