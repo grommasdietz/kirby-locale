@@ -1,6 +1,6 @@
 # Kirby Locale
 
-Kirby Locale adds a Writer mark and optional title dialog picker so editors can tag language-specific fragments and store per-page title locales.
+Kirby Locale adds a Writer mark and an optional dialog select field so editors can tag language-specific fragments and store per-page title locales.
 
 The `locale` Writer mark wraps inline selections in a `span` element with `lang` attribute, e.g.:
 
@@ -8,7 +8,7 @@ The `locale` Writer mark wraps inline selections in a `span` element with `lang`
 <span lang="en">Example</span>
 ```
 
-The locale picker in Kirby’s page create and title rename dialogs can be activated individually based on `intendedTemplate` and saves `title_locale` to your content. This gives you full flexibility to set `lang` attribute yourself.
+The optional select field in Kirby’s page create and title rename dialogs can be activated individually based on `intendedTemplate` and saves `title_locale` to your content. This gives you full flexibility to set `lang` attribute yourself.
 
 ## Requirements
 
