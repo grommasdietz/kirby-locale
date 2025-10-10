@@ -149,4 +149,4 @@ The generator relies on CLDR data via FormatJS, so every supported Panel languag
 
 ## License
 
-MIT. See [LICENSE.md](LICENSE.md).
+[MIT](LICENSE.md)
