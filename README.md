@@ -8,7 +8,7 @@ The `locale` Writer mark wraps inline selections in a `span` element with `lang`
 <span lang="en">Example</span>
 ```
 
-The optional select field in Kirby’s page create and title rename dialogs can be activated individually based on `intendedTemplate` and saves `title_locale` to your content. In this way the `lang` attribute can be set flexible across your markup.
+The optional select field in Kirby’s page create and title rename dialogs can be activated individually based on `intendedTemplate` and saves `title_locale` to your content. In this way the `lang` attribute can be set flexible across the markup.
 
 ## Requirements
 
