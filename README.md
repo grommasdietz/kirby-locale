@@ -79,7 +79,7 @@ If your deployment runs cleanup commands such as `kirby clean:content`, declare 
 fields:
   title_locale:
     type: hidden
-    translate: false
+    translate: false # optional
 ```
 
 ### Custom integrations
