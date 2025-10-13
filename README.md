@@ -71,7 +71,7 @@ return [
 ];
 ```
 
-After configuration, Kirby’s create and rename dialogs automatically show the **Locale** dropdown and save the choice as `title_locale`. Retrieve it in templates with `$page->title_locale()`.
+After configuration, Kirby’s create and rename dialogs automatically show the locale dropdown and save the choice as `title_locale`. Retrieve it in templates with `$page->title_locale()`.
 
 If your deployment runs cleanup commands such as `kirby clean:content`, declare `title_locale` as a hidden field in the affected blueprints:
 
