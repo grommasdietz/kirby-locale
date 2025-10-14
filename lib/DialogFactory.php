@@ -13,8 +13,8 @@ final class DialogFactory
         $options = [];
         $seen = [];
 
-        $siteGroupLabel = I18n::translate('grommasdietz.kirby-locale.dialog.group.site');
-        $otherGroupLabel = I18n::translate('grommasdietz.kirby-locale.dialog.group.other');
+        $siteGroupLabel = I18n::translate('grommasdietz.kirby-locale.dialog.group.site', 'Site locales');
+        $otherGroupLabel = I18n::translate('grommasdietz.kirby-locale.dialog.group.other', 'Other locales');
 
         $currentValue = is_string($currentValue) ? trim($currentValue) : '';
         $currentGroupLabel = null;
@@ -310,7 +310,7 @@ final class DialogFactory
         }
 
         $field = [
-            'label'     => I18n::translate('grommasdietz.kirby-locale.label'),
+            'label'     => I18n::translate('grommasdietz.kirby-locale.label', 'Locale'),
             'type'      => 'select',
             'icon'      => 'translate',
             'name'      => TitleLocale::FIELD_KEY,
