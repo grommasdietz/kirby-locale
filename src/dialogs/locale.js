@@ -38,8 +38,8 @@ const buildDialogProps = (pluginId, value, locales) => {
         empty: {
           text: translate(pluginId, "dialog.empty", "–"),
         },
-  options,
-  searchable: enabledCount > 7,
+        options,
+        searchable: enabledCount > 7,
       }
     : {
         ...baseField,

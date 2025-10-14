@@ -251,8 +251,7 @@ const applyGroupedSelectComponent = () => {
       window.panel.$components["k-select-input"] = enhancedComponent;
     }
 
-    const maybeVue =
-      window.panel?.app?.$vue || window.panel?.Vue || window.Vue;
+    const maybeVue = window.panel?.app?.$vue || window.panel?.Vue || window.Vue;
 
     if (maybeVue && typeof maybeVue.component === "function") {
       maybeVue.component("k-select-input", enhancedComponent);
