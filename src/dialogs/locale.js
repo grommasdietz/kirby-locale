@@ -16,11 +16,15 @@ const translate = (pluginId, key, fallback) => {
 
 const buildDialogProps = (pluginId, value, locales) => {
   const siteLocaleCodes = getSiteLocaleCodes();
-  const options = createLocaleOptions(locales, value, siteLocaleCodes, {
-    pluginId,
-  });
-  const enabledOptions = options.filter((option) => option.disabled !== true);
-  const hasOptions = enabledOptions.length > 0;
+  const { options, enabledCount } = createLocaleOptions(
+    locales,
+    value,
+    siteLocaleCodes,
+    {
+      pluginId,
+    }
+  );
+  const hasOptions = enabledCount > 0;
 
   const baseField = {
     label: translate(pluginId, "dialog.select.label", "Locale"),
@@ -34,8 +38,8 @@ const buildDialogProps = (pluginId, value, locales) => {
         empty: {
           text: translate(pluginId, "dialog.empty", "–"),
         },
-        options,
-        searchable: enabledOptions.length > 7,
+  options,
+  searchable: enabledCount > 7,
       }
     : {
         ...baseField,

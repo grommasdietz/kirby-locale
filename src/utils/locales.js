@@ -423,6 +423,7 @@ export const createLocaleOptions = (
   const options = [];
   const seen = new Set();
   const preferredSet = new Set();
+  let enabledCount = 0;
 
   const registerPreferredCode = (rawCode) => {
     const normalised = normaliseLocaleCode(rawCode);
@@ -487,7 +488,7 @@ export const createLocaleOptions = (
     }
   });
 
-  const pushOption = (locale) => {
+  const pushOption = (locale, groupLabel = null) => {
     if (!locale || !locale.code) {
       return;
     }
@@ -503,46 +504,27 @@ export const createLocaleOptions = (
 
     const label = resolveName(locale, code);
 
-    options.push({
+    const option = {
       value: locale.code,
       text: label && label !== code ? `${label} (${locale.code})` : locale.code,
-    });
-  };
-  let lastGroupKey = null;
+    };
 
-  const pushGroupHeading = (label) => {
-    const trimmed = typeof label === "string" ? label.trim() : "";
-
-    if (!trimmed) {
-      return;
+    if (groupLabel && typeof groupLabel === "string" && groupLabel.trim()) {
+      option.group = groupLabel.trim();
     }
 
-    const key = localeKey(trimmed);
+    options.push(option);
 
-    if (key && key === lastGroupKey) {
-      return;
-    }
-
-    options.push({
-      value: `__group__${key || options.length}`,
-      text: trimmed,
-      disabled: true,
-    });
-
-    lastGroupKey = key;
+    enabledCount += 1;
   };
 
   if (siteLocales.length) {
-    pushGroupHeading(siteGroupLabel);
     siteLocales.forEach((locale) => {
-      pushOption(locale);
+      pushOption(locale, siteGroupLabel);
     });
-    lastGroupKey = null;
   }
 
   if (remainingLocales.length) {
-    lastGroupKey = null;
-
     remainingLocales.forEach((locale) => {
       const rawGroup =
         typeof locale?.group === "string" && locale.group.trim()
@@ -550,8 +532,7 @@ export const createLocaleOptions = (
           : "";
       const label = rawGroup || otherGroupLabel;
 
-      pushGroupHeading(label);
-      pushOption(locale);
+      pushOption(locale, label);
     });
   }
 
@@ -565,9 +546,13 @@ export const createLocaleOptions = (
         value: currentValue,
         text: currentValue,
       });
+      enabledCount += 1;
       seen.add(currentKey);
     }
   }
 
-  return options;
+  return {
+    options,
+    enabledCount,
+  };
 };

@@ -192,32 +192,7 @@ final class DialogFactory
                 }
             }
 
-            $lastGroupKey = null;
-
-            $pushGroupHeading = static function (string $label) use (&$options, &$lastGroupKey, &$currentGroupLabel) {
-                $trimmed = trim($label);
-
-                if ($trimmed === '') {
-                    return;
-                }
-
-                $key = LocaleHelper::normaliseLowercase($trimmed);
-
-                if ($key !== '' && $key === $lastGroupKey) {
-                    return;
-                }
-
-                $options[] = [
-                    'value'    => '__group__' . ($key !== '' ? $key : count($options)),
-                    'text'     => $trimmed,
-                    'disabled' => true,
-                ];
-
-                $lastGroupKey = $key;
-                $currentGroupLabel = $trimmed;
-            };
-
-            $pushOption = static function (array $locale, string $code) use (&$options, &$seen, &$currentGroupLabel, $resolveLabel) {
+            $pushOption = static function (array $locale, string $code, ?string $groupLabel) use (&$options, &$seen, $resolveLabel) {
                 $key = LocaleHelper::normaliseLowercase($code);
 
                 if ($key === '' || isset($seen[$key])) {
@@ -233,16 +208,14 @@ final class DialogFactory
                     'text'  => $label !== $code ? sprintf('%s (%s)', $label, $code) : $code,
                 ];
 
-                if (is_string($currentGroupLabel) && $currentGroupLabel !== '') {
-                    $option['group'] = $currentGroupLabel;
+                if (is_string($groupLabel) && $groupLabel !== '') {
+                    $option['group'] = $groupLabel;
                 }
 
                 $options[] = $option;
             };
 
             if ($siteLocales !== []) {
-                $pushGroupHeading($siteGroupLabel);
-
                 foreach ($siteLocales as $locale) {
                     $code = $locale['code'] ?? null;
 
@@ -256,17 +229,11 @@ final class DialogFactory
                         continue;
                     }
 
-                    $pushOption($locale, $trimmed);
+                    $pushOption($locale, $trimmed, $siteGroupLabel);
                 }
-
-                $lastGroupKey = null;
-                $currentGroupLabel = null;
             }
 
             if ($remainingLocales !== []) {
-                $lastGroupKey = null;
-                $currentGroupLabel = null;
-
                 foreach ($remainingLocales as $locale) {
                     $code = $locale['code'] ?? null;
 
@@ -285,8 +252,7 @@ final class DialogFactory
                         ? trim($rawGroup)
                         : $otherGroupLabel;
 
-                    $pushGroupHeading($groupLabel);
-                    $pushOption($locale, $trimmed);
+                    $pushOption($locale, $trimmed, $groupLabel);
                 }
             }
         }
@@ -301,13 +267,7 @@ final class DialogFactory
             $seen[$normalisedCurrent] = true;
         }
 
-        $enabledCount = 0;
-
-        foreach ($options as $option) {
-            if (!isset($option['disabled']) || $option['disabled'] !== true) {
-                ++$enabledCount;
-            }
-        }
+        $enabledCount = count($options);
 
         $field = [
             'label'     => I18n::translate('grommasdietz.kirby-locale.label', 'Locale'),
