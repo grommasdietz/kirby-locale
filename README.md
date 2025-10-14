@@ -10,6 +10,9 @@ The `locale` Writer mark wraps inline selections in a `span` element with `lang`
 
 The optional select field in Kirby’s page create and title rename dialogs can be activated individually based on `intendedTemplate` and saves `title_locale` to your content. In this way the `lang` attribute can be set flexible across the markup.
 
+<img width="1800" height="900" alt="Cover image showing an example of the plugin in use" src="https://github.com/user-attachments/assets/73e34fcc-73d2-4f0d-abe0-9eb7f72d946f" />
+
+
 ## Requirements
 
 - Kirby 5+
