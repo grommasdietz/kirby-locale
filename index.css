@@ -6,7 +6,7 @@
   color: inherit;
   display: inline;
   margin-block: calc(var(--spacing-1) * -1);
-  margin-inline: calc((var(--spacing-1) + 1px) * -1);
+  margin-inline: -0.5px;
   padding-block: 0.75px calc(1cap - 1ex);
   padding-inline: var(--spacing-1);
 }
@@ -21,10 +21,6 @@
   padding-inline-end: 0.1rem;
   text-transform: uppercase;
   text-decoration-color: none;
-}
-
-:where(.k-writer .ProseMirror) span.notranslate[lang] + span.notranslate[lang] {
-  margin-inline-start: var(--spacing-1);
 }
 
 :where(.k-writer .ProseMirror) a:has(span.notranslate[lang]) {
