@@ -1,9 +1,9 @@
 <?php
 
-use Grommasdietz\KirbyLocale\DialogFactory;
-use Grommasdietz\KirbyLocale\LocaleHelper;
-use Grommasdietz\KirbyLocale\TitleLocale;
-use Grommasdietz\KirbyLocale\Translations;
+use GrommasDietz\KirbyLocale\DialogFactory;
+use GrommasDietz\KirbyLocale\LocaleHelper;
+use GrommasDietz\KirbyLocale\TitleLocale;
+use GrommasDietz\KirbyLocale\Translations;
 use Kirby\Cms\App;
 use Kirby\Sane\Html;
 

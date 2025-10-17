@@ -1,6 +1,6 @@
 <?php
 
-namespace Grommasdietz\KirbyLocale;
+namespace GrommasDietz\KirbyLocale;
 
 use Kirby\Cms\App;
 use Kirby\Toolkit\I18n;

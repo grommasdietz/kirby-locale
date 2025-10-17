@@ -1,6 +1,6 @@
 <?php
 
-namespace Grommasdietz\KirbyLocale;
+namespace GrommasDietz\KirbyLocale;
 
 final class Translations
 {
