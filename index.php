@@ -7,12 +7,6 @@ use GrommasDietz\KirbyLocale\Translations;
 use Kirby\Cms\App;
 use Kirby\Sane\Html;
 
-require_once __DIR__ . '/lib/Translations.php';
-require_once __DIR__ . '/lib/IsoCatalog.php';
-require_once __DIR__ . '/lib/LocaleHelper.php';
-require_once __DIR__ . '/lib/DialogFactory.php';
-require_once __DIR__ . '/lib/TitleLocale.php';
-
 $existingSpanAttributes = Html::$allowedTags['span'] ?? [];
 Html::$allowedTags['span'] = array_values(array_unique(array_merge(
     is_array($existingSpanAttributes) ? $existingSpanAttributes : [],

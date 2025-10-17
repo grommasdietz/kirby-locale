@@ -3,7 +3,7 @@
     "description": "Locale utilities for Kirby CMS",
     "type": "kirby-plugin",
     "license": "MIT",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "authors": [
         {
             "name": "Grommas Dietz",
@@ -11,6 +11,11 @@
             "homepage": "https://grommas-dietz.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "GrommasDietz\\KirbyLocale\\": "lib/"
+        }
+    },
     "require": {
         "getkirby/composer-installer": "^1.2"
     },
