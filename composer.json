@@ -3,7 +3,7 @@
     "description": "Locale utilities for Kirby CMS",
     "type": "kirby-plugin",
     "license": "MIT",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "authors": [
         {
             "name": "Grommas Dietz",
@@ -27,6 +27,20 @@
         "allow-plugins": {
             "getkirby/composer-installer": true
         }
+    },
+    "archive": {
+        "exclude": [
+            "/.editorconfig",
+            "/.gitattributes",
+            "/.github",
+            "/.gitignore",
+            "/composer.lock",
+            "/package-lock.json",
+            "/package.json",
+            "/resources",
+            "/scripts",
+            "/src"
+        ]
     },
     "extra": {
         "kirby-cms-path": false
