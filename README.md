@@ -1,6 +1,6 @@
 # Kirby Locale
 
-Locale utilities for [Kirby CMS](https://getkirby.com). This plugin adds a Writer mark and an optional dialog select field so editors can tag language-specific fragments and store per-page title locales.
+Locale utilities for [Kirby CMS](https://getkirby.com) adds a Writer mark and an optional dialog select field so editors can tag language-specific fragments and store per-page title locales.
 
 <img width="1800" height="900" alt="Cover image showing an example of the plugin in use" src="https://github.com/user-attachments/assets/73e34fcc-73d2-4f0d-abe0-9eb7f72d946f" />
 
