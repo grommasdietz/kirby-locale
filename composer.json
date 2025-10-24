@@ -8,8 +8,20 @@
         {
             "name": "Grommas Dietz",
             "email": "info@grommas-dietz.com",
-            "homepage": "https://grommas-dietz.com"
+            "homepage": "https://grommas-dietz.com",
+            "role": "Developer"
         }
+    ],
+    "support": {
+        "issues": "https://github.com/grommasdietz/kirby-locale/issues",
+        "source": "https://github.com/grommasdietz/kirby-locale"
+    },
+    "keywords": [
+        "kirby",
+        "kirby-cms",
+        "kirby-plugin",
+        "locale",
+        "locales"
     ],
     "autoload": {
         "psr-4": {
