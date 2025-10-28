@@ -11,5 +11,4 @@ src/ export-ignore
 composer.lock export-ignore
 package-lock.json export-ignore
 package.json export-ignore
-resources/ export-ignore
 scripts/ export-ignore
