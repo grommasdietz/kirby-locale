@@ -39,6 +39,9 @@
             "getkirby/composer-installer": true
         }
     },
+    "extra": {
+        "kirby-cms-path": false
+    },
     "archive": {
         "exclude": [
             "/.editorconfig",
@@ -51,8 +54,5 @@
             "/scripts",
             "/src"
         ]
-    },
-    "extra": {
-        "kirby-cms-path": false
     }
 }
