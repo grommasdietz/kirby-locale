@@ -278,7 +278,7 @@ final class LocaleHelper
 
   public static function normaliseTemplateList($templates)
   {
-    if (is_callable($templates)) {
+    if (is_callable($templates) && !is_string($templates)) {
       $templates = $templates();
     }
 
