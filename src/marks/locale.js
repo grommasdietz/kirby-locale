@@ -50,6 +50,16 @@ export const createLocaleMark = (pluginId) => ({
       },
       parseDOM: [
         {
+          tag: "span[translate=\"no\"][lang]",
+          getAttrs: (dom) => {
+            const lang = dom.getAttribute("lang");
+
+            return {
+              lang,
+            };
+          },
+        },
+        {
           tag: "span.notranslate[lang]",
           getAttrs: (dom) => {
             const lang = dom.getAttribute("lang");
@@ -64,6 +74,7 @@ export const createLocaleMark = (pluginId) => ({
         const attrs = {
           class: "notranslate",
           lang: node.attrs.lang || null,
+          translate: "no",
         };
 
         return ["span", attrs, 0];

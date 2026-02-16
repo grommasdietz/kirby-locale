@@ -100,7 +100,7 @@ const canonicaliseLocale = (value) => {
       ) {
         return result[0];
       }
-    } catch (error) {
+    } catch {
       // ignore and fall back to manual handling below
     }
   }
@@ -174,7 +174,7 @@ export const createLocaleCollector = () => {
 export const getSiteLocales = () =>
   normaliseLocales(
     window.panel?.$store?.state?.languages?.all,
-    "site-language"
+    "site-language",
   );
 
 export const getSiteLocaleCodes = () =>
@@ -253,7 +253,7 @@ export const fetchLocales = async (pluginId) => {
       if (error?.status !== 404) {
         console.warn(
           `[${pluginId}] Unable to fetch locales via plugin endpoint.`,
-          error
+          error,
         );
       }
     }
@@ -277,7 +277,7 @@ export const fetchLocales = async (pluginId) => {
 
   if (locales.length === 0) {
     console.warn(
-      `[${pluginId}] No locales available. Configure \`grommasdietz.kirby-locale.locales\` or enable the plugin API route.`
+      `[${pluginId}] No locales available. Configure \`grommasdietz.kirby-locale.locales\` or enable the plugin API route.`,
     );
   }
 
@@ -290,7 +290,7 @@ export const createLocaleOptions = (
   locales = [],
   currentValue = null,
   preferredCodes = [],
-  settings = {}
+  settings = {},
 ) => {
   const pluginIdOption =
     settings && typeof settings === "object" && settings.pluginId
@@ -351,7 +351,7 @@ export const createLocaleOptions = (
     languageDisplayNames = new Intl.DisplayNames([canonicalPanelLocale], {
       type: "language",
     });
-  } catch (error) {
+  } catch {
     languageDisplayNames = null;
   }
 
@@ -459,7 +459,7 @@ export const createLocaleOptions = (
   const siteGroupLabel = translatePanel("dialog.group.site", "Site languages");
   const otherGroupLabel = translatePanel(
     "dialog.group.other",
-    "Other languages"
+    "Other languages",
   );
 
   const siteLocales = [];

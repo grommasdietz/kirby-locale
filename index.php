@@ -10,7 +10,7 @@ use Kirby\Sane\Html;
 $existingSpanAttributes = Html::$allowedTags['span'] ?? [];
 Html::$allowedTags['span'] = array_values(array_unique(array_merge(
     is_array($existingSpanAttributes) ? $existingSpanAttributes : [],
-    ['lang', 'class']
+    ['lang', 'class', 'translate']
 )));
 
 $translations = Translations::load();
@@ -62,7 +62,6 @@ App::plugin('grommasdietz/kirby-locale', [
                 is_callable($pageChangeTitle['load'])
             ) {
                 $load = $pageChangeTitle['load'];
-                $submit = $pageChangeTitle['submit'] ?? null;
 
                 $dialogs['page.changeTitle'] = array_replace($pageChangeTitle, [
                     'load' => function (string $id) use ($kirby, $load, $allowedTemplates) {
@@ -89,28 +88,6 @@ App::plugin('grommasdietz/kirby-locale', [
 
                         return DialogFactory::extend($dialog, $value, $fieldOverrides);
                     },
-                    'submit' => is_callable($submit)
-                        ? function (string $id) use ($submit, $kirby) {
-                            $result = $submit($id);
-                            $request = $kirby->request();
-                            [$hasValue, $rawValue] = LocaleHelper::extractLocaleFromRequest($request);
-
-                            if ($hasValue === true) {
-                                $languageCode = LocaleHelper::resolveLanguageCode($kirby, $request->get('language'));
-                                $newSlug = $request->get('slug');
-                                $page = TitleLocale::resolvePageAfterTitleDialog(
-                                    $id,
-                                    is_string($newSlug) ? trim($newSlug) : null
-                                );
-
-                                if ($page) {
-                                    TitleLocale::store($page, $rawValue, $languageCode);
-                                }
-                            }
-
-                            return $result;
-                        }
-                        : ($pageChangeTitle['submit'] ?? null),
                 ]);
             }
 
@@ -203,9 +180,6 @@ App::plugin('grommasdietz/kirby-locale', [
         },
         'page.changeSlug:after' => function ($newPage) {
             TitleLocale::handlePageLocaleUpdate($newPage);
-        },
-        'route:after' => function ($route, $path, $method, $result, $final) {
-            return TitleLocale::handleRouteAfter($route, $path, $method, $result, $final);
         },
     ],
 ]);

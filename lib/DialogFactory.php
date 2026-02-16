@@ -28,18 +28,24 @@ final class DialogFactory
             $siteLocales = [];
             $remainingLocales = [];
 
-            $registerPreferredCode = static function (string $rawCode) use (&$preferredSet) {
+            $registerPreferredCode = static function (string $rawCode) use (&$preferredSet): void {
                 $trimmed = trim($rawCode);
 
+                // Kirby language codes are validated as non-empty strings.
+                // @codeCoverageIgnoreStart
                 if ($trimmed === '') {
                     return;
                 }
+                // @codeCoverageIgnoreEnd
 
                 $normalised = LocaleHelper::normaliseLowercase($trimmed);
 
+                // Non-empty strings remain non-empty after lowercasing.
+                // @codeCoverageIgnoreStart
                 if ($normalised === '') {
                     return;
                 }
+                // @codeCoverageIgnoreEnd
 
                 $preferredSet[$normalised] = true;
 
@@ -61,7 +67,7 @@ final class DialogFactory
                 }
             };
 
-            $getIsoTranslation = static function (string $code) use ($translations, $candidateLocales) {
+            $getIsoTranslation = static function (string $code) use ($translations, $candidateLocales): string|null {
                 foreach ($candidateLocales as $candidate) {
                     if (!isset($translations[$candidate][$code])) {
                         continue;
@@ -81,17 +87,22 @@ final class DialogFactory
                 return null;
             };
 
-            $getIntlDisplayName = static function (string $code) use ($candidateLocales) {
-                if (!class_exists('\\Locale') || !method_exists('\\Locale', 'getDisplayLanguage')) {
+            $getIntlDisplayName = static function (string $code) use ($candidateLocales): string|null {
+                // intl is required in supported environments; guard remains defensive.
+                // @codeCoverageIgnoreStart
+                if (!class_exists(\Locale::class) || !method_exists(\Locale::class, 'getDisplayLanguage')) {
                     return null;
                 }
+                // @codeCoverageIgnoreEnd
 
                 foreach ($candidateLocales as $candidate) {
                     try {
                         $value = \Locale::getDisplayLanguage($code, $candidate);
+                        // @codeCoverageIgnoreStart
                     } catch (\Throwable $exception) {
                         $value = null;
                     }
+                    // @codeCoverageIgnoreEnd
 
                     if (is_string($value)) {
                         $value = trim($value);
@@ -105,22 +116,28 @@ final class DialogFactory
                 return null;
             };
 
-            $resolveLabel = static function (array $locale, string $code) use ($translations, $getIsoTranslation, $getIntlDisplayName) {
+            $resolveLabel = static function (array $locale, string $code) use ($translations, $getIsoTranslation, $getIntlDisplayName): string {
                 $rawName = $locale['name'] ?? null;
                 $baseName = is_string($rawName) ? trim($rawName) : '';
 
+                // collectLocales always provides a non-empty fallback name.
+                // @codeCoverageIgnoreStart
                 if ($baseName === '') {
                     $baseName = $code;
                 }
+                // @codeCoverageIgnoreEnd
 
                 $englishName = $translations['en'][$code] ?? null;
 
                 $normalisedBase = LocaleHelper::normaliseLowercase($baseName);
                 $normalisedCode = LocaleHelper::normaliseLowercase($code);
                 $normalisedEnglish = LocaleHelper::normaliseLowercase($englishName);
+                // collectLocales always sets nameProvided for each locale record.
+                // @codeCoverageIgnoreStart
                 $nameProvided = array_key_exists('nameProvided', $locale)
                     ? (bool) $locale['nameProvided']
                     : false;
+                // @codeCoverageIgnoreEnd
 
                 $shouldLocalise = $nameProvided === false
                     || $normalisedBase === ''
@@ -150,9 +167,12 @@ final class DialogFactory
                 foreach ($languages as $language) {
                     $code = $language->code();
 
+                    // Kirby Language::code() returns a string; guard is defensive.
+                    // @codeCoverageIgnoreStart
                     if (!is_string($code)) {
                         continue;
                     }
+                    // @codeCoverageIgnoreEnd
 
                     $registerPreferredCode($code);
                 }
@@ -175,13 +195,16 @@ final class DialogFactory
 
                 $key = LocaleHelper::normaliseLowercase($trimmed);
 
+                // trim() already excluded empty-string codes.
+                // @codeCoverageIgnoreStart
                 if ($key === '') {
                     continue;
                 }
+                // @codeCoverageIgnoreEnd
 
                 $rawSource = $locale['source'] ?? null;
                 $normalisedSource = is_string($rawSource)
-                    ? strtolower(preg_replace('/[^a-z]/', '', $rawSource))
+                    ? strtolower(preg_replace('/[^a-z]/', '', $rawSource) ?? '')
                     : '';
                 $isSiteSource = $normalisedSource === 'sitelanguage';
 
@@ -192,12 +215,15 @@ final class DialogFactory
                 }
             }
 
-            $pushOption = static function (array $locale, string $code, ?string $groupLabel) use (&$options, &$seen, $resolveLabel) {
+            $pushOption = static function (array $locale, string $code, ?string $groupLabel) use (&$options, &$seen, $resolveLabel): void {
                 $key = LocaleHelper::normaliseLowercase($code);
 
+                // Duplicates and empty codes are filtered before this callback.
+                // @codeCoverageIgnoreStart
                 if ($key === '' || isset($seen[$key])) {
                     return;
                 }
+                // @codeCoverageIgnoreEnd
 
                 $seen[$key] = true;
 
@@ -219,6 +245,8 @@ final class DialogFactory
                 foreach ($siteLocales as $locale) {
                     $code = $locale['code'] ?? null;
 
+                    // Locale records are normalised before grouping.
+                    // @codeCoverageIgnoreStart
                     if (!is_string($code)) {
                         continue;
                     }
@@ -228,6 +256,7 @@ final class DialogFactory
                     if ($trimmed === '') {
                         continue;
                     }
+                    // @codeCoverageIgnoreEnd
 
                     $pushOption($locale, $trimmed, $siteGroupLabel);
                 }
@@ -237,6 +266,8 @@ final class DialogFactory
                 foreach ($remainingLocales as $locale) {
                     $code = $locale['code'] ?? null;
 
+                    // Locale records are normalised before grouping.
+                    // @codeCoverageIgnoreStart
                     if (!is_string($code)) {
                         continue;
                     }
@@ -246,6 +277,7 @@ final class DialogFactory
                     if ($trimmed === '') {
                         continue;
                     }
+                    // @codeCoverageIgnoreEnd
 
                     $rawGroup = $locale['group'] ?? null;
                     $groupLabel = is_string($rawGroup) && trim($rawGroup) !== ''
