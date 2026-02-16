@@ -1,0 +1,13 @@
+Title: Sample Article
+
+----
+
+Text: <p>This is a <span class="notranslate" translate="no" lang="de">German phrase</span> inside English text.</p>
+
+----
+
+Uuid: v3h8qr1c6j9ws0yb
+
+----
+
+Title-locale: nl

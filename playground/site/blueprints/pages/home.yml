@@ -1,0 +1,10 @@
+title: Home
+
+fields:
+  text:
+    type: writer
+    marks:
+      - bold
+      - italic
+      - link
+      - locale

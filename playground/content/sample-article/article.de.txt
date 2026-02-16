@@ -1,0 +1,9 @@
+Title: Beispielartikel
+
+----
+
+Text: <p>Das ist ein <span class="notranslate" translate="no" lang="en">English phrase</span> im deutschen Text.</p>
+
+----
+
+Title-locale: ja
