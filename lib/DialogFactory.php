@@ -13,8 +13,8 @@ final class DialogFactory
         $options = [];
         $seen = [];
 
-        $siteGroupLabel = I18n::translate('grommasdietz.kirby-locale.dialog.group.site', 'Site locales');
-        $otherGroupLabel = I18n::translate('grommasdietz.kirby-locale.dialog.group.other', 'Other locales');
+        $siteGroupLabel = I18n::translate('grommasdietz.locale.dialog.group.site', 'Site locales');
+        $otherGroupLabel = I18n::translate('grommasdietz.locale.dialog.group.other', 'Other locales');
 
         $currentValue = is_string($currentValue) ? trim($currentValue) : '';
         $currentGroupLabel = null;
@@ -302,14 +302,14 @@ final class DialogFactory
         $enabledCount = count($options);
 
         $field = [
-            'label'     => I18n::translate('grommasdietz.kirby-locale.label', 'Locale'),
+            'label'     => I18n::translate('grommasdietz.locale.label', 'Locale'),
             'type'      => 'select',
             'icon'      => 'translate',
             'name'      => TitleLocale::FIELD_KEY,
             'options'   => $options,
             'locales'   => $locales,
             'empty'     => [
-                'text'  => I18n::translate('grommasdietz.kirby-locale.dialog.empty', 'No locale'),
+                'text'  => I18n::translate('grommasdietz.locale.dialog.empty', 'No locale'),
                 'value' => '',
             ],
             'search'    => $enabledCount > 7,

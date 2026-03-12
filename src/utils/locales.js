@@ -277,7 +277,7 @@ export const fetchLocales = async (pluginId) => {
 
   if (locales.length === 0) {
     console.warn(
-      `[${pluginId}] No locales available. Configure \`grommasdietz.kirby-locale.locales\` or enable the plugin API route.`,
+      `[${pluginId}] No locales available. Configure \`grommasdietz.locale.locales\` or enable the plugin API route.`,
     );
   }
 
@@ -295,7 +295,7 @@ export const createLocaleOptions = (
   const pluginIdOption =
     settings && typeof settings === "object" && settings.pluginId
       ? settings.pluginId
-      : "grommasdietz/kirby-locale";
+      : "grommasdietz/locale";
   const dottedPluginId = pluginIdOption.replace("/", ".");
 
   const translatePanel = (key, fallback) => {

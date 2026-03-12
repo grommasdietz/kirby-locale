@@ -33,7 +33,7 @@ Enable it per template in `site/config/config.php`:
 
 ```php
 return [
-    'grommasdietz.kirby-locale.intendedTemplate' => 'project',
+    'grommasdietz.locale.intendedTemplate' => 'project',
 ];
 ```
 
@@ -41,7 +41,7 @@ For multiple templates:
 
 ```php
 return [
-    'grommasdietz.kirby-locale.intendedTemplate' => [
+    'grommasdietz.locale.intendedTemplate' => [
         'project',
         'note',
     ],
@@ -63,8 +63,8 @@ fields:
 
 Need the locale list elsewhere? Reuse the shared dataset via the plugin's API endpoints:
 
-- `GET grommasdietz/kirby-locale/locales` — returns the raw locale definitions (code, name, group, source)
-- `GET grommasdietz/kirby-locale/options` — returns the grouped select options shown in the dialogs
+- `GET grommasdietz/locale/locales` — returns the raw locale definitions (code, name, group, source)
+- `GET grommasdietz/locale/options` — returns the grouped select options shown in the dialogs
 
 Fetch the data inside custom Panel plugins or fields with Kirby's [`window.panel.api`](https://getkirby.com/docs/reference/panel/api#api-client) and wire it into your UI of choice. The API payloads stay in sync with the Writer mark and dialog pickers, so every consumer uses the same locale catalogue.
 
@@ -72,13 +72,13 @@ Fetch the data inside custom Panel plugins or fields with Kirby's [`window.panel
 
 The Writer dialog and the title selector share a single locale collector. Entries are deduplicated and gathered in this order:
 
-1. `kirby()->option('grommasdietz.kirby-locale.locales')`
+1. `kirby()->option('grommasdietz.locale.locales')`
 2. Kirby's configured site languages
 3. The bundled ISO 639-1 catalog (unless disabled)
 
-Values must be associative arrays that include at least a `code` and `name`, with an optional `group`. The kirby option `'grommasdietz.kirby-locale.locales'` may also be a closure that returns such an array at runtime.
+Values must be associative arrays that include at least a `code` and `name`, with an optional `group`. The kirby option `'grommasdietz.locale.locales'` may also be a closure that returns such an array at runtime.
 
-Set the kirby option `'grommasdietz.kirby-locale.catalog'` to disable the ISO fallback entirely, or pass a custom array to replace it.
+Set the kirby option `'grommasdietz.locale.catalog'` to disable the ISO fallback entirely, or pass a custom array to replace it.
 
 ## Optional configuration
 
@@ -86,12 +86,12 @@ Define custom labels or additional locales in `site/config/config.php`:
 
 ```php
 return [
-    'grommasdietz.kirby-locale.locales' => [
+    'grommasdietz.locale.locales' => [
         ['code' => 'en-GB', 'name' => 'English, United Kingdom'],
         ['code' => 'en-US', 'name' => 'English, United States'],
     ],
     // Optional: disable the ISO fallback if you only want the entries above
-    // 'grommasdietz.kirby-locale.catalog' => false,
+    // 'grommasdietz.locale.catalog' => false,
 ];
 ```
 
@@ -101,9 +101,9 @@ Each entry must provide a `code` and `name` (and optionally `group`). You can al
 
 | Route                                    | Method | Description                           |
 | ---------------------------------------- | ------ | ------------------------------------- |
-| `grommasdietz/kirby-locale/locales`      | GET    | Locale list for the current site      |
-| `grommasdietz/kirby-locale/options`      | GET    | Dropdown options for the locale field |
-| `grommasdietz/kirby-locale/title-locale` | GET    | Stored title locale for a page        |
+| `grommasdietz/locale/locales`      | GET    | Locale list for the current site      |
+| `grommasdietz/locale/options`      | GET    | Dropdown options for the locale field |
+| `grommasdietz/locale/title-locale` | GET    | Stored title locale for a page        |
 
 ---
 

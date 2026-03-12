@@ -24,7 +24,7 @@ final class DialogFactoryTest extends TestCase
 
         $this->bootKirby([
             'options' => [
-                'grommasdietz.kirby-locale.intendedTemplate' => ['article', 'home'],
+                'grommasdietz.locale.intendedTemplate' => ['article', 'home'],
             ],
         ])->impersonate('kirby');
     }
@@ -187,8 +187,8 @@ final class DialogFactoryTest extends TestCase
     {
         $this->kirby = $this->bootKirby([
             'options' => [
-                'grommasdietz.kirby-locale.catalog' => false,
-                'grommasdietz.kirby-locale.locales' => [
+                'grommasdietz.locale.catalog' => false,
+                'grommasdietz.locale.locales' => [
                     ['code' => 123, 'name' => 'Numeric'],
                     ['code' => '   ', 'name' => 'Blank'],
                     ['code' => 'de-DE'],
@@ -229,8 +229,8 @@ final class DialogFactoryTest extends TestCase
                 ['code' => 'nb_NO', 'name' => 'Norwegian Bokmal'],
             ],
             'options' => [
-                'grommasdietz.kirby-locale.catalog' => false,
-                'grommasdietz.kirby-locale.locales' => [
+                'grommasdietz.locale.catalog' => false,
+                'grommasdietz.locale.locales' => [
                     ['code' => 'nb-NO'],
                     ['code' => 'no'],
                 ],

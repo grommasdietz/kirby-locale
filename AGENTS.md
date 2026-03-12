@@ -14,7 +14,7 @@ This is the canonical workflow guide for working on the Kirby Locale plugin.
 
 ## Repo essentials
 
-- Plugin entry: `index.php` registers `App::plugin('grommasdietz/kirby-locale', ...)`, PHP code lives under `lib/` (`GrommasDietz\\KirbyLocale\\`).
+- Plugin entry: `index.php` registers `App::plugin('grommasdietz/locale', ...)`, PHP code lives under `lib/` (`GrommasDietz\\KirbyLocale\\`).
 - Panel source: `src/` (including `src/dialogs/**`, `src/marks/**`, `src/utils/**`) built with `kirbyup` into `index.js`/`index.css`. Rebuild with `pnpm build` after UI changes and commit the outputs.
 - Playground: `playground/` is the self-contained Kirby site for integration and browser tests.
 - Conventions: use Conventional Commit messages (template in `.gitmessage`), keep diffs small, keep docs aligned with behavior, and never wrap imports in `try/catch`.

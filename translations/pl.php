@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'grommasdietz.kirby-locale.label' => 'Język',
-    'grommasdietz.kirby-locale.dialog.headline' => 'Wybierz język dla zaznaczenia',
-    'grommasdietz.kirby-locale.dialog.select.label' => 'Język',
-    'grommasdietz.kirby-locale.dialog.empty' => 'Brak języka',
-    'grommasdietz.kirby-locale.dialog.group.site' => 'Języki witryny',
-    'grommasdietz.kirby-locale.dialog.group.other' => 'Inne języki',
+    'grommasdietz.locale.label' => 'Język',
+    'grommasdietz.locale.dialog.headline' => 'Wybierz język dla zaznaczenia',
+    'grommasdietz.locale.dialog.select.label' => 'Język',
+    'grommasdietz.locale.dialog.empty' => 'Brak języka',
+    'grommasdietz.locale.dialog.group.site' => 'Języki witryny',
+    'grommasdietz.locale.dialog.group.other' => 'Inne języki',
 ];

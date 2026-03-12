@@ -21,7 +21,7 @@ final class LocaleCollectionTest extends TestCase
     {
         $this->bootKirby([
             'options' => [
-                'grommasdietz.kirby-locale.locales' => [
+                'grommasdietz.locale.locales' => [
                     ['code' => 'x-custom', 'name' => 'Custom Locale'],
                 ],
             ],
@@ -37,10 +37,10 @@ final class LocaleCollectionTest extends TestCase
     {
         $this->bootKirby([
             'options' => [
-                'grommasdietz.kirby-locale.locales' => [
+                'grommasdietz.locale.locales' => [
                     ['code' => 'x-only', 'name' => 'Only Entry'],
                 ],
-                'grommasdietz.kirby-locale.catalog' => false,
+                'grommasdietz.locale.catalog' => false,
             ],
         ]);
 
@@ -57,10 +57,10 @@ final class LocaleCollectionTest extends TestCase
     {
         $this->bootKirby([
             'options' => [
-                'grommasdietz.kirby-locale.locales' => fn () => [
+                'grommasdietz.locale.locales' => fn () => [
                     ['code' => 'x-dynamic', 'name' => 'Dynamic'],
                 ],
-                'grommasdietz.kirby-locale.catalog' => false,
+                'grommasdietz.locale.catalog' => false,
             ],
         ]);
 
@@ -76,7 +76,7 @@ final class LocaleCollectionTest extends TestCase
     {
         $this->bootKirby([
             'options' => [
-                'grommasdietz.kirby-locale.locales' => [
+                'grommasdietz.locale.locales' => [
                     ['code' => 'x-plugin', 'name' => 'Plugin Entry'],
                 ],
             ],
@@ -101,11 +101,11 @@ final class LocaleCollectionTest extends TestCase
     {
         $this->bootKirby([
             'options' => [
-                'grommasdietz.kirby-locale.locales' => [
+                'grommasdietz.locale.locales' => [
                     ['name' => 'Invalid entry without code'],
                     ['code' => 'x-plugin-valid', 'name' => 'Valid plugin locale'],
                 ],
-                'grommasdietz.kirby-locale.catalog' => static fn () => [
+                'grommasdietz.locale.catalog' => static fn () => [
                     ['code' => 'x-catalog', 'name' => 'Catalog locale'],
                 ],
             ],

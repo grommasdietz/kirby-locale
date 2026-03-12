@@ -15,7 +15,7 @@ Html::$allowedTags['span'] = array_values(array_unique(array_merge(
 
 $translations = Translations::load();
 
-App::plugin('grommasdietz/kirby-locale', [
+App::plugin('grommasdietz/locale', [
     'translations' => $translations,
     'areas' => [
         'site' => function (App $kirby) {
@@ -103,7 +103,7 @@ App::plugin('grommasdietz/kirby-locale', [
     'api' => [
         'routes' => [
             [
-                'pattern' => 'grommasdietz/kirby-locale/locales',
+                'pattern' => 'grommasdietz/locale/locales',
                 'method'  => 'GET',
                 'action'  => function () {
                     $kirby = App::instance();
@@ -116,7 +116,7 @@ App::plugin('grommasdietz/kirby-locale', [
                 },
             ],
             [
-                'pattern' => 'grommasdietz/kirby-locale/options',
+                'pattern' => 'grommasdietz/locale/options',
                 'method'  => 'GET',
                 'action'  => function () {
                     $field = DialogFactory::buildField();
@@ -125,7 +125,7 @@ App::plugin('grommasdietz/kirby-locale', [
                 },
             ],
             [
-                'pattern' => 'grommasdietz/kirby-locale/title-locale',
+                'pattern' => 'grommasdietz/locale/title-locale',
                 'method'  => 'GET',
                 'action'  => function () {
                     $kirby = App::instance();

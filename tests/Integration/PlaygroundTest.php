@@ -21,7 +21,7 @@ final class PlaygroundTest extends TestCase
 
     public function testPluginRegistersWithKirby(): void
     {
-        $this->assertNotNull($this->kirby->plugin('grommasdietz/kirby-locale'));
+        $this->assertNotNull($this->kirby->plugin('grommasdietz/locale'));
     }
 
     public function testHomePageCanBeLoaded(): void

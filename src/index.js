@@ -1,6 +1,6 @@
 import { createLocaleMark } from "./marks/locale.js";
 
-const pluginId = "grommasdietz/kirby-locale";
+const pluginId = "grommasdietz/locale";
 const FIELD_NAME = "title_locale";
 
 const buildGroupedSelectComponent = (selectComponent) => {
@@ -332,8 +332,8 @@ const buildLocaleField = (currentValue = null, existingField = null) => {
     default: existingDefault,
     ...rest
   } = baseField;
-  const label = window.panel.$t("grommasdietz.kirby-locale.label");
-  const emptyText = window.panel.$t("grommasdietz.kirby-locale.dialog.empty");
+  const label = window.panel.$t("grommasdietz.locale.label");
+  const emptyText = window.panel.$t("grommasdietz.locale.dialog.empty");
   const value = normaliseDialogValue(currentValue);
   const type = existingType || "select";
 

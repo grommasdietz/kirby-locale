@@ -83,7 +83,7 @@ final class LocaleHelper
             ];
         };
 
-        $pluginLocales = $kirby->option('grommasdietz.kirby-locale.locales', []);
+        $pluginLocales = $kirby->option('grommasdietz.locale.locales', []);
 
         if (is_callable($pluginLocales)) {
             $pluginLocales = $pluginLocales($kirby);
@@ -112,7 +112,7 @@ final class LocaleHelper
             }
         }
 
-        $catalogPreference = $kirby->option('grommasdietz.kirby-locale.catalog');
+        $catalogPreference = $kirby->option('grommasdietz.locale.catalog');
 
         if ($catalogPreference !== false) {
             if (is_callable($catalogPreference)) {
@@ -347,7 +347,7 @@ final class LocaleHelper
 
     public static function getEnabledTitleLocaleTemplates(App $kirby)
     {
-        $option = $kirby->option('grommasdietz.kirby-locale.intendedTemplate');
+        $option = $kirby->option('grommasdietz.locale.intendedTemplate');
 
         return self::normaliseTemplateList($option);
     }

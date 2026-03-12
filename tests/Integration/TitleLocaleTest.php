@@ -23,7 +23,7 @@ final class TitleLocaleTest extends TestCase
 
         $this->bootKirby([
             'options' => [
-                'grommasdietz.kirby-locale.intendedTemplate' => 'home',
+                'grommasdietz.locale.intendedTemplate' => 'home',
             ],
         ])->impersonate('kirby');
     }
@@ -48,7 +48,7 @@ final class TitleLocaleTest extends TestCase
         // Boot a fresh instance where only 'article' templates are enabled
         $this->kirby = $this->bootKirby([
             'options' => [
-                'grommasdietz.kirby-locale.intendedTemplate' => 'article',
+                'grommasdietz.locale.intendedTemplate' => 'article',
             ],
         ]);
         $this->kirby->impersonate('kirby');

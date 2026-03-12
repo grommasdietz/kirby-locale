@@ -23,7 +23,7 @@ final class ApiRouteTest extends TestCase
 
         $this->bootKirby([
             'options' => [
-                'grommasdietz.kirby-locale.intendedTemplate' => ['article', 'home'],
+                'grommasdietz.locale.intendedTemplate' => ['article', 'home'],
                 'api' => ['allowImpersonation' => true],
             ],
         ])->impersonate('kirby');
@@ -32,7 +32,7 @@ final class ApiRouteTest extends TestCase
     public function testLocalesRouteReturnsArray(): void
     {
         $result = $this->kirby->api()->call(
-            'grommasdietz/kirby-locale/locales',
+            'grommasdietz/locale/locales',
             'GET'
         );
 
@@ -45,7 +45,7 @@ final class ApiRouteTest extends TestCase
     public function testOptionsRouteReturnsArray(): void
     {
         $result = $this->kirby->api()->call(
-            'grommasdietz/kirby-locale/options',
+            'grommasdietz/locale/options',
             'GET'
         );
 
@@ -56,7 +56,7 @@ final class ApiRouteTest extends TestCase
     public function testTitleLocaleRouteReturnsNullForMissingId(): void
     {
         $result = $this->kirby->api()->call(
-            'grommasdietz/kirby-locale/title-locale',
+            'grommasdietz/locale/title-locale',
             'GET'
         );
 

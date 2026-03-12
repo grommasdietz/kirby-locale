@@ -26,7 +26,7 @@ final class MultilangTitleLocaleTest extends TestCase
 
         $this->bootKirby([
             'options' => [
-                'grommasdietz.kirby-locale.intendedTemplate' => ['article', 'home'],
+                'grommasdietz.locale.intendedTemplate' => ['article', 'home'],
             ],
         ])->impersonate('kirby');
     }

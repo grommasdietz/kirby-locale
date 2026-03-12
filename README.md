@@ -12,7 +12,7 @@ Locale utilities for [Kirby CMS](https://getkirby.com) adds a Writer mark and an
 ## Installation
 
 ```bash
-composer require grommasdietz/kirby-locale
+composer require grommasdietz/locale
 ```
 
 > [!TIP]
@@ -36,11 +36,11 @@ The Writer displays the locale mark in the toolbar and highlights tagged segment
 
 ### Title locales
 
-Activate the title locale selector via `grommasdietz.kirby-locale.intendedTemplate` in `site/config/config.php`. For a single template:
+Activate the title locale selector via `grommasdietz.locale.intendedTemplate` in `site/config/config.php`. For a single template:
 
 ```php
 return [
-    'grommasdietz.kirby-locale.intendedTemplate' => 'project',
+    'grommasdietz.locale.intendedTemplate' => 'project',
 ];
 ```
 
@@ -48,7 +48,7 @@ For multiple templates:
 
 ```php
 return [
-    'grommasdietz.kirby-locale.intendedTemplate' => [
+    'grommasdietz.locale.intendedTemplate' => [
         'project',
         'note',
     ],
@@ -64,13 +64,13 @@ Configure via `site/config/config.php`:
 ```php
 return [
     // Custom locales
-    'grommasdietz.kirby-locale.locales' => [
+    'grommasdietz.locale.locales' => [
         ['code' => 'en-GB', 'name' => 'English, United Kingdom'],
         ['code' => 'en-US', 'name' => 'English, United States'],
     ],
 
     // Optional: disable the ISO fallback catalog
-    // 'grommasdietz.kirby-locale.catalog' => false,
+    // 'grommasdietz.locale.catalog' => false,
 ];
 ```
 

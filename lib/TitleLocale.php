@@ -48,7 +48,7 @@ final class TitleLocale
         } catch (\Throwable $exception) {
             if (method_exists($kirby, 'logger')) {
                 /** @disregard P1013 Kirby 5 runtime method guarded by method_exists() */
-                $kirby->logger('grommasdietz/kirby-locale')->error($exception->getMessage(), [
+                $kirby->logger('grommasdietz/locale')->error($exception->getMessage(), [
                     'exception' => $exception,
                     'page'      => $page->id(),
                     'language'  => $languageCode,

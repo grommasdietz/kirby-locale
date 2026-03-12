@@ -22,7 +22,7 @@ final class HookPipelineTest extends TestCase
 
         $this->bootKirby([
             'options' => [
-                'grommasdietz.kirby-locale.intendedTemplate' => ['article', 'home'],
+                'grommasdietz.locale.intendedTemplate' => ['article', 'home'],
             ],
         ])->impersonate('kirby');
     }
@@ -66,7 +66,7 @@ final class HookPipelineTest extends TestCase
         // Boot with only 'article' allowed — 'default' template should be gated
         $this->kirby = $this->bootKirby([
             'options' => [
-                'grommasdietz.kirby-locale.intendedTemplate' => 'article',
+                'grommasdietz.locale.intendedTemplate' => 'article',
             ],
         ]);
         $this->kirby->impersonate('kirby');
@@ -100,7 +100,7 @@ final class HookPipelineTest extends TestCase
         // Only 'article' is allowed
         $this->kirby = $this->bootKirby([
             'options' => [
-                'grommasdietz.kirby-locale.intendedTemplate' => 'article',
+                'grommasdietz.locale.intendedTemplate' => 'article',
             ],
         ]);
         $this->kirby->impersonate('kirby');
@@ -126,7 +126,7 @@ final class HookPipelineTest extends TestCase
                 ],
             ],
             'options' => [
-                'grommasdietz.kirby-locale.intendedTemplate' => ['article', 'home'],
+                'grommasdietz.locale.intendedTemplate' => ['article', 'home'],
             ],
         ]);
         $this->kirby->impersonate('kirby');

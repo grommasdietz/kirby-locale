@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'grommasdietz.kirby-locale.label' => 'Jazyk',
-    'grommasdietz.kirby-locale.dialog.headline' => 'Zvolte jazyk pro výběr',
-    'grommasdietz.kirby-locale.dialog.select.label' => 'Jazyk',
-    'grommasdietz.kirby-locale.dialog.empty' => 'Žádný jazyk',
-    'grommasdietz.kirby-locale.dialog.group.site' => 'Jazyky webu',
-    'grommasdietz.kirby-locale.dialog.group.other' => 'Další jazyky',
+    'grommasdietz.locale.label' => 'Jazyk',
+    'grommasdietz.locale.dialog.headline' => 'Zvolte jazyk pro výběr',
+    'grommasdietz.locale.dialog.select.label' => 'Jazyk',
+    'grommasdietz.locale.dialog.empty' => 'Žádný jazyk',
+    'grommasdietz.locale.dialog.group.site' => 'Jazyky webu',
+    'grommasdietz.locale.dialog.group.other' => 'Další jazyky',
 ];

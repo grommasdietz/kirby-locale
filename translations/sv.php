@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'grommasdietz.kirby-locale.label' => 'Språk',
-    'grommasdietz.kirby-locale.dialog.headline' => 'Välj språk för markeringen',
-    'grommasdietz.kirby-locale.dialog.select.label' => 'Språk',
-    'grommasdietz.kirby-locale.dialog.empty' => 'Inget språk',
-    'grommasdietz.kirby-locale.dialog.group.site' => 'Webbplatsens språk',
-    'grommasdietz.kirby-locale.dialog.group.other' => 'Andra språk',
+    'grommasdietz.locale.label' => 'Språk',
+    'grommasdietz.locale.dialog.headline' => 'Välj språk för markeringen',
+    'grommasdietz.locale.dialog.select.label' => 'Språk',
+    'grommasdietz.locale.dialog.empty' => 'Inget språk',
+    'grommasdietz.locale.dialog.group.site' => 'Webbplatsens språk',
+    'grommasdietz.locale.dialog.group.other' => 'Andra språk',
 ];
