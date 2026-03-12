@@ -45,7 +45,7 @@ This is the canonical workflow guide for working on the Kirby Locale plugin.
 
 - Write docs in `docs` folder. Follow [STYLE_GUIDE.md](STYLE_GUIDE.md) and [docs/contributions/documentation.md](docs/contributions/documentation.md). Keep README/docs in sync with behavior.
 - The README is a quickstart; `docs/contributions/*` hold the detailed contributor guidance. Update both when you change commands or workflows.
-- Typography: add non-breaking spaces after short sentence starters (1–2 characters like "It" or "A"), before short words at the end of a sentence, and within short two-part names (e.g. "Grommas Dietz"). For em dashes, use a thin space on each side (` — `).
+- Typography: add non-breaking spaces after short sentence starters (1–2 characters like "It" or "A"), before short words at the end of a sentence, and within short two-part names (e.g. "Grommas Dietz"). For em dashes, use a thin space on each side (`—`).
 
 ---
 
