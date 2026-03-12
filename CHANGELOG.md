@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/grommasdietz/kirby-locale/compare/v2.0.0...v2.0.1) (2026-03-12)
+
+
+### Bug Fixes
+
+* **readme:** restore Composer package name in install command ([19ec7c6](https://github.com/grommasdietz/kirby-locale/commit/19ec7c627e57e2612579209c73be8117abf72489))
+
 # [2.0.0](https://github.com/grommasdietz/kirby-locale/compare/v1.0.7...v2.0.0) (2026-03-12)
 
 
