@@ -99,8 +99,8 @@ Each entry must provide a `code` and `name` (and optionally `group`). You can al
 
 ## API routes
 
-| Route                                    | Method | Description                           |
-| ---------------------------------------- | ------ | ------------------------------------- |
+| Route                              | Method | Description                           |
+| ---------------------------------- | ------ | ------------------------------------- |
 | `grommasdietz/locale/locales`      | GET    | Locale list for the current site      |
 | `grommasdietz/locale/options`      | GET    | Dropdown options for the locale field |
 | `grommasdietz/locale/title-locale` | GET    | Stored title locale for a page        |
