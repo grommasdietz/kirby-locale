@@ -100,4 +100,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidance and expectations.
 
 ## License
 
-[MIT](LICENSE.md) © 2025 Grommas Dietz
+[MIT](LICENSE.md) © 2025 Grommas Dietz
