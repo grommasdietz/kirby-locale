@@ -12,7 +12,7 @@ Locale utilities for [Kirby CMS](https://getkirby.com) adds a Writer mark and an
 ## Installation
 
 ```bash
-composer require grommasdietz/locale
+composer require grommasdietz/kirby-locale
 ```
 
 > [!TIP]
