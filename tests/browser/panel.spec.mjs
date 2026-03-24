@@ -40,7 +40,9 @@ test.describe("Panel integration", () => {
 
     const localeSelect = page.locator('select[name="locale"]');
     await expect(localeSelect).toBeVisible();
-    const optionCount = await page.locator('select[name="locale"] option').count();
+    const optionCount = await page
+      .locator('select[name="locale"] option')
+      .count();
     expect(optionCount).toBeGreaterThan(50);
 
     const groups = await page
@@ -69,5 +71,23 @@ test.describe("Panel integration", () => {
     await page.keyboard.press("Escape");
     await openRenameDialog(page, "sandbox");
     await expect(page.locator('select[name="title_locale"]')).toHaveCount(0);
+  });
+
+  test("create dialog shows locale field for enabled templates", async ({
+    page,
+  }) => {
+    await loginToPanel(page);
+    await page.goto("/panel");
+    await page.waitForLoadState("networkidle");
+
+    // Open the create dialog from the site's pages section
+    await page.getByRole("button", { name: "Add" }).first().click();
+
+    // Wait for dialog fields to load
+    await expect(page.locator('input[name="title"]')).toBeVisible();
+
+    // Locale field should appear for enabled templates (article is the
+    // first available template in the playground and therefore auto-selected)
+    await expect(page.locator('select[name="title_locale"]')).toBeVisible();
   });
 });

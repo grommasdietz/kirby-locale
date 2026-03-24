@@ -357,7 +357,25 @@ final class DialogFactory
         $field['name'] = TitleLocale::FIELD_KEY;
         $field['value'] = $value;
 
-        $fields[TitleLocale::FIELD_KEY] = $field;
+        // Position locale field right after slug so it sits between
+        // core fields and any custom create-dialog fields from blueprints.
+        if (array_key_exists('slug', $fields)) {
+            unset($fields[TitleLocale::FIELD_KEY]);
+
+            $positioned = [];
+
+            foreach ($fields as $key => $fieldDef) {
+                $positioned[$key] = $fieldDef;
+
+                if ($key === 'slug') {
+                    $positioned[TitleLocale::FIELD_KEY] = $field;
+                }
+            }
+
+            $fields = $positioned;
+        } else {
+            $fields[TitleLocale::FIELD_KEY] = $field;
+        }
 
         $values = $dialog['props']['value'] ?? [];
 

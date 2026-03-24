@@ -33,22 +33,22 @@ App::plugin('grommasdietz/locale', [
                 is_callable($pageCreate['load'])
             ) {
                 $load = $pageCreate['load'];
-                $fieldOverrides = [];
-
-                if (is_array($allowedTemplates)) {
-                    $fieldOverrides['when'] = [
-                        'template' => count($allowedTemplates) === 1 ? $allowedTemplates[0] : $allowedTemplates,
-                    ];
-                }
 
                 $dialogs['page.create'] = array_replace($pageCreate, [
-                    'load' => function () use ($kirby, $load, $fieldOverrides) {
+                    'load' => function () use ($kirby, $load, $allowedTemplates) {
                         $dialog = $load();
+
+                        $template = $dialog['props']['template'] ?? null;
+
+                        if (LocaleHelper::templateAllowsLocale($template, $allowedTemplates) === false) {
+                            return $dialog;
+                        }
+
                         $request = $kirby->request();
                         [$hasValue, $rawValue] = LocaleHelper::extractLocaleFromRequest($request);
                         $value = $hasValue ? LocaleHelper::normaliseTitleLocale($rawValue) : null;
 
-                        return DialogFactory::extend($dialog, $value, $fieldOverrides);
+                        return DialogFactory::extend($dialog, $value);
                     },
                 ]);
             }

@@ -139,6 +139,35 @@ final class DialogFactoryTest extends TestCase
         $this->assertArrayHasKey(TitleLocale::FIELD_KEY, $result['props']['fields']);
     }
 
+    public function testExtendPositionsLocaleFieldAfterSlug(): void
+    {
+        $dialog = [
+            'props' => [
+                'fields' => [
+                    'title'    => ['type' => 'text', 'label' => 'Title'],
+                    'slug'     => ['type' => 'slug', 'label' => 'Slug'],
+                    'template' => ['type' => 'hidden'],
+                    'category' => ['type' => 'select', 'label' => 'Category'],
+                ],
+                'value' => [
+                    'title' => 'Test',
+                    'slug'  => 'test',
+                ],
+            ],
+        ];
+
+        $result = DialogFactory::extend($dialog, 'de');
+        $keys = array_keys($result['props']['fields']);
+
+        $slugIndex = array_search('slug', $keys, true);
+        $localeIndex = array_search(TitleLocale::FIELD_KEY, $keys, true);
+        $categoryIndex = array_search('category', $keys, true);
+
+        $this->assertNotFalse($localeIndex, 'Locale field must be present');
+        $this->assertSame($slugIndex + 1, $localeIndex, 'Locale field must be directly after slug');
+        $this->assertLessThan($categoryIndex, $localeIndex, 'Locale field must come before custom fields');
+    }
+
     public function testExtendWithNullValueSetsEmptyLocale(): void
     {
         $dialog = [
