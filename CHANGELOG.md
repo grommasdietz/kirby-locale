@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/grommasdietz/kirby-locale/compare/v2.0.1...v2.1.0) (2026-03-24)
+
+
+### Features
+
+* **dialog:** add locale field to page create dialog ([34aadb3](https://github.com/grommasdietz/kirby-locale/commit/34aadb3bd7afbccbf5832a78f9a40979d00d6454))
+
 ## [2.0.1](https://github.com/grommasdietz/kirby-locale/compare/v2.0.0...v2.0.1) (2026-03-12)
 
 
