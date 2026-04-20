@@ -21,8 +21,8 @@ importers:
         specifier: ^7.3.1
         version: 7.3.1
       '@formatjs/intl-locale':
-        specifier: ^5.3.1
-        version: 5.3.1
+        specifier: ^5.3.2
+        version: 5.3.2
       '@playwright/test':
         specifier: ^1.59.1
         version: 1.59.1
@@ -506,20 +506,23 @@ packages:
   '@formatjs/fast-memoize@3.1.1':
     resolution: {integrity: sha512-CbNbf+tlJn1baRnPkNePnBqTLxGliG6DDgNa/UtV66abwIjwsliPMOt0172tzxABYzSuxZBZfcp//qI8AvBWPg==}
 
+  '@formatjs/fast-memoize@3.1.2':
+    resolution: {integrity: sha512-vPnriihkfK0lzoQGaXq+qXH23VsYyansRTkTgo2aTG0k1NjLFyZimFVdfj4C9JkSE5dm7CEngcQ5TTc1yAyBfQ==}
+
   '@formatjs/intl-displaynames@7.3.1':
     resolution: {integrity: sha512-RgjlauIAuUfkYDHmm0M+UMJGKLUgxnvsbAfGX7CYJDrHlAw39FC11DUuMqWYbMvNqdGkcRMnM4mSprDU8stp4g==}
 
-  '@formatjs/intl-getcanonicallocales@3.2.2':
-    resolution: {integrity: sha512-pjF2zC26yXXLv9FlPes6zzOme9MwgqyeWYu8r5bP7qEdoDcaGsuQO3mk6pQb57t9bxdbIwrAhZFy0hH760SeWw==}
+  '@formatjs/intl-getcanonicallocales@3.2.3':
+    resolution: {integrity: sha512-h6rLO0ny+SVffeAZWrmqwipgGpNFUHdTy09XM5YdXAlzqK/QXbMcuwMcocofXcBhA5Jy46B45qMHVOp3/7CtOA==}
 
-  '@formatjs/intl-locale@5.3.1':
-    resolution: {integrity: sha512-txs0HyscmgtmSzrQFzsrM6iYajsAuonoRtuackvAlmW9VX6H4FTL4TzEJoL/Qn6FFAXaQ+wxB5YqlNFR1PtlbQ==}
+  '@formatjs/intl-locale@5.3.2':
+    resolution: {integrity: sha512-4l2kI4r127dIyXbmUVlJ9ftTPH/ffrM1ms7s3hxWPAExBaZ63OOuivLBXjc0eB/4O7m3zSzC9YVoy+9Jle5NNQ==}
 
   '@formatjs/intl-localematcher@0.8.2':
     resolution: {integrity: sha512-q05KMYGJLyqFNFtIb8NhWLF5X3aK/k0wYt7dnRFuy6aLQL+vUwQ1cg5cO4qawEiINybeCPXAWlprY2mSBjSXAQ==}
 
-  '@formatjs/intl-supportedvaluesof@2.3.0':
-    resolution: {integrity: sha512-Fjw2ur3N+GrMLxjT6jLPCuAKFRNcWB1GDHB77pN8Lktx2z7MHJnlCA8q4NEZbJsDdVDsCeaesudHBe6el3khkg==}
+  '@formatjs/intl-supportedvaluesof@2.3.1':
+    resolution: {integrity: sha512-zSlTDGVHZJFEKRimtEhtsXOMrfjdz/Yvuvt8AfqXuLoUXkMaIH2ThMRbfQuy/VLyMNyRhqDv2V4NWJXushaVNw==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -3567,27 +3570,27 @@ snapshots:
 
   '@formatjs/fast-memoize@3.1.1': {}
 
+  '@formatjs/fast-memoize@3.1.2': {}
+
   '@formatjs/intl-displaynames@7.3.1':
     dependencies:
       '@formatjs/ecma402-abstract': 3.2.0
       '@formatjs/intl-localematcher': 0.8.2
 
-  '@formatjs/intl-getcanonicallocales@3.2.2': {}
+  '@formatjs/intl-getcanonicallocales@3.2.3': {}
 
-  '@formatjs/intl-locale@5.3.1':
+  '@formatjs/intl-locale@5.3.2':
     dependencies:
-      '@formatjs/ecma402-abstract': 3.2.0
-      '@formatjs/intl-getcanonicallocales': 3.2.2
-      '@formatjs/intl-supportedvaluesof': 2.3.0
+      '@formatjs/intl-getcanonicallocales': 3.2.3
+      '@formatjs/intl-supportedvaluesof': 2.3.1
 
   '@formatjs/intl-localematcher@0.8.2':
     dependencies:
       '@formatjs/fast-memoize': 3.1.1
 
-  '@formatjs/intl-supportedvaluesof@2.3.0':
+  '@formatjs/intl-supportedvaluesof@2.3.1':
     dependencies:
-      '@formatjs/ecma402-abstract': 3.2.0
-      '@formatjs/fast-memoize': 3.1.1
+      '@formatjs/fast-memoize': 3.1.2
 
   '@humanfs/core@0.19.1': {}
 
