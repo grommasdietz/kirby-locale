@@ -18,8 +18,8 @@ importers:
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.2.1(jiti@2.6.1))
       '@formatjs/intl-displaynames':
-        specifier: ^7.3.3
-        version: 7.3.3
+        specifier: ^7.3.4
+        version: 7.3.4
       '@formatjs/intl-locale':
         specifier: ^5.3.3
         version: 5.3.3
@@ -500,8 +500,11 @@ packages:
   '@formatjs/fast-memoize@3.1.2':
     resolution: {integrity: sha512-vPnriihkfK0lzoQGaXq+qXH23VsYyansRTkTgo2aTG0k1NjLFyZimFVdfj4C9JkSE5dm7CEngcQ5TTc1yAyBfQ==}
 
-  '@formatjs/intl-displaynames@7.3.3':
-    resolution: {integrity: sha512-x/cjBiV1GvEHxuLKhZIw4t26rnVYj3YR57u6mWp3VCY4vVbZ+lrC6Az22GuVe5TkM47dKmYW8Rr7/hLAHPX82A==}
+  '@formatjs/fast-memoize@3.1.3':
+    resolution: {integrity: sha512-Ocd1vPuD68rW6BJDuAOtnnc1GPeVepY5kZXML1psGVFQ+1Q8CfkftT3Tnam+Mxx97Pz08jIEDCotl/GV+Naccg==}
+
+  '@formatjs/intl-displaynames@7.3.4':
+    resolution: {integrity: sha512-AdgpDis/hYl8NNNClN9S24BRuzgFbAGaY4LmpBcobnztglBzzmSybcInlE3cd+mtcLlGm6n+Cj1JDhP2TY33FQ==}
 
   '@formatjs/intl-getcanonicallocales@3.2.4':
     resolution: {integrity: sha512-MaLI65d50h+Amzunc9+qR/cn3FDwgxPXn7Ty8oarT+GsGJU+os3dSfGHOAMSN7YaEJfyzGLVa6xRfYjJAe7U3Q==}
@@ -509,8 +512,8 @@ packages:
   '@formatjs/intl-locale@5.3.3':
     resolution: {integrity: sha512-DzUlpkyR9ZjOCpzaGQ95i1MIvGyM++vx/+L84B8FPcAWqezQzYUUeWgwGOn/pnm0MNGy9dKhpTEV+N0SxUus0w==}
 
-  '@formatjs/intl-localematcher@0.8.4':
-    resolution: {integrity: sha512-J51dAnynnqJdVUEXidHoIWn+qYve+yNQEgmFk9Dyfr3p0okzm+5QhQ+9QmsMz08+BeWTVpc1HadIiLfZmRYbAQ==}
+  '@formatjs/intl-localematcher@0.8.5':
+    resolution: {integrity: sha512-TEW/NR367c3PcQ2AXfkNig9jC740+qbkM0LgKl7UCE7Xtv7C5Uk1mvlu86MjQZBmscUai8HSWjcEETpwaVvJ6A==}
 
   '@formatjs/intl-supportedvaluesof@2.3.2':
     resolution: {integrity: sha512-UHXqjDgrABhW8W72mORjEkSD+GAv6M1nHKw43DQwBE7htwHNOtpgw/IKyBPQ8BUZk7t/xeKP72SjNREEWMU5Dw==}
@@ -3523,9 +3526,11 @@ snapshots:
 
   '@formatjs/fast-memoize@3.1.2': {}
 
-  '@formatjs/intl-displaynames@7.3.3':
+  '@formatjs/fast-memoize@3.1.3': {}
+
+  '@formatjs/intl-displaynames@7.3.4':
     dependencies:
-      '@formatjs/intl-localematcher': 0.8.4
+      '@formatjs/intl-localematcher': 0.8.5
 
   '@formatjs/intl-getcanonicallocales@3.2.4': {}
 
@@ -3534,9 +3539,9 @@ snapshots:
       '@formatjs/intl-getcanonicallocales': 3.2.4
       '@formatjs/intl-supportedvaluesof': 2.3.2
 
-  '@formatjs/intl-localematcher@0.8.4':
+  '@formatjs/intl-localematcher@0.8.5':
     dependencies:
-      '@formatjs/fast-memoize': 3.1.2
+      '@formatjs/fast-memoize': 3.1.3
 
   '@formatjs/intl-supportedvaluesof@2.3.2':
     dependencies:
