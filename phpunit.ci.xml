@@ -25,6 +25,7 @@
 >
     <source>
         <include>
+            <file>./index.php</file>
             <directory suffix=".php">./lib</directory>
         </include>
     </source>

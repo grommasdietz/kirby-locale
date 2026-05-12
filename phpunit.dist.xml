@@ -22,13 +22,9 @@
     failOnWarning="true"
     stderr="true"
 >
-    <!--
-        Coverage source configuration.
-        Coverage metrics become meaningful once you add PHP classes to lib/.
-        Add directories as you create PHP code (models, services, config, etc.).
-    -->
     <source>
         <include>
+            <file>./index.php</file>
             <directory suffix=".php">./lib</directory>
         </include>
     </source>

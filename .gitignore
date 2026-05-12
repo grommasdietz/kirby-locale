@@ -50,6 +50,3 @@ playground/site/plugins/*
 
 # Temporary plugin sandbox used by tests
 tests/.plugins/
-
-# Legacy npm lockfile (migrated to pnpm)
-package-lock.json
