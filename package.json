@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.0",
-    "@commitlint/config-conventional": "^20.5.3",
+    "@commitlint/config-conventional": "^21.0.0",
     "@eslint/js": "^10.0.1",
     "@formatjs/intl-displaynames": "^7.3.5",
     "@formatjs/intl-locale": "^5.3.5",
