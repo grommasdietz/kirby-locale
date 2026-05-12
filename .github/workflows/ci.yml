@@ -196,7 +196,15 @@ jobs:
   semantic-release:
     name: Semantic Release
     runs-on: ubuntu-latest
-    needs: [php-quality, php-tests, js-lint, docs-lint, third-party-notices, browser-tests]
+    needs:
+      [
+        php-quality,
+        php-tests,
+        js-lint,
+        docs-lint,
+        third-party-notices,
+        browser-tests,
+      ]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
       - uses: actions/checkout@v6
