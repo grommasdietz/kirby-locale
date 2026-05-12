@@ -1,3 +1,10 @@
+## [2.1.2](https://github.com/grommasdietz/kirby-locale/compare/v2.1.1...v2.1.2) (2026-05-12)
+
+
+### Bug Fixes
+
+* **playground:** align site title and home page content ([60d04b2](https://github.com/grommasdietz/kirby-locale/commit/60d04b217c9510e939a4d36afc57bace57d2d891))
+
 ## [2.1.1](https://github.com/grommasdietz/kirby-locale/compare/v2.1.0...v2.1.1) (2026-05-12)
 
 
