@@ -2,7 +2,7 @@ Title: Startseite
 
 ----
 
-Text: Willkommen.
+Text: <p>Willkommen im Kirby-Locale-Playground. Die Locale-Markierung umschließt Inline-Phrasen mit einer Sprache, zum Beispiel <span class="notranslate" translate="no" lang="en">this English phrase</span>, damit Kirby sie im richtigen Sprachkontext ausgeben kann.</p>
 
 ----
 

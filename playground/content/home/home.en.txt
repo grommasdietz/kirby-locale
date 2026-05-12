@@ -2,7 +2,7 @@ Title: Home
 
 ----
 
-Text: Welcome to the playground.
+Text: <p>Welcome to the Kirby Locale playground. The locale mark wraps inline phrases with a language, like <span class="notranslate" translate="no" lang="de">dieser deutsche Ausdruck</span>, so Kirby can render them in the correct language context.</p>
 
 ----
 

@@ -4,8 +4,8 @@ test.describe("Frontend layout", () => {
   test("article page keeps locale-marked spans", async ({ page }) => {
     await page.goto("/sample-article");
 
-    await expect(page.locator("[data-test='site-title']")).toHaveText("Playground");
-    await expect(page).toHaveTitle("Playground");
+    await expect(page.locator("[data-test='site-title']")).toHaveText("Kirby Playground");
+    await expect(page).toHaveTitle("Kirby Playground");
     await expect(page.locator("[data-test='page-id']")).toHaveText(
       "sample-article",
     );
