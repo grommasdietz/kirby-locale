@@ -1,3 +1,10 @@
+## [2.1.3](https://github.com/grommasdietz/kirby-locale/compare/v2.1.2...v2.1.3) (2026-05-12)
+
+
+### Bug Fixes
+
+* **ci:** track plugins dir for psalm path resolution ([bbb47e6](https://github.com/grommasdietz/kirby-locale/commit/bbb47e65ba6df67847354e88e8733acec1aa475a))
+
 ## [2.1.2](https://github.com/grommasdietz/kirby-locale/compare/v2.1.1...v2.1.2) (2026-05-12)
 
 
