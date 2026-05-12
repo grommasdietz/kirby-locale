@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/grommasdietz/kirby-locale/compare/v2.1.0...v2.1.1) (2026-05-12)
+
+
+### Bug Fixes
+
+* **deps:** update config.platform to 8.3.16 and regenerate composer.lock ([f946b50](https://github.com/grommasdietz/kirby-locale/commit/f946b503daf2369448bc99191f1dc87ac9a60372))
+
 # [2.1.0](https://github.com/grommasdietz/kirby-locale/compare/v2.0.1...v2.1.0) (2026-03-24)
 
 
