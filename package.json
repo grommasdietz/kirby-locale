@@ -24,7 +24,7 @@
     "@commitlint/cli": "^21.0.1",
     "@commitlint/config-conventional": "^21.0.1",
     "@eslint/js": "^10.0.1",
-    "@formatjs/intl-displaynames": "^7.3.5",
+    "@formatjs/intl-displaynames": "^7.3.7",
     "@formatjs/intl-locale": "^5.3.7",
     "@playwright/test": "^1.60.0",
     "@semantic-release/changelog": "^6.0.3",
