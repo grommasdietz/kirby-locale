@@ -10,9 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
-  issues: write
-  pull-requests: write
+  contents: read
 
 jobs:
   # 1. Run PHP Quality Checks
@@ -206,6 +204,10 @@ jobs:
         browser-tests,
       ]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v6
         with:
