@@ -538,7 +538,7 @@
             "dist": {
                 "type": "path",
                 "url": "..",
-                "reference": "5d6c436045ccb22c57e76d3a60bf68b97c6a1c06"
+                "reference": "c1640f185864411df383e4012084c0dfc1702681"
             },
             "require": {
                 "getkirby/composer-installer": "^1.2",
