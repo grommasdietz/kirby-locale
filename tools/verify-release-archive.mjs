@@ -41,6 +41,7 @@ const forbiddenFiles = new Set([
   ".env",
   "composer.lock",
   "package.json",
+  ".pnpmfile.cjs",
   "pnpm-lock.yaml",
 ]);
 
