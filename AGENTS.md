@@ -17,7 +17,7 @@ This is the canonical workflow guide for working on the Kirby Locale plugin.
 - Plugin entry: `index.php` registers `App::plugin('grommasdietz/locale', ...)`, PHP code lives under `lib/` (`GrommasDietz\\KirbyLocale\\`).
 - Panel source: `src/` (including `src/dialogs/**`, `src/marks/**`, `src/utils/**`) built with `kirbyup` into `index.js`/`index.css`. Rebuild with `pnpm build` after UI changes and commit the outputs.
 - Playground: `playground/` is the self-contained Kirby site for integration and browser tests.
-- Conventions: use Conventional Commit messages (template in `.gitmessage`), keep diffs small, keep docs aligned with behavior, and never wrap imports in `try/catch`.
+- Conventions: use Conventional Commit messages, keep diffs small, keep docs aligned with behavior, and never wrap imports in `try/catch`.
 - Static analysis coverage: when you add plugin folders (blueprints, config, translations, snippets, templates, resources, or `playground/site/plugins/gd-*` fixtures), include them in `psalm.xml.dist`.
 
 ---
@@ -33,9 +33,9 @@ This is the canonical workflow guide for working on the Kirby Locale plugin.
 
 ## Testing and QA
 
-- Prereqs: `composer run setup`, `pnpm run setup` (installs Playwright with OS deps).
+- Prereqs: `composer run setup`, `pnpm run setup` (installs Chromium; CI also installs its OS dependencies).
 - Run `composer test` for PHP changes; add `composer psalm` when you touch PHP logic. Use `composer run verify` for the full PHP sweep.
-- Run `pnpm lint` for JS/Panel changes; run `pnpm test:browser` when Panel/Playwright behavior changes. Use `pnpm run verify` for build + lint + Playwright.
+- Run `pnpm lint` for JS/Panel changes; run `pnpm test:browser` when Panel/Playwright behavior changes. Use `pnpm run verify` for generated-asset checks, lint, archive, docs, hygiene and Playwright. Use `pnpm run verify:all` for the combined PHP and Node gates.
 - Add or extend PHPUnit/Playwright coverage for new behavior; include regression tests for bug fixes. Use `tests/bootstrap.php`, `tests/TestCase.php`, and `tests/Support/TestEnvironment.php` to boot the playground quickly.
 - Call out intentionally skipped suites in commit/PR notes and ensure no generated files or runtime artifacts land in Git.
 

@@ -12,8 +12,7 @@ Run tests after PHP or Panel changes and add coverage for bug fixes.
 Run the full lint/analysis/test set:
 
 ```bash
-composer run verify
-pnpm run verify
+pnpm run verify:all
 ```
 
 ---
@@ -72,7 +71,7 @@ pnpm lint
 
 ## Browser tests (Playwright)
 
-First run (installs browser binaries with OS dependencies):
+First run (installs Chromium browser binaries):
 
 ```bash
 pnpm run setup

@@ -1,4 +1,4 @@
-import { execSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -28,8 +28,9 @@ export default async function globalSetup() {
   const createUserScript = path.join(root, "tools", "create-test-user.php");
 
   // Create admin test user
-  execSync(
-    `php ${createUserScript} --email="${env.KIRBY_USER_EMAIL}" --password="${env.KIRBY_USER_PASSWORD}" --role=admin`,
+  execFileSync(
+    "php",
+    [createUserScript, `--email=${env.KIRBY_USER_EMAIL}`, `--password=${env.KIRBY_USER_PASSWORD}`, "--role=admin"],
     { cwd: root, stdio: "inherit", env },
   );
 }

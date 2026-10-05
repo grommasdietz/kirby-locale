@@ -1,6 +1,9 @@
 packages:
   - .
 
-ignoredBuiltDependencies:
-  - '@parcel/watcher'
-  - esbuild
+nodeLinker: isolated
+minimumReleaseAge: 1440
+minimumReleaseAgeStrict: true
+allowBuilds:
+  "@parcel/watcher": true
+  esbuild: true

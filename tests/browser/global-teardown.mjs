@@ -1,4 +1,4 @@
-import { execSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -17,7 +17,7 @@ export default async function globalTeardown() {
   const deleteScript = path.join(root, "tools", "create-test-user.php");
 
   // Delete admin test user
-  execSync(`php ${deleteScript} --delete --email="${email}"`, {
+  execFileSync("php", [deleteScript, "--delete", `--email=${email}`], {
     cwd: root,
     stdio: "inherit",
     env,

@@ -32,7 +32,7 @@ final class LocaleHelperCoverageTest extends TestCase
 
     public function testResolveLanguageCodeReturnsNullWhenMultilangIsDisabled(): void
     {
-        $kirby = $this->createMock(App::class);
+        $kirby = $this->createStub(App::class);
         $kirby->method('multilang')->willReturn(false);
 
         $this->assertNull(LocaleHelper::resolveLanguageCode($kirby));
@@ -40,7 +40,7 @@ final class LocaleHelperCoverageTest extends TestCase
 
     public function testResolveLanguageCodeUsesExplicitLanguageWhenProvided(): void
     {
-        $kirby = $this->createMock(App::class);
+        $kirby = $this->createStub(App::class);
         $kirby->method('multilang')->willReturn(true);
         $kirby->method('request')->willReturn(new Request(['query' => ['language' => 'de']]));
 
@@ -49,30 +49,30 @@ final class LocaleHelperCoverageTest extends TestCase
 
     public function testResolveLanguageCodeUsesRequestLanguageWhenNoExplicitValueExists(): void
     {
-        $kirby = $this->createMock(App::class);
+        $kirby = $this->createStub(App::class);
         $kirby->method('multilang')->willReturn(true);
         $kirby->method('request')->willReturn(new Request(['query' => ['language' => 'de']]));
-        $kirby->method('language')->willReturn($this->mockLanguage('en'));
-        $kirby->method('defaultLanguage')->willReturn($this->mockLanguage('en'));
+        $kirby->method('language')->willReturn($this->stubLanguage('en'));
+        $kirby->method('defaultLanguage')->willReturn($this->stubLanguage('en'));
 
         $this->assertSame('de', LocaleHelper::resolveLanguageCode($kirby));
     }
 
     public function testResolveLanguageCodeFallsBackToCurrentOrDefaultLanguage(): void
     {
-        $kirbyWithCurrent = $this->createMock(App::class);
+        $kirbyWithCurrent = $this->createStub(App::class);
         $kirbyWithCurrent->method('multilang')->willReturn(true);
         $kirbyWithCurrent->method('request')->willReturn(new Request(['query' => []]));
-        $kirbyWithCurrent->method('language')->willReturn($this->mockLanguage('it'));
-        $kirbyWithCurrent->method('defaultLanguage')->willReturn($this->mockLanguage('en'));
+        $kirbyWithCurrent->method('language')->willReturn($this->stubLanguage('it'));
+        $kirbyWithCurrent->method('defaultLanguage')->willReturn($this->stubLanguage('en'));
 
         $this->assertSame('it', LocaleHelper::resolveLanguageCode($kirbyWithCurrent));
 
-        $kirbyWithDefault = $this->createMock(App::class);
+        $kirbyWithDefault = $this->createStub(App::class);
         $kirbyWithDefault->method('multilang')->willReturn(true);
         $kirbyWithDefault->method('request')->willReturn(new Request(['query' => []]));
         $kirbyWithDefault->method('language')->willReturn(null);
-        $kirbyWithDefault->method('defaultLanguage')->willReturn($this->mockLanguage('en'));
+        $kirbyWithDefault->method('defaultLanguage')->willReturn($this->stubLanguage('en'));
 
         $this->assertSame('en', LocaleHelper::resolveLanguageCode($kirbyWithDefault));
     }
@@ -113,9 +113,9 @@ final class LocaleHelperCoverageTest extends TestCase
         $this->assertSame([], LocaleHelper::normaliseTemplateList([null, 123, '  ']));
     }
 
-    private function mockLanguage(string $code): Language
+    private function stubLanguage(string $code): Language
     {
-        $language = $this->createMock(Language::class);
+        $language = $this->createStub(Language::class);
         $language->method('code')->willReturn($code);
 
         return $language;

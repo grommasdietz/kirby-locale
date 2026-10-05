@@ -20,7 +20,10 @@ composer run setup
 
 ## Node
 
-Install Node dependencies and Playwright browsers (with system dependencies):
+Use Node 22.14 or newer within Node 22 and pnpm 11.22.0, as declared in
+`.node-version` and `package.json`. CI installs Chromium system dependencies.
+
+Install Node dependencies and Playwright Chromium:
 
 ```bash
 pnpm run setup

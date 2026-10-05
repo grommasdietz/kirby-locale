@@ -1,20 +1,23 @@
 {
-    "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../"
-        }
-    ],
-    "require": {
-        "php": "^8.2",
-        "grommasdietz/kirby-locale": "*@dev",
-        "getkirby/cms": "^5.2"
-    },
-    "config": {
-        "allow-plugins": {
-            "getkirby/composer-installer": true,
-            "php-http/discovery": true
-        }
+  "prefer-stable": true,
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../"
     }
+  ],
+  "require": {
+    "php": "^8.2",
+    "grommasdietz/kirby-locale": "*@dev",
+    "getkirby/cms": "^5.2"
+  },
+  "config": {
+    "allow-plugins": {
+      "getkirby/composer-installer": true,
+      "php-http/discovery": true
+    },
+    "platform": {
+      "php": "8.2.0"
+    }
+  }
 }

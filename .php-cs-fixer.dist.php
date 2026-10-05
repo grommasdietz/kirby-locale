@@ -5,6 +5,7 @@ $finder = PhpCsFixer\Finder::create()
     ->name('*.php')
     ->exclude([
         'vendor',
+        'kirby',
         'node_modules',
         '.phpunit.cache',
         '.husky',

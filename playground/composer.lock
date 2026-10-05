@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "35cd6897306be8e0707622c748fe9c04",
+    "content-hash": "77b5589b0b617a965c3cf6dcfa93985a",
     "packages": [
         {
             "name": "christian-riesen/base32",
@@ -385,16 +385,16 @@
         },
         {
             "name": "getkirby/cms",
-            "version": "5.5.0",
+            "version": "5.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getkirby/kirby.git",
-                "reference": "79b15cfe22ba60707388c2b4eb8d508dfdba360e"
+                "reference": "3647b786bfd14b99c64a3fcee8644baf88476533"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getkirby/kirby/zipball/79b15cfe22ba60707388c2b4eb8d508dfdba360e",
-                "reference": "79b15cfe22ba60707388c2b4eb8d508dfdba360e",
+                "url": "https://api.github.com/repos/getkirby/kirby/zipball/3647b786bfd14b99c64a3fcee8644baf88476533",
+                "reference": "3647b786bfd14b99c64a3fcee8644baf88476533",
                 "shasum": ""
             },
             "require": {
@@ -420,9 +420,9 @@
                 "michelf/php-smartypants": "1.8.1",
                 "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
                 "phpmailer/phpmailer": "7.1.1",
-                "symfony/polyfill-intl-idn": "1.38.1",
+                "symfony/polyfill-intl-idn": "1.42.0",
                 "symfony/polyfill-mbstring": "1.38.2",
-                "symfony/yaml": "7.4.14"
+                "symfony/yaml": "7.4.18"
             },
             "replace": {
                 "symfony/polyfill-php72": "*"
@@ -483,7 +483,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2026-07-02T11:01:55+00:00"
+            "time": "2026-09-16T10:39:26+00:00"
         },
         {
             "name": "getkirby/composer-installer",
@@ -534,11 +534,11 @@
         },
         {
             "name": "grommasdietz/kirby-locale",
-            "version": "dev-main",
+            "version": "2.1.3",
             "dist": {
                 "type": "path",
                 "url": "..",
-                "reference": "c1640f185864411df383e4012084c0dfc1702681"
+                "reference": "984945c85c7452f6c39e1d6fa8f2a9c9c5242222"
             },
             "require": {
                 "getkirby/composer-installer": "^1.2",
@@ -546,8 +546,9 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.93",
+                "getkirby/cms": "^5.2",
                 "phpunit/phpunit": "^12.5",
-                "vimeo/psalm": "^6.15"
+                "vimeo/psalm": "^6.19.1"
             },
             "type": "kirby-plugin",
             "autoload": {
@@ -558,46 +559,56 @@
             "scripts": {
                 "test": [
                     "@test:unit",
-                    "@test:integration"
+                    "@test:integration",
+                    "@test:smoke"
                 ],
                 "test:unit": [
-                    "phpunit --testsuite Unit"
+                    "./vendor/bin/phpunit --testsuite Unit"
                 ],
                 "test:integration": [
-                    "phpunit --testsuite Integration"
+                    "./vendor/bin/phpunit --testsuite Integration"
                 ],
                 "test:coverage": [
-                    "phpunit --coverage-text"
+                    "./vendor/bin/phpunit --coverage-text"
                 ],
                 "psalm": [
                     "./vendor/bin/psalm --no-cache --show-info=true"
                 ],
                 "lint": [
-                    "php-cs-fixer fix --dry-run"
+                    "./vendor/bin/php-cs-fixer fix --dry-run --diff"
                 ],
                 "lint:fix": [
-                    "php-cs-fixer fix"
+                    "./vendor/bin/php-cs-fixer fix"
                 ],
                 "format": [
                     "@lint:fix"
                 ],
                 "setup": [
-                    "composer install",
-                    "composer install -d playground"
+                    "composer install -d playground",
+                    "composer install"
                 ],
                 "verify": [
                     "@lint",
                     "@psalm",
                     "@test"
                 ],
-                "package:clean": [
-                    "rm -rf dist && mkdir -p dist && git archive --format=zip --worktree-attributes HEAD -o dist/kirby-locale.zip"
-                ],
                 "notices:generate": [
                     "php tools/generate-third-party-notices.php"
                 ],
                 "post-update-cmd": [
                     "@notices:generate"
+                ],
+                "update:dev": [
+                    "@composer update phpunit/phpunit vimeo/psalm friendsofphp/php-cs-fixer getkirby/cms --with-all-dependencies"
+                ],
+                "playground:update": [
+                    "@composer --working-dir=playground update --with-all-dependencies"
+                ],
+                "test:smoke": [
+                    "php tests/run.php"
+                ],
+                "release:check": [
+                    "php tools/release-readiness.php"
                 ]
             },
             "license": [
@@ -621,7 +632,8 @@
             ],
             "support": {
                 "issues": "https://github.com/grommasdietz/kirby-locale/issues",
-                "source": "https://github.com/grommasdietz/kirby-locale"
+                "source": "https://github.com/grommasdietz/kirby-locale",
+                "docs": "https://github.com/grommasdietz/kirby-locale/blob/main/README.md"
             },
             "transport-options": {
                 "relative": true
@@ -1091,16 +1103,16 @@
         },
         {
             "name": "symfony/polyfill-intl-idn",
-            "version": "v1.38.1",
+            "version": "v1.42.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-idn.git",
-                "reference": "dc21118016c039a66235cf93d96b435ffb282412"
+                "reference": "51b5ff5ba85452b31ec6f55490b08148612339d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/dc21118016c039a66235cf93d96b435ffb282412",
-                "reference": "dc21118016c039a66235cf93d96b435ffb282412",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/51b5ff5ba85452b31ec6f55490b08148612339d9",
+                "reference": "51b5ff5ba85452b31ec6f55490b08148612339d9",
                 "shasum": ""
             },
             "require": {
@@ -1154,7 +1166,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.38.1"
+                "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.42.0"
             },
             "funding": [
                 {
@@ -1174,20 +1186,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-25T15:22:23+00:00"
+            "time": "2026-08-24T10:51:20+00:00"
         },
         {
             "name": "symfony/polyfill-intl-normalizer",
-            "version": "v1.38.0",
+            "version": "v1.43.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
-                "reference": "2d446c214bdbe5b71bde5011b060a05fece3ae6b"
+                "reference": "ebd57ccc7edb93d632e184efbe7693d2517bab3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/2d446c214bdbe5b71bde5011b060a05fece3ae6b",
-                "reference": "2d446c214bdbe5b71bde5011b060a05fece3ae6b",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/ebd57ccc7edb93d632e184efbe7693d2517bab3b",
+                "reference": "ebd57ccc7edb93d632e184efbe7693d2517bab3b",
                 "shasum": ""
             },
             "require": {
@@ -1239,7 +1251,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.38.0"
+                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.43.0"
             },
             "funding": [
                 {
@@ -1259,7 +1271,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-25T13:48:31+00:00"
+            "time": "2026-09-23T22:02:09+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1348,16 +1360,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v7.4.14",
+            "version": "v7.4.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "f8f328665ace2370d1e10645b807ba1646dc7dcc"
+                "reference": "4cef939e55b8a21c5780418de0d98ab00d0736e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/f8f328665ace2370d1e10645b807ba1646dc7dcc",
-                "reference": "f8f328665ace2370d1e10645b807ba1646dc7dcc",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/4cef939e55b8a21c5780418de0d98ab00d0736e1",
+                "reference": "4cef939e55b8a21c5780418de0d98ab00d0736e1",
                 "shasum": ""
             },
             "require": {
@@ -1400,7 +1412,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v7.4.14"
+                "source": "https://github.com/symfony/yaml/tree/v7.4.18"
             },
             "funding": [
                 {
@@ -1420,7 +1432,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-06-08T20:24:16+00:00"
+            "time": "2026-08-30T00:47:26+00:00"
         }
     ],
     "packages-dev": [],
@@ -1435,5 +1447,8 @@
         "php": "^8.2"
     },
     "platform-dev": {},
+    "platform-overrides": {
+        "php": "8.2.0"
+    },
     "plugin-api-version": "2.9.0"
 }

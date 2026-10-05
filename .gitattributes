@@ -13,7 +13,6 @@ playground/ export-ignore
 
 # Dev tooling
 .editorconfig export-ignore
-.gitmessage export-ignore
 .husky/ export-ignore
 .markdownlint.json export-ignore
 .npmrc export-ignore
@@ -26,8 +25,7 @@ playground/ export-ignore
 commitlint.config.cjs export-ignore
 eslint.config.cjs export-ignore
 phpmd.xml.dist export-ignore
-phpunit.ci.xml export-ignore
-phpunit.dist.xml export-ignore
+phpunit.xml.dist export-ignore
 playwright.config.ts export-ignore
 postcss.config.cjs export-ignore
 psalm.xml.dist export-ignore
@@ -56,3 +54,6 @@ scripts/ export-ignore
 src/ export-ignore
 tests/ export-ignore
 tools/ export-ignore
+
+.node-version export-ignore
+kirby/ export-ignore

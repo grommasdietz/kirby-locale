@@ -33,6 +33,7 @@
             <directory name="playground/vendor" />
             <directory name="playground/site/templates" />
             <directory name="vendor" />
+            <directory name="kirby" />
         </ignoreFiles>
     </projectFiles>
 

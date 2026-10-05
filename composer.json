@@ -13,7 +13,8 @@
   ],
   "support": {
     "issues": "https://github.com/grommasdietz/kirby-locale/issues",
-    "source": "https://github.com/grommasdietz/kirby-locale"
+    "source": "https://github.com/grommasdietz/kirby-locale",
+    "docs": "https://github.com/grommasdietz/kirby-locale/blob/main/README.md"
   },
   "keywords": [
     "kirby",
@@ -33,8 +34,9 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^12.5",
-    "vimeo/psalm": "^6.15",
-    "friendsofphp/php-cs-fixer": "^3.93"
+    "vimeo/psalm": "^6.19.1",
+    "friendsofphp/php-cs-fixer": "^3.93",
+    "getkirby/cms": "^5.2"
   },
   "config": {
     "optimize-autoloader": true,
@@ -48,26 +50,31 @@
   "scripts": {
     "test": [
       "@test:unit",
-      "@test:integration"
+      "@test:integration",
+      "@test:smoke"
     ],
-    "test:unit": "phpunit --testsuite Unit",
-    "test:integration": "phpunit --testsuite Integration",
-    "test:coverage": "phpunit --coverage-text",
+    "test:unit": "./vendor/bin/phpunit --testsuite Unit",
+    "test:integration": "./vendor/bin/phpunit --testsuite Integration",
+    "test:coverage": "./vendor/bin/phpunit --coverage-text",
     "psalm": "./vendor/bin/psalm --no-cache --show-info=true",
-    "lint": "php-cs-fixer fix --dry-run",
-    "lint:fix": "php-cs-fixer fix",
+    "lint": "./vendor/bin/php-cs-fixer fix --dry-run --diff",
+    "lint:fix": "./vendor/bin/php-cs-fixer fix",
     "format": "@lint:fix",
     "setup": [
-      "composer install",
-      "composer install -d playground"
+      "composer install -d playground",
+      "composer install"
     ],
     "verify": [
       "@lint",
       "@psalm",
       "@test"
     ],
-    "package:clean": "rm -rf dist && mkdir -p dist && git archive --format=zip --worktree-attributes HEAD -o dist/kirby-locale.zip",
     "notices:generate": "php tools/generate-third-party-notices.php",
-    "post-update-cmd": "@notices:generate"
-  }
+    "post-update-cmd": "@notices:generate",
+    "update:dev": "@composer update phpunit/phpunit vimeo/psalm friendsofphp/php-cs-fixer getkirby/cms --with-all-dependencies",
+    "playground:update": "@composer --working-dir=playground update --with-all-dependencies",
+    "test:smoke": "php tests/run.php",
+    "release:check": "php tools/release-readiness.php"
+  },
+  "version": "2.1.3"
 }
