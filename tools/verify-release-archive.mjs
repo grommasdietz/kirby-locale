@@ -32,6 +32,7 @@ const forbiddenPrefixes = [
   "node_modules/",
   "playground/",
   "src/",
+  "resources/source/",
   "tests/",
   "tools/",
   "vendor/",
