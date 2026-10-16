@@ -39,57 +39,18 @@ This runs `scripts/generate-iso-data.mjs` and writes the output to `resources/`.
 
 ---
 
-## Dependency updates
+## Dependency updates and CI
 
-Update PHP dependencies (repo and playground):
+Update the root development dependencies, playground and Node tooling separately:
 
 ```bash
 composer run update:dev
 composer run playground:update
-composer run setup
-```
-
-Update JS dev dependencies:
-
-```bash
 pnpm run update:dev
 ```
 
----
+Review changed manifests and locks, rebuild affected assets and run the repository verification commands in the [testing guide](tests.md). Dependency automation and compatibility jobs are defined in `.github/`.
 
-## Dependency updates and CI
-
-Use `composer run update:dev` for root PHP development dependencies,
-`composer run playground:update` for the runtime fixture, and `pnpm run update:dev`
-for Node tooling. Review and commit the resulting lockfiles.
-
-Dependabot groups version updates into one PR per ecosystem and lockfile, including
-related TypeScript, ESLint, PostCSS and build tools. Each update entry allows one
-open version PR. Root and playground Composer locks remain separate. Weekly runs
-are staggered across plugins; GitHub Actions updates run monthly.
-
-All plugins use TypeScript 7 for compilation and `pnpm run check:types`.
-That command is part of local verification and the main CI job.
-
-Repositories using `typescript-eslint` also install `@typescript/typescript6`.
-The scoped `.pnpmfile.cjs` hook gives TypeScript ESLint 8 that compiler API
-while `tsc` remains TypeScript 7. Both packages have normal manifest entries
-so Dependabot can update them. Remove the bridge after the linter supports
-the native API and verification passes. See the
-[TypeScript migration guidance](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-60)
-and [pnpm install hooks](https://pnpm.io/pnpmfile).
-
-Version updates wait three days after publication. pnpm also enforces a strict
-24-hour minimum release age for installation and local updates. Dependabot security
-updates use separate groups and bypass its version-update cooldown; pnpm's install
-age still applies. Patch updates may auto-merge after required checks pass; minor
-and major updates need review. Refresh the remaining grouped PR after each merge
-to keep its lockfile based on current `main`. Grouping reduces overlapping lockfile
-changes but cannot prevent conflicts with manual dependency edits.
-
-CI runs PHP quality, Node, generated-asset, documentation and browser checks with
-one shared PHP 8.3 setup where practical. Separate PHP and Kirby compatibility
-jobs preserve each plugin's supported-runtime coverage. Stale runs are cancelled,
-jobs have time limits, and failed browser artifacts are retained for three days.
+The `.pnpmfile.cjs` hook supplies the TypeScript 6 API to TypeScript ESLint while `check:types` uses the root compiler. Review this bridge when changing the compiler or linter.
 
 Next: Continue with [Tests](./tests.md)

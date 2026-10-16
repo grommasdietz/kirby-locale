@@ -8,7 +8,7 @@ The `locale` mark wraps selected text in a `<span lang="…">` tag. Editors pick
 
 ### Enabling the mark
 
-Add `locale` to the `marks` list of any writer or textarea field:
+Add `locale` to the `marks` list of any Writer field:
 
 ```yml
 # site/blueprints/pages/default.yml
@@ -78,7 +78,7 @@ The Writer dialog and the title selector share a single locale collector. Entrie
 
 Values must be associative arrays that include at least a `code` and `name`, with an optional `group`. The kirby option `'grommasdietz.locale.locales'` may also be a closure that returns such an array at runtime.
 
-Set the kirby option `'grommasdietz.locale.catalog'` to disable the ISO fallback entirely, or pass a custom array to replace it.
+Set the Kirby option `'grommasdietz.locale.catalog'` to `false` to disable the ISO fallback entirely, or pass a custom array to replace it.
 
 ## Optional configuration
 
