@@ -26,7 +26,12 @@ function collect(target, files = []) {
 const filesForTargets = () => [...new Set(targets.flatMap((target) => collect(target)))].sort();
 const digest = (bytes) => crypto.createHash("sha256").update(bytes).digest("hex");
 function packageManagerInvocation(args) {
-  if (process.env.npm_execpath) return [process.execPath, [process.env.npm_execpath, ...args]];
+  const executable = process.env.npm_execpath;
+  if (executable) {
+    return /\.[cm]?js$/i.test(executable)
+      ? [process.execPath, [executable, ...args]]
+      : [executable, args];
+  }
   return [process.platform === "win32" ? "pnpm.cmd" : "pnpm", args];
 }
 

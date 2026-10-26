@@ -3,7 +3,7 @@
   "version": "2.1.3",
   "description": "Locale utilities for Kirby CMS",
   "license": "MIT",
-  "packageManager": "pnpm@11.22.0",
+  "packageManager": "pnpm@12.15.0+sha512.b3951d6d6ff4a9f13dc7cf56cd28d2b8eb37dbcc9c68e52e1e1191873ea9f82a017287ab50baadc5ccc494f036c67c0e47eb13608c2fa36f47711b61ea128e61",
   "scripts": {
     "setup": "pnpm install --frozen-lockfile && pnpm exec playwright install chromium",
     "update:dev": "pnpm update --dev",
@@ -27,7 +27,7 @@
     "test:browser:report": "pnpm exec playwright show-report playwright-report",
     "verify:all": "composer validate --strict --no-check-version && composer check-platform-reqs && composer run verify && composer run release:check && pnpm run verify && git diff --check",
     "build:assets": "kirbyup src/index.js",
-    "build:check": "node tools/check-reproducible-assets.mjs index.js index.css",
+    "build:check": "node tests/reproducible-assets-command.mjs && node tools/check-reproducible-assets.mjs index.js index.css",
     "check:types": "tsc --version && tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
@@ -60,6 +60,6 @@
   "private": true,
   "engines": {
     "node": ">=22.14 <23",
-    "pnpm": ">=11 <12"
+    "pnpm": ">=12 <13"
   }
 }
