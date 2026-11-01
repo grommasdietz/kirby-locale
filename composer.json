@@ -61,6 +61,7 @@
     "lint:fix": "./vendor/bin/php-cs-fixer fix",
     "format": "@lint:fix",
     "setup": [
+      "@php tools/playground-secrets.php",
       "composer install -d playground",
       "composer install"
     ],
