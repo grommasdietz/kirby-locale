@@ -1,3 +1,10 @@
+## [2.1.4](https://github.com/grommasdietz/kirby-locale/compare/v2.1.3...v2.1.4) (2026-11-02)
+
+
+### Bug Fixes
+
+* **ci:** retain queued dependency merge jobs ([8343104](https://github.com/grommasdietz/kirby-locale/commit/8343104f2d634e73d182416bfd64aad217e53f4a))
+
 ## [2.1.3](https://github.com/grommasdietz/kirby-locale/compare/v2.1.2...v2.1.3) (2026-05-12)
 
 

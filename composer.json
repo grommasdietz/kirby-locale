@@ -1,6 +1,7 @@
 {
   "name": "grommasdietz/kirby-locale",
   "description": "Locale utilities for Kirby CMS",
+  "version": "2.1.4",
   "type": "kirby-plugin",
   "license": "MIT",
   "authors": [
@@ -76,6 +77,5 @@
     "playground:update": "@composer --working-dir=playground update --with-all-dependencies",
     "test:smoke": "php tests/run.php",
     "release:check": "php tools/release-readiness.php"
-  },
-  "version": "2.1.3"
+  }
 }
