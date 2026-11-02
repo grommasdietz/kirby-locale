@@ -44,35 +44,7 @@ return [
 ];
 ```
 
-For multiple templates:
-
-```php
-return [
-    'grommasdietz.locale.intendedTemplate' => [
-        'project',
-        'note',
-    ],
-];
-```
-
-After configuration, Kirby's create and rename dialogs show the locale dropdown and save the choice as `title_locale`. Retrieve it in templates with `$page->title_locale()`.
-
-### Options
-
-Configure via `site/config/config.php`:
-
-```php
-return [
-    // Custom locales
-    'grommasdietz.locale.locales' => [
-        ['code' => 'en-GB', 'name' => 'English, United Kingdom'],
-        ['code' => 'en-US', 'name' => 'English, United States'],
-    ],
-
-    // Optional: disable the ISO fallback catalog
-    // 'grommasdietz.locale.catalog' => false,
-];
-```
+See [usage](docs/usage/index.md) for multiple templates, custom locales and API routes.
 
 ### Documentation
 
