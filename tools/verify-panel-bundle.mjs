@@ -2,7 +2,7 @@
 import fs from "node:fs";
 
 const errors = [];
-const markers = ["grommasdietz/locale", "title_locale", "notranslate"];
+const markers = ["grommasdietz/locale", "k-select-input", "notranslate"];
 if (!fs.existsSync("index.js") || fs.statSync("index.js").size === 0) {
   errors.push("index.js is missing or empty");
 } else {

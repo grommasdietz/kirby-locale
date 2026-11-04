@@ -43,6 +43,30 @@ final class TitleLocaleTest extends TestCase
         // Fixture content is auto-restored by TestEnvironment::ensureContentFixtures()
     }
 
+    public function testRenameDialogStoresLocaleWithoutChangingTitleOrSlug(): void
+    {
+        $this->bootKirby([
+            'options' => ['grommasdietz.locale.intendedTemplate' => 'home'],
+            'request' => ['body' => ['title' => 'Home', 'slug' => 'home', 'title_locale' => 'fr']],
+        ])->impersonate('kirby');
+        $page = $this->kirby->page('home');
+        $contentFile = $page->root() . '/home.en.txt';
+        $original = file_get_contents($contentFile);
+        try {
+            $controller = new \GrommasDietz\KirbyLocale\Panel\PageChangeTitleDialogController($page);
+            $dialog = $controller->load();
+            $this->assertArrayHasKey('title_locale', $dialog->fields);
+            $this->assertSame('fr', $dialog->value['title_locale']);
+            $response = $controller->submit();
+            $this->assertSame([], $response['event']);
+            $this->assertSame('fr', TitleLocale::getStored($this->kirby->page('home'), null));
+            $this->assertSame('Home', $this->kirby->page('home')->title()->value());
+            $this->assertSame('home', $this->kirby->page('home')->slug());
+        } finally {
+            file_put_contents($contentFile, $original);
+        }
+    }
+
     public function testStoreSkipsWhenTemplateNotAllowed(): void
     {
         // Boot a fresh instance where only 'article' templates are enabled
