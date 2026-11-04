@@ -20,7 +20,7 @@ The root dependency graph provides the PHP test and analysis tools. Use the play
 
 ## Node
 
-Use Node 22.22.2 or newer within Node 22 and pnpm 11.28.10, as declared in
+Use Node 24.22.2 or newer within Node 24 and pnpm 11.28.10, as declared in
 `.node-version` and `package.json`. CI installs Chromium system dependencies.
 
 Install Node dependencies and Playwright Chromium:

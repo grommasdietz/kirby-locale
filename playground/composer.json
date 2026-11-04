@@ -7,9 +7,10 @@
     }
   ],
   "require": {
-    "php": "^8.2",
+    "php": "^8.3",
     "grommasdietz/kirby-locale": "*@dev",
-    "getkirby/cms": "^5.2"
+    "getkirby/cms": "^6.0@beta",
+    "symfony/yaml": "7.4.23 as 7.4.21"
   },
   "config": {
     "allow-plugins": {
@@ -17,7 +18,7 @@
       "php-http/discovery": true
     },
     "platform": {
-      "php": "8.2.0"
+      "php": "8.3.16"
     }
   }
 }

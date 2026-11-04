@@ -17,88 +17,20 @@ $translations = Translations::load();
 
 App::plugin('grommasdietz/locale', [
     'translations' => $translations,
+    'fields' => ['pagelist' => \GrommasDietz\KirbyLocale\Panel\PageListField::class],
     'areas' => [
-        'site' => function (App $kirby) {
-            $core = $kirby->core()->area('site');
-            $coreDialogs = $core['dialogs'] ?? [];
-            $dialogs = [];
-            $allowedTemplates = LocaleHelper::getEnabledTitleLocaleTemplates($kirby);
-
-            $pageCreate = $coreDialogs['page.create'] ?? null;
-
-            if (
-                $allowedTemplates !== [] &&
-                is_array($pageCreate) &&
-                isset($pageCreate['load']) &&
-                is_callable($pageCreate['load'])
-            ) {
-                $load = $pageCreate['load'];
-
-                $dialogs['page.create'] = array_replace($pageCreate, [
-                    'load' => function () use ($kirby, $load, $allowedTemplates) {
-                        $dialog = $load();
-
-                        $template = $dialog['props']['template'] ?? null;
-
-                        if (LocaleHelper::templateAllowsLocale($template, $allowedTemplates) === false) {
-                            return $dialog;
-                        }
-
-                        $request = $kirby->request();
-                        [$hasValue, $rawValue] = LocaleHelper::extractLocaleFromRequest($request);
-                        $value = $hasValue ? LocaleHelper::normaliseTitleLocale($rawValue) : null;
-
-                        return DialogFactory::extend($dialog, $value);
-                    },
-                ]);
-            }
-
-            $pageChangeTitle = $coreDialogs['page.changeTitle'] ?? null;
-
-            if (
-                $allowedTemplates !== [] &&
-                is_array($pageChangeTitle) &&
-                isset($pageChangeTitle['load']) &&
-                is_callable($pageChangeTitle['load'])
-            ) {
-                $load = $pageChangeTitle['load'];
-
-                $dialogs['page.changeTitle'] = array_replace($pageChangeTitle, [
-                    'load' => function (string $id) use ($kirby, $load, $allowedTemplates) {
-                        $dialog = $load($id);
-                        $request = $kirby->request();
-                        [$hasValue, $rawValue] = LocaleHelper::extractLocaleFromRequest($request);
-                        $languageCode = LocaleHelper::resolveLanguageCode($kirby, $request->get('language'));
-                        $value = $hasValue ? LocaleHelper::normaliseTitleLocale($rawValue) : null;
-                        $fieldOverrides = [];
-                        $pageTemplate = null;
-                        $page = LocaleHelper::findPage($id);
-
-                        if ($page) {
-                            $pageTemplate = $page->intendedTemplate()->name();
-                        }
-
-                        if (LocaleHelper::templateAllowsLocale($pageTemplate, $allowedTemplates) === false) {
-                            return $dialog;
-                        }
-
-                        if ($value === null && $page) {
-                            $value = TitleLocale::getStored($page, $languageCode);
-                        }
-
-                        return DialogFactory::extend($dialog, $value, $fieldOverrides);
-                    },
-                ]);
-            }
-
-            if ($dialogs === []) {
-                return [];
-            }
-
-            return [
-                'dialogs' => $dialogs,
-            ];
-        },
+        'site' => [
+            'dialogs' => [
+                'page.create' => [
+                    'pattern' => 'pages/create',
+                    'action' => \GrommasDietz\KirbyLocale\Panel\PageCreateDialogController::class,
+                ],
+                'page.changeTitle' => [
+                    'pattern' => 'pages/(:any)/changeTitle',
+                    'action' => \GrommasDietz\KirbyLocale\Panel\PageChangeTitleDialogController::class,
+                ],
+            ],
+        ],
     ],
     'api' => [
         'routes' => [
