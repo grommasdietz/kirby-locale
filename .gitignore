@@ -52,3 +52,4 @@ playground/site/plugins/*
 
 # Temporary plugin sandbox used by tests
 tests/.plugins/
+/index.dev.js
