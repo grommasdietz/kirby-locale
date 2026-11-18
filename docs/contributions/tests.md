@@ -12,7 +12,8 @@ Run tests after PHP or Panel changes and add coverage for bug fixes.
 Run the full lint/analysis/test set:
 
 ```bash
-pnpm run verify:all
+composer run verify
+pnpm run verify
 ```
 
 ---
