@@ -71,15 +71,14 @@
       "@lint",
       "@psalm",
       "@test",
-      "@notices:check",
-      "@release:check"
+      "@notices:check"
     ],
     "notices:generate": "php tools/generate-third-party-notices.php",
     "post-update-cmd": "@notices:generate",
     "update:dev": "@composer update phpunit/phpunit vimeo/psalm friendsofphp/php-cs-fixer getkirby/cms --with-all-dependencies",
     "playground:update": "@composer --working-dir=playground update --with-all-dependencies",
     "test:smoke": "php tests/run.php",
-    "release:check": "php tools/release-readiness.php",
+    "release:check": "node tools/verify-release-archive.mjs",
     "verify:composer": [
       "@composer validate --strict --no-check-version",
       "@composer check-platform-reqs"
