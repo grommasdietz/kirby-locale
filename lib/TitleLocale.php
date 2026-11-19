@@ -4,6 +4,7 @@ namespace GrommasDietz\KirbyLocale;
 
 use Kirby\Cms\App;
 use Kirby\Cms\Page;
+use Kirby\Content\Field;
 
 final class TitleLocale
 {
@@ -25,7 +26,7 @@ final class TitleLocale
         $value = LocaleHelper::normaliseTitleLocale($rawValue);
         $content = $languageCode ? $page->content($languageCode) : $page->content();
         $field = $content->get(self::FIELD_KEY);
-        $existing = LocaleHelper::normaliseTitleLocale($field?->value());
+        $existing = LocaleHelper::normaliseTitleLocale($field instanceof Field ? $field->value() : null);
 
         if ($existing === $value) {
             return;
@@ -92,7 +93,7 @@ final class TitleLocale
 
         $content = $languageCode ? $page->content($languageCode) : $page->content();
         $field = $content->get(self::FIELD_KEY);
-        $value = $field?->value();
+        $value = $field instanceof Field ? $field->value() : null;
 
         return LocaleHelper::normaliseTitleLocale($value);
     }

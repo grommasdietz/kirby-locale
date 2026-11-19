@@ -5,6 +5,7 @@ use GrommasDietz\KirbyLocale\LocaleHelper;
 use GrommasDietz\KirbyLocale\TitleLocale;
 use GrommasDietz\KirbyLocale\Translations;
 use Kirby\Cms\App;
+use Kirby\Cms\Page;
 use Kirby\Sane\Html;
 
 $existingSpanAttributes = Html::$allowedTags['span'] ?? [];
@@ -172,13 +173,13 @@ App::plugin('grommasdietz/locale', [
         ],
     ],
     'hooks' => [
-        'page.create:after' => function ($page) {
+        'page.create:after' => function (Page $page): void {
             TitleLocale::handlePageLocaleUpdate($page);
         },
-        'page.changeTitle:after' => function ($newPage) {
+        'page.changeTitle:after' => function (Page $newPage): void {
             TitleLocale::handlePageLocaleUpdate($newPage);
         },
-        'page.changeSlug:after' => function ($newPage) {
+        'page.changeSlug:after' => function (Page $newPage): void {
             TitleLocale::handlePageLocaleUpdate($newPage);
         },
     ],

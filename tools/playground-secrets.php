@@ -61,7 +61,7 @@ return (static function (): array {
                 $quoted = '"' . $value . '"';
 
                 if ($matched === 1) {
-                    $contents = substr_replace($contents, $quoted, $matches[1][1], strlen($matches[1][0]));
+                    $contents = substr_replace($contents, $quoted, $matches[1][1], strlen($matches[1][0] ?? ''));
                 } else {
                     $newline = str_contains($contents, "\r\n") ? "\r\n" : "\n";
                     if ($contents !== '' && !str_ends_with($contents, "\n")) {
