@@ -1,7 +1,5 @@
 # Documentation
 
-[Configure language marks and fields](usage/index.md) or [set up the development playground](contributions/setup.md).
-
 ## Users
 
 - [Usage](./usage/index.md): Locale marks, dialogs, and ISO data
