@@ -54,21 +54,11 @@ Full reference for [usage](docs/usage/index.md), [contributions](docs/contributi
 
 ---
 
-## Changelog
+## Project information
 
-See [CHANGELOG.md](CHANGELOG.md) for version history and changes.
-
----
-
-## Security
-
-See [SECURITY.md](SECURITY.md) for security policies and reporting vulnerabilities.
-
----
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidance and expectations.
+- [Changelog](CHANGELOG.md)
+- [Security policy and reporting](SECURITY.md)
+- [Contributing](CONTRIBUTING.md)
 
 ---
 
@@ -76,4 +66,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidance and expectations.
 
 [MIT](LICENSE.md) © 2025 Grommas Dietz
 
-Kirby 6 title locale fields extend native dialog controllers, including page-list create dialogs. The grouped selector uses Vue 3 render functions; the old frontend dialog interception is removed.
+Kirby 6 title locale fields extend native dialog controllers, including page-list create dialogs. The grouped selector uses Vue 3 render functions. The old frontend dialog interception is removed.

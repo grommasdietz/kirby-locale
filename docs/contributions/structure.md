@@ -51,7 +51,7 @@ Only add directories that actually exist.
 
 ## Environment and secrets
 
-Normal tests use local fixtures and require no secrets. Keep any integration credentials outside tracked files; the PHPUnit bootstrap does not load an environment file.
+Normal tests use local fixtures and require no secrets. Keep any integration credentials outside tracked files. The PHPUnit bootstrap does not load an environment file.
 
 ---
 
