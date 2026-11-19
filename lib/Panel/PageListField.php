@@ -8,7 +8,7 @@ final class PageListField extends \Kirby\Form\Field\PageListField
     public function dialogs(): array
     {
         $dialogs = parent::dialogs();
-        $dialogs['create']['action'] = fn () => new PageCreateDialogController(
+        $dialogs['create']['action'] = fn (): PageCreateDialogController => new PageCreateDialogController(
             parent: $this->parentModel(),
             blueprints: $this->acceptedPageBlueprints()
         );

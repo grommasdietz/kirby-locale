@@ -15,6 +15,8 @@ final class DialogFactory
 
         $siteGroupLabel = I18n::translate('grommasdietz.locale.dialog.group.site', 'Site locales');
         $otherGroupLabel = I18n::translate('grommasdietz.locale.dialog.group.other', 'Other locales');
+        $siteGroupLabel = is_string($siteGroupLabel) ? $siteGroupLabel : 'Site locales';
+        $otherGroupLabel = is_string($otherGroupLabel) ? $otherGroupLabel : 'Other locales';
 
         $currentValue = is_string($currentValue) ? trim($currentValue) : '';
         $currentGroupLabel = null;

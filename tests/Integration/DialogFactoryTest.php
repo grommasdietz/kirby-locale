@@ -7,6 +7,7 @@ namespace GrommasDietz\KirbyLocale\Tests\Integration;
 use GrommasDietz\KirbyLocale\DialogFactory;
 use GrommasDietz\KirbyLocale\TitleLocale;
 use GrommasDietz\KirbyLocale\Tests\TestCase;
+use Kirby\Toolkit\I18n;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
@@ -200,6 +201,21 @@ final class DialogFactoryTest extends TestCase
 
         // Should have at least one group (site locales)
         $this->assertNotEmpty($groups);
+    }
+
+    public function testBuildFieldUsesDefaultGroupLabelsForNonStringTranslations(): void
+    {
+        $locale = I18n::locale();
+        I18n::$translations[$locale] = [
+            'grommasdietz.locale.dialog.group.site' => ['one' => 'Site locale'],
+            'grommasdietz.locale.dialog.group.other' => static fn (): string => 'Other locales',
+        ];
+
+        $field = DialogFactory::buildField();
+        $groups = array_column($field['options'], 'group');
+
+        $this->assertContains('Site locales', $groups);
+        $this->assertContains('Other locales', $groups);
     }
 
     public function testBuildFieldPrependsCurrentValueWhenMissingFromOptions(): void
