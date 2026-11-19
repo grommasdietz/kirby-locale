@@ -5,12 +5,12 @@ Repository guide for the Kirby Locale plugin.
 ## Kirby Locale rules
 
 - **Keep it ready-to-install.** ZIP, submodule and Composer installs must work without running `composer` or `npm`. Keep committed build outputs and the PHP dependencies those installs need.
-- Plugin entry: `index.php` registers `App::plugin('grommasdietz/locale', ...)`; PHP code lives under `lib/` (`GrommasDietz\\KirbyLocale\\`).
+- Plugin entry: `index.php` registers `App::plugin('grommasdietz/locale', ...)`. PHP code lives under `lib/` (`GrommasDietz\\KirbyLocale\\`).
 - Panel source: `src/` (including `src/dialogs/**`, `src/marks/**`, `src/utils/**`) builds with `kirbyup` into `index.js`/`index.css`.
 - Playground: `playground/` is the self-contained Kirby site for integration and browser tests. Add the smallest useful fixtures under `playground/site/**`.
 - Never wrap imports in `try/catch`.
 - Static analysis: when you add plugin folders (blueprints, config, translations, snippets, templates, resources, or `playground/site/plugins/gd-*` fixtures), include them in `psalm.xml.dist`.
-- `pnpm run setup` installs Chromium; CI also installs its OS dependencies.
+- `pnpm run setup` installs Chromium. CI also installs its OS dependencies.
 - Use `tests/bootstrap.php`, `tests/TestCase.php` and `tests/Support/TestEnvironment.php` to boot the playground quickly. Run `pnpm run test:browser` when Panel behavior changes.
 - Write docs in `docs/` and update contributor documentation when development commands or workflows change. Call out intentionally skipped suites in commit or PR notes.
 
