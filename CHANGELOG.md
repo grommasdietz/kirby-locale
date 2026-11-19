@@ -1,3 +1,10 @@
+## [2.1.5](https://github.com/grommasdietz/kirby-locale/compare/v2.1.4...v2.1.5) (2026-11-19)
+
+
+### Bug Fixes
+
+* **locale:** validate dialog labels and hook types ([4f343ee](https://github.com/grommasdietz/kirby-locale/commit/4f343eeb6e9005a15ed0d5309d00f2b2c295efa4))
+
 ## [2.1.4](https://github.com/grommasdietz/kirby-locale/compare/v2.1.3...v2.1.4) (2026-11-02)
 
 
