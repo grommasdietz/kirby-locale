@@ -1,6 +1,6 @@
 {
   "name": "kirby-locale",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "Locale utilities for Kirby CMS",
   "license": "MIT",
   "packageManager": "pnpm@12.21.0",
