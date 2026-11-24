@@ -81,7 +81,12 @@ test.describe("Panel integration", () => {
     await page.waitForLoadState("networkidle");
 
     // Open the create dialog from the site's pages section
+    const createResponse = page.waitForResponse((response) =>
+      response.url().includes("/fields/pages/create") &&
+      response.request().method() === "GET"
+    );
     await page.getByRole("button", { name: "Add" }).first().click();
+    expect((await createResponse).status()).toBe(200);
 
     // Wait for dialog fields to load
     await expect(page.locator('input[name="title"]')).toBeVisible();

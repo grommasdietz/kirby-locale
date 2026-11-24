@@ -6,8 +6,10 @@ Locale utilities for [Kirby CMS](https://getkirby.com) adds a Writer mark and an
 
 ## Requirements
 
-- Kirby 5+
-- PHP 8.2+
+- Kirby 6
+- PHP 8.3+
+
+For Kirby 5, use version 2.x.
 
 ## Installation
 

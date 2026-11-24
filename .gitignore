@@ -64,3 +64,6 @@ tests/.plugins/
 # Project-specific
 !playground/site/plugins/gd-*/
 !playground/site/plugins/gd-*/**
+vendor/
+psalm-baseline.xml
+/index.dev.js

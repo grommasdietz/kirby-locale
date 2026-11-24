@@ -59,3 +59,4 @@ tools/ export-ignore
 .node-version export-ignore
 kirby/ export-ignore
 resources/source/ export-ignore
+index.dev.js export-ignore
