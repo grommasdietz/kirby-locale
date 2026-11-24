@@ -1,7 +1,5 @@
 # Kirby Locale
 
-> Kirby 6 preview branch. The stable Kirby 5 release remains on `main`. Requires PHP 8.3+ and Node 24 for development.
-
 Locale utilities for [Kirby CMS](https://getkirby.com) adds a Writer mark and an optional dialog select field so editors can tag language-specific fragments and store per-page title locales.
 
 ![Cover image showing an example of the plugin in use](/.github/assets/hero-image.png)
@@ -11,10 +9,12 @@ Locale utilities for [Kirby CMS](https://getkirby.com) adds a Writer mark and an
 - Kirby 6
 - PHP 8.3+
 
+For Kirby 5, use version 2.x.
+
 ## Installation
 
 ```bash
-composer require grommasdietz/kirby-locale:dev-kirby-6
+composer require grommasdietz/kirby-locale
 ```
 
 > [!TIP]
@@ -65,5 +65,3 @@ Full reference for [usage](docs/usage/index.md), [contributions](docs/contributi
 ## License
 
 [MIT](LICENSE.md) © 2025 Grommas Dietz
-
-Kirby 6 title locale fields extend native dialog controllers, including page-list create dialogs. The grouped selector uses Vue 3 render functions. The old frontend dialog interception is removed.
