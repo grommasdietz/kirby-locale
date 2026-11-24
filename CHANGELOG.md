@@ -1,3 +1,21 @@
+# [3.0.0](https://github.com/grommasdietz/kirby-locale/compare/v2.1.5...v3.0.0) (2026-11-24)
+
+
+* feat!: migrate Locale to Kirby 6 ([11e3134](https://github.com/grommasdietz/kirby-locale/commit/11e31343e2f1a17a5075f600b4a8bdea9a744630))
+* feat!: prepare Kirby 6 compatibility ([#83](https://github.com/grommasdietz/kirby-locale/issues/83)) ([898fe12](https://github.com/grommasdietz/kirby-locale/commit/898fe12f43299c760546489e90f35bfe8796e0f2))
+
+
+### Bug Fixes
+
+* **locale:** validate dialog labels and hook types ([250e865](https://github.com/grommasdietz/kirby-locale/commit/250e86572509d93df6e2a9ae7d40ee054f902d43))
+* **panel:** finish Kirby 6 create dialog compatibility ([9558231](https://github.com/grommasdietz/kirby-locale/commit/9558231656792913177de63100b02720965de012))
+
+
+### BREAKING CHANGES
+
+* This preview requires Kirby 6 and PHP 8.3. Kirby 5 remains on main.
+* Requires Kirby 6 and PHP 8.3. Uses native dialog controllers and Vue 3.
+
 ## [2.1.5](https://github.com/grommasdietz/kirby-locale/compare/v2.1.4...v2.1.5) (2026-11-19)
 
 
